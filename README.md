@@ -1,6 +1,6 @@
 # Sahib International School: website
 
-The official website of **Sahib International School**, a CBSE-affiliated school (Nursery to Class XII).
+The official website of **Sahib International School**, Saha (Ambala), Haryana: a co-educational school for Nursery to Class VIII that follows the CBSE curriculum with NCERT textbooks. Motto: *Come to Learn · Go to Serve*.
 
 It is a fast, mobile-friendly static site built with [Astro](https://astro.build). There is no database or server to maintain: every page is plain HTML, so it can be hosted free on GitHub Pages, Netlify or Cloudflare Pages.
 
@@ -8,21 +8,22 @@ It is a fast, mobile-friendly static site built with [Astro](https://astro.build
 
 | Page | Path | What it covers |
 | --- | --- | --- |
-| Home | `/` | Hero, quick links, latest-updates ticker, principal's note, stats, academics, notice board, events, board results, gallery, parent testimonials, admissions call-to-action |
-| About | `/about/` | Story, vision & mission, core values, principal's and chairperson's messages, School Managing Committee, milestones |
-| Academics | `/academics/` | CBSE curriculum (NEP 2020 stages), subjects, XI–XII streams, assessment, academic calendar, book list & uniform |
+| Home | `/` | Hero, quick links, latest-updates ticker, principal's note, stats, academics, notice board, events, teachers, photo mosaic, parent testimonials, admissions call-to-action |
+| About | `/about/` | Story, vision & mission, motto, core values, principal's and chairperson's messages, teachers, management committee, milestones |
+| Academics | `/academics/` | CBSE curriculum (NEP 2020 stages, Nursery to VIII), subjects, assessment, academic calendar, book list & uniform |
 | Admissions | `/admissions/` | Process, age criteria, documents, fee structure, RTE seats, FAQs, enquiry form |
 | Facilities | `/facilities/` | Classrooms, labs, library, sports, transport routes, safety & committees |
 | Student Life | `/student-life/` | Houses, clubs, sports, events, student council, wellbeing |
-| Achievements | `/achievements/` | Last three years' Class X & XII board results, toppers, competition wins |
+| Achievements | `/achievements/` | Olympiads, sports, cultural and other competition wins |
 | Gallery | `/gallery/` | Photo albums with category filter and a full-screen viewer |
 | Notices | `/notices/` | Circulars, news and holidays with filter and search, upcoming events |
-| Mandatory Disclosure | `/mandatory-disclosure/` | CBSE Appendix IX disclosure (sections A–E) with document links |
 | TC Verification | `/tc-verification/` | Look up an issued Transfer Certificate by TC number and admission number |
 | Careers | `/careers/` | Teaching vacancies and how to apply |
 | Contact | `/contact/` | Address, map, phone numbers, departments, enquiry form |
 
-All the details Indian parents and CBSE expect are included: affiliation number in the header and footer, a **Mandatory Public Disclosure** link on every page, TC verification, fee structure, a scrolling notice ticker, and a WhatsApp button.
+Everything Indian parents look for is included: fee structure, admission process and age criteria, a scrolling notice ticker, festival photo albums, TC verification and a WhatsApp button on every page.
+
+> **Wording:** pages describe the curriculum as “CBSE curriculum with NCERT textbooks”. Keep that wording consistent when editing, and don't describe the school as affiliated to any board.
 
 ---
 
@@ -30,20 +31,19 @@ All the details Indian parents and CBSE expect are included: affiliation number 
 
 Everything the school needs to change lives in **`src/data/`**. Values marked `⚠ PLACEHOLDER` or `⚠ SAMPLE CONTENT` are made up and **must be replaced**.
 
-1. **`src/data/school.ts`**: start here. Name, motto, year founded, CBSE affiliation number and school code, address, phone numbers, WhatsApp number, emails, principal and chairperson, social media links, headline numbers. Most pages read from this file.
+1. **`src/data/school.ts`**: start here. Year founded, street address, phone numbers, WhatsApp number, emails, principal and chairperson, social media links, headline numbers. Most pages read from this file.
 2. **`src/data/notices.ts`**: notices, circulars and upcoming events.
-3. **`src/data/results.ts`**: board results for the last three years and toppers.
-4. The other files in `src/data/` (fees, admissions, academics, facilities, gallery, disclosure, careers, contacts, and so on) hold the content for each page.
+3. The other files in `src/data/` (fees, admissions, academics, facilities, gallery, achievements, careers, contacts, and so on) hold the content for each page.
 5. When everything is real, set **`preview: false`** in `school.ts` to remove the yellow "sample content" banner.
 
 ### Photos
 
-Until real photos are added, the site shows decorative placeholders. To add photos:
+The school's logo and its first photos (the gate, a classroom, the teaching staff and festival albums) are already in `public/images/`. Anywhere a real photo is still missing, the site shows a decorative placeholder. To add more:
 
-- **Campus photo on the home page:** put it in `public/images/` and set `heroImage` / `welcomeImage` at the top of `src/pages/index.astro`.
+- **Home page photos:** set `heroImage` / `welcomeImage` / `teachersImage` at the top of `src/pages/index.astro`.
 - **Principal / chairperson:** put the photo in `public/images/people/` and set `photo` in `school.ts`.
-- **Gallery:** put photos in `public/images/gallery/<album-name>/` and set `src` for each photo in `src/data/gallery.ts`.
-- **School logo:** put it at `public/images/logo.png` (or `.svg`) and set `logoSrc` in `src/components/Crest.astro`.
+- **Gallery:** put photos in `public/images/gallery/<album-name>/` and add them to `src/data/gallery.ts`.
+- **Logo:** `public/images/logo.webp` (full crest) and `public/images/emblem.webp` (header), used by `src/components/Crest.astro`.
 
 Resize photos to about 1600 px on the long side and save them as JPG or WebP (under 300 KB each) to keep the site fast on mobile data.
 
@@ -51,13 +51,12 @@ Resize photos to about 1600 px on the long side and save them as JPG or WebP (un
 
 Put PDFs in `public/documents/`:
 
-- `public/documents/disclosure/`: the CBSE Mandatory Disclosure certificates (affiliation letter, trust registration, NOC, RTE recognition, building safety, fire safety, DEO certificate, water/health/sanitation). Then mark each one `available: true` in `src/data/disclosure.ts`.
 - `public/documents/circulars/`: circular PDFs, linked from `notices.ts` with `file: 'circulars/<name>.pdf'`.
 - Book list, uniform guidelines and prospectus, using the file names referenced on the Academics and Admissions pages.
 
 ### Transfer Certificates (TC verification)
 
-CBSE asks schools to put issued TCs on their website. To protect student privacy, a TC on this site can only be opened by someone who knows **both** the TC number and the admission number.
+Parents and the schools your Class VIII students move on to can verify a Transfer Certificate online. To protect student privacy, a TC can only be opened by someone who knows **both** the TC number and the admission number.
 
 ```bash
 npm run tc:add -- --tc <TC_NUMBER> --adm <ADMISSION_NUMBER> --file path/to/tc.pdf
@@ -98,7 +97,7 @@ Colours, fonts and shared styles are in `src/styles/global.css`. The header, foo
 
 The site will be available at `https://<github-username>.github.io/<repository-name>/`.
 
-### Custom domain (e.g. `www.sahibinternationalschool.in`)
+### Custom domain (e.g. `www.sahibschoolsaha.in`)
 
 1. Buy the domain from any registrar.
 2. In **Settings → Pages → Custom domain**, enter it and follow GitHub's DNS instructions.
