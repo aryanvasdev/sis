@@ -1,0 +1,543 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Icon from '../components/Icon.astro';
+import { school, telLink, whatsappLink } from '../data/school';
+import { url } from '../lib/url';
+
+const forSchools = [
+  'Ask the parent for the original Transfer Certificate issued by our school.',
+  'Enter the TC number and the admission number exactly as printed on it, then select “Verify certificate”.',
+  'Open the copy from our records and check that the name, date of birth, class and dates match the original.',
+  'If no record is found or any detail differs, please contact our school office before confirming admission.',
+];
+
+const forParents = [
+  'Apply for the TC at the school office with a written request; the office issues it once all formalities are complete.',
+  'A copy of every TC we issue is placed on this page, so the new school can verify it online.',
+  'Share the original TC with the new school. They need both numbers printed on it to check our record.',
+  'Lost the TC or spotted an error? Contact the office for a corrected or duplicate certificate.',
+];
+---
+
+<BaseLayout
+  title="TC Verification"
+  description={`Verify a Transfer Certificate issued by ${school.name}. Admitting schools can confirm a TC online using the TC number and the student's admission number.`}
+>
+  <PageHero
+    title="Transfer Certificate Verification"
+    eyebrow="For parents & admitting schools"
+    lead={`Verify a Transfer Certificate issued by ${school.name}. Enter the TC number and the student’s admission number exactly as printed on the certificate.`}
+    crumbs={[{ label: 'TC Verification' }]}
+  />
+
+  <section class="section">
+    <div class="container tc-grid">
+      <!-- ========== VERIFY FORM ========== -->
+      <div class="card tc-card reveal">
+        <span class="icon-badge icon-badge--navy"><Icon name="file-search" /></span>
+        <h2>Verify a Transfer Certificate</h2>
+        <p class="muted">Both numbers are needed. This keeps every student’s certificate private.</p>
+
+        <form class="form tc-form" data-tc-form data-tc-base={url('/tc/')}>
+          <div class="field">
+            <label for="tc-no">TC number <span class="req" aria-hidden="true">*</span></label>
+            <input
+              id="tc-no"
+              name="tc"
+              type="text"
+              required
+              autocomplete="off"
+              autocapitalize="characters"
+              spellcheck="false"
+              placeholder="e.g. SIS/2026/0412"
+              aria-describedby="tc-no-hint"
+            />
+            <span class="hint" id="tc-no-hint">Printed at the top of the certificate.</span>
+          </div>
+          <div class="field">
+            <label for="adm-no">Admission number <span class="req" aria-hidden="true">*</span></label>
+            <input
+              id="adm-no"
+              name="adm"
+              type="text"
+              required
+              autocomplete="off"
+              autocapitalize="characters"
+              spellcheck="false"
+              placeholder="e.g. 4521"
+              aria-describedby="adm-no-hint"
+            />
+            <span class="hint" id="adm-no-hint">The student’s admission (scholar register) number.</span>
+          </div>
+          <button type="submit" class="btn btn--gold tc-submit">
+            <Icon name="badge-check" />
+            <span data-tc-label>Verify certificate</span>
+          </button>
+        </form>
+
+        <div class="tc-result" data-tc-result aria-live="polite">
+          <div class="tc-state tc-state--ok" data-state="found" hidden>
+            <Icon name="circle-check-big" size={28} />
+            <div>
+              <p class="tc-state-title">Certificate found</p>
+              <p>
+                Transfer Certificate <strong data-tc-echo></strong> was issued by {school.name} and is on our records.
+                Please compare the copy below with the original certificate.
+              </p>
+              <a href="#" class="btn btn--navy btn--sm" data-tc-link target="_blank" rel="noopener">
+                <Icon name="download" /> View / download TC
+                <span class="visually-hidden">(PDF, opens in a new tab)</span>
+              </a>
+            </div>
+          </div>
+
+          <div class="tc-state tc-state--missing" data-state="missing" hidden>
+            <Icon name="circle-alert" size={28} />
+            <div>
+              <p class="tc-state-title">No matching certificate found</p>
+              <p>We could not find a TC for these numbers. Please check that:</p>
+              <ul>
+                <li>both numbers are typed exactly as printed, including any slashes or hyphens;</li>
+                <li>the TC number and the admission number have not been swapped.</li>
+              </ul>
+              <p>
+                Some older certificates may not be online yet. Our office will be glad to confirm it for you:
+                <a href={telLink(school.phones[0])}>{school.phones[0]}</a> or
+                <a href={`mailto:${school.email}`}>{school.email}</a>.
+              </p>
+            </div>
+          </div>
+
+          <div class="tc-state tc-state--missing" data-state="error" hidden>
+            <Icon name="triangle-alert" size={28} />
+            <div>
+              <p class="tc-state-title">We couldn’t complete the check</p>
+              <p>
+                Please check your internet connection and try again, or contact the school office on
+                <a href={telLink(school.phones[0])}>{school.phones[0]}</a>.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========== WHERE TO FIND THE NUMBERS ========== -->
+      <div class="tc-side reveal">
+        <h2 class="tc-side-title">Where to find the numbers</h2>
+        <figure class="tc-mock">
+          <div class="tc-paper" aria-hidden="true">
+            <p class="tc-paper-school">{school.name}</p>
+            <p class="tc-paper-title">Transfer Certificate</p>
+            <dl>
+              <div class="hl"><dt>TC No.</dt><dd>SIS/2026/0412</dd></div>
+              <div class="hl"><dt>Admission No.</dt><dd>4521</dd></div>
+              <div><dt>Name of student</dt><dd><span class="bar" style="width:70%"></span></dd></div>
+              <div><dt>Date of birth</dt><dd><span class="bar" style="width:45%"></span></dd></div>
+              <div><dt>Class last studied</dt><dd><span class="bar" style="width:35%"></span></dd></div>
+            </dl>
+          </div>
+          <figcaption>
+            The <strong>TC number</strong> and the <strong>admission number</strong> are printed near the top of every
+            Transfer Certificate we issue. The numbers above are only an example.
+          </figcaption>
+        </figure>
+        <div class="callout callout--navy">
+          <Icon name="lock" />
+          <p>
+            <strong>Your child’s privacy comes first.</strong> We never publish a list of certificates. A TC can only be
+            opened by someone who has both numbers, which appear together only on the certificate itself.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HOW IT WORKS ========== -->
+  <section class="section section--cream">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow="How it works"
+        title="Simple, secure verification"
+        lead="Our school runs from Nursery to Class VIII, so many of our students take a TC after Class VIII to join Class IX at another school. The new school can verify that TC here in a few seconds."
+      />
+      <div class="grid grid-2">
+        <article class="card steps-card reveal">
+          <span class="icon-badge"><Icon name="school" /></span>
+          <h3>For admitting schools</h3>
+          <ol class="steps">
+            {forSchools.map((s) => <li>{s}</li>)}
+          </ol>
+        </article>
+        <article class="card steps-card reveal">
+          <span class="icon-badge icon-badge--green"><Icon name="users" /></span>
+          <h3>For parents</h3>
+          <ol class="steps">
+            {forParents.map((s) => <li>{s}</li>)}
+          </ol>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HELP ========== -->
+  <section class="section section--tight">
+    <div class="container">
+      <div class="help reveal">
+        <div>
+          <h2>Need help with a TC?</h2>
+          <p>
+            For a new or duplicate TC, or to confirm a certificate by phone, contact the school office
+            ({school.officeHours}).
+          </p>
+        </div>
+        <div class="btn-row">
+          <a href={telLink(school.phones[0])} class="btn btn--gold"><Icon name="phone" /> {school.phones[0]}</a>
+          <a href={`mailto:${school.email}`} class="btn btn--light"><Icon name="mail" /> Email the office</a>
+          <a
+            href={whatsappLink('Hello, I have a query about a Transfer Certificate (TC).')}
+            class="btn btn--whatsapp"
+            target="_blank"
+            rel="noopener"><Icon name="whatsapp" /> WhatsApp</a
+          >
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-tc-form]');
+  const result = document.querySelector<HTMLElement>('[data-tc-result]');
+
+  if (form && result) {
+    const base = form.dataset.tcBase ?? '/tc/';
+    const tcInput = form.elements.namedItem('tc') as HTMLInputElement;
+    const admInput = form.elements.namedItem('adm') as HTMLInputElement;
+    const button = form.querySelector<HTMLButtonElement>('button[type="submit"]')!;
+    const label = form.querySelector<HTMLElement>('[data-tc-label]')!;
+    const link = result.querySelector<HTMLAnchorElement>('[data-tc-link]')!;
+    const echo = result.querySelector<HTMLElement>('[data-tc-echo]')!;
+    const states = result.querySelectorAll<HTMLElement>('[data-state]');
+
+    const show = (state: string | null) => states.forEach((el) => (el.hidden = el.dataset.state !== state));
+
+    // Must match scripts/add-tc.mjs exactly.
+    const normalise = (tc: string, adm: string) => `${tc.trim().toUpperCase()}|${adm.trim().toUpperCase()}`;
+
+    async function sha256Hex(text: string) {
+      const digest = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+      return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    // A host that answers every path with the home page (HTML) must not count as "found".
+    const isPdf = (res: Response) => res.ok && !(res.headers.get('content-type') ?? '').includes('text/html');
+
+    async function exists(href: string) {
+      try {
+        const head = await fetch(href, { method: 'HEAD', cache: 'no-store' });
+        if (isPdf(head)) return true;
+      } catch {
+        // Some hosts reject HEAD; try a normal request below.
+      }
+      const res = await fetch(href, { cache: 'no-store' });
+      res.body?.cancel().catch(() => {});
+      return isPdf(res);
+    }
+
+    [tcInput, admInput].forEach((input) => input.addEventListener('input', () => input.setCustomValidity('')));
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      [tcInput, admInput].forEach((input) =>
+        input.setCustomValidity(input.value.trim() ? '' : 'Please fill in this field.'),
+      );
+      if (!form.reportValidity()) return;
+
+      if (!window.crypto?.subtle) {
+        show('error');
+        return;
+      }
+
+      button.disabled = true;
+      label.textContent = 'Checking…';
+      result.setAttribute('aria-busy', 'true');
+      show(null);
+
+      try {
+        const hash = await sha256Hex(normalise(tcInput.value, admInput.value));
+        const href = `${base}${hash}.pdf`;
+        if (await exists(href)) {
+          link.href = href;
+          echo.textContent = tcInput.value.trim().toUpperCase();
+          show('found');
+        } else {
+          show('missing');
+        }
+      } catch {
+        show('error');
+      } finally {
+        button.disabled = false;
+        label.textContent = 'Verify certificate';
+        result.removeAttribute('aria-busy');
+      }
+    });
+  }
+</script>
+
+<style>
+  .tc-grid {
+    display: grid;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .tc-grid {
+      grid-template-columns: 1.1fr 1fr;
+    }
+  }
+
+  /* ---------- Form card ---------- */
+  .tc-card {
+    border-top: 4px solid var(--gold-500);
+    box-shadow: var(--shadow);
+  }
+  .tc-card h2 {
+    font-size: var(--step-3);
+    margin-bottom: 6px;
+  }
+  .tc-form {
+    margin-top: 22px;
+  }
+  .tc-form input {
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .tc-form input::placeholder {
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .tc-submit {
+    justify-self: start;
+  }
+  .tc-submit:disabled {
+    opacity: 0.75;
+    cursor: progress;
+    transform: none;
+  }
+
+  /* ---------- Result ---------- */
+  .tc-state {
+    margin-top: 20px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px 20px;
+    border-radius: var(--radius);
+    border: 1px solid;
+  }
+  .tc-state[hidden] {
+    display: none;
+  }
+  .tc-state > :global(svg) {
+    flex: none;
+    margin-top: 2px;
+  }
+  .tc-state > div {
+    display: grid;
+    gap: 8px;
+    min-width: 0;
+  }
+  .tc-state-title {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+  .tc-state ul {
+    padding-left: 1.2em;
+  }
+  .tc-state a:not(.btn) {
+    font-weight: 700;
+    color: inherit;
+    overflow-wrap: anywhere;
+  }
+  .tc-state .btn {
+    justify-self: start;
+    margin-top: 4px;
+  }
+  .tc-state--ok {
+    background: var(--green-50);
+    border-color: #bfe3cf;
+    color: #17553a;
+  }
+  .tc-state--ok > :global(svg),
+  .tc-state--ok .tc-state-title {
+    color: var(--green-600);
+  }
+  .tc-state--ok strong {
+    overflow-wrap: anywhere;
+  }
+  .tc-state--missing {
+    background: var(--maroon-50);
+    border-color: #efc9cf;
+    color: #5e1220;
+  }
+  .tc-state--missing > :global(svg),
+  .tc-state--missing .tc-state-title {
+    color: var(--maroon-600);
+  }
+
+  /* ---------- Sample TC ---------- */
+  .tc-side {
+    display: grid;
+    gap: 20px;
+  }
+  .tc-side-title {
+    font-size: var(--step-2);
+  }
+  .tc-mock {
+    display: grid;
+    gap: 14px;
+  }
+  .tc-paper {
+    position: relative;
+    padding: 26px 26px 22px;
+    border-radius: 6px;
+    background: linear-gradient(#fffdf7, #fbf6e8);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    transform: rotate(-1.2deg);
+  }
+  .tc-paper::before {
+    content: '';
+    position: absolute;
+    inset: 8px;
+    border: 1.5px double var(--gold-500);
+    border-radius: 3px;
+    pointer-events: none;
+  }
+  .tc-paper-school {
+    font-family: var(--font-display);
+    font-weight: 650;
+    text-align: center;
+    color: var(--navy-900);
+    font-size: 1.05rem;
+  }
+  .tc-paper-title {
+    text-align: center;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--maroon-600);
+    margin: 2px 0 14px;
+  }
+  .tc-paper dl {
+    display: grid;
+    gap: 6px;
+  }
+  .tc-paper dl > div {
+    display: grid;
+    grid-template-columns: 9.5em 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 5px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+  }
+  .tc-paper dt {
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .tc-paper dd {
+    margin: 0;
+    font-weight: 800;
+    color: var(--navy-900);
+    font-variant-numeric: tabular-nums;
+  }
+  .tc-paper .hl {
+    background: var(--gold-200);
+    box-shadow: inset 3px 0 0 var(--gold-600);
+  }
+  .tc-paper .bar {
+    display: block;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--line);
+  }
+  .tc-mock figcaption {
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  .tc-mock figcaption strong {
+    color: var(--navy-900);
+  }
+
+  /* ---------- Steps ---------- */
+  .steps-card h3 {
+    font-size: var(--step-2);
+    margin-bottom: 14px;
+  }
+  .steps {
+    list-style: none;
+    padding: 0;
+    counter-reset: step;
+    display: grid;
+    gap: 14px;
+  }
+  .steps li {
+    position: relative;
+    padding-left: 44px;
+    counter-increment: step;
+    color: var(--ink-soft);
+  }
+  .steps li::before {
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: -1px;
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--navy-900);
+    color: var(--gold-400);
+    font-weight: 800;
+    font-size: 0.85rem;
+  }
+
+  /* ---------- Help band ---------- */
+  .help {
+    display: grid;
+    gap: 22px;
+    align-items: center;
+    padding: clamp(24px, 4vw, 40px);
+    border-radius: var(--radius-lg);
+    background: var(--navy-900);
+    color: #c7d2e6;
+  }
+  @media (min-width: 960px) {
+    .help {
+      grid-template-columns: 1fr auto;
+    }
+  }
+  .help h2 {
+    color: #fff;
+    font-size: var(--step-3);
+    margin-bottom: 6px;
+  }
+  @media (max-width: 480px) {
+    .help .btn {
+      width: 100%;
+    }
+    .tc-state {
+      flex-direction: column;
+      gap: 8px;
+      padding: 16px;
+    }
+  }
+</style>

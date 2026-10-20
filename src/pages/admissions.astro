@@ -1,0 +1,1089 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
+import { school, telLink, whatsappLink } from '../data/school';
+import {
+  admissionYear,
+  classesOpen,
+  otherClassesNote,
+  keyDates,
+  admissionOffice,
+  ageCutoff,
+  ageRules,
+  dobRange,
+  documents,
+  faqs,
+} from '../data/admissions';
+import {
+  feeSession,
+  oneTimeCharges,
+  classFees,
+  tuitionQuarterly,
+  yearlyTotal,
+  transportSlabs,
+  transportNote,
+  feeNotes,
+} from '../data/fees';
+import { formatDate, formatDateLong, formatINR, dateParts } from '../lib/format';
+import { url } from '../lib/url';
+
+const steps = [
+  {
+    icon: 'messages-square',
+    title: 'Enquiry',
+    text: 'Fill in the enquiry form below, call or WhatsApp us, or walk in to the admission office. We will answer your questions and invite you for a campus tour.',
+  },
+  {
+    icon: 'file-pen-line',
+    title: 'Registration',
+    text: 'Collect the registration form from the school office, fill it in and submit it with the registration fee, a photograph and a copy of the birth certificate.',
+  },
+  {
+    icon: 'users',
+    title: 'Interaction / assessment',
+    text: 'A relaxed, friendly interaction with the child and parents. There is no written test; for Classes II – VIII we also look at the last report card.',
+  },
+  {
+    icon: 'file-check',
+    title: 'Document verification & offer',
+    text: 'Bring the original documents for verification. Families are then given a provisional admission letter for the seat offered.',
+  },
+  {
+    icon: 'badge-check',
+    title: 'Fee payment & confirmation',
+    text: 'Pay the admission fee and the first quarter’s fees within 7 days to confirm the seat. You will receive the book list, uniform details and orientation date.',
+  },
+];
+
+/** '2026-12-01' + '2026-12-19' → '1 – 19 Dec 2026' */
+const dateRange = (from: string, to?: string) => {
+  if (!to) return formatDate(from);
+  const a = dateParts(from);
+  const b = dateParts(to);
+  if (a.month === b.month && a.year === b.year) return `${Number(a.day)} – ${Number(b.day)} ${b.month} ${b.year}`;
+  return `${formatDate(from)} – ${formatDate(to)}`;
+};
+
+/** Split an email address so it can wrap before the "@" in narrow cards. */
+const emailParts = (email: string) => {
+  const i = email.indexOf('@');
+  return [email.slice(0, i), email.slice(i)];
+};
+
+const enquiryMessage = `Hello, I would like to know about admissions for Session ${school.admissionSession}.`;
+---
+
+<BaseLayout
+  title="Admissions"
+  description={`Admissions for Session ${school.admissionSession} at ${school.name}, ${school.address.city}, ${school.address.district} (${classesOpen}): admission process, age criteria, documents required, fee structure and FAQs.`}
+>
+  <PageHero
+    title="Admissions"
+    eyebrow={`Session ${school.admissionSession}`}
+    lead={school.admissionsOpen
+      ? `Registrations are open for ${classesOpen}. Everything you need is on this page: the process, age criteria, documents, fees and answers to the questions parents ask us most.`
+      : `Everything you need to know about joining ${school.name}: the process, age criteria, documents, fees and answers to the questions parents ask us most.`}
+    crumbs={[{ label: 'Admissions' }]}
+  >
+    <div class="btn-row">
+      <a href="#enquiry" class="btn btn--gold">Admission enquiry <Icon name="arrow-right" /></a>
+      <a href="#fees" class="btn btn--light">Fee structure</a>
+    </div>
+  </PageHero>
+
+  <!-- ========== INTRO / KEY DATES ========== -->
+  {
+    school.admissionsOpen ? (
+      <section class="section">
+        <div class="container intro">
+          <div class="reveal">
+            <span class="tag tag--maroon">Now open</span>
+            <SectionHead eyebrow="Welcome" title={`Admissions open for Session ${school.admissionSession}`} />
+            <div class="stack">
+              <p>
+                Thank you for considering {school.name} for your child. We are now registering students for{' '}
+                <strong>{classesOpen}</strong>. {otherClassesNote}
+              </p>
+              <p>
+                Choosing a school is a big decision, so we encourage every family to visit us first: walk through the
+                classrooms, meet our teachers and ask as many questions as you like.
+              </p>
+              <ul class="check-list">
+                <li>{school.recognition} school, {school.classes}</li>
+                <li>Follows the {school.curriculum}, {school.medium} medium</li>
+                <li>No admission test: just a friendly interaction</li>
+                <li>Clear, published fees with a sibling concession</li>
+              </ul>
+              <div class="btn-row" style="margin-top:24px">
+                <a href={url(admissionOffice.prospectus)} class="btn btn--navy" download>
+                  <Icon name="download" /> Prospectus {school.admissionSession}
+                </a>
+                <a href={telLink(school.phones[0])} class="btn btn--outline">
+                  <Icon name="phone" /> {school.phones[0]}
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <aside class="dates-card reveal" aria-labelledby="dates-title">
+            <h3 id="dates-title" class="dates-title">
+              <Icon name="calendar-days" /> Key dates
+            </h3>
+            <ol class="dates">
+              {keyDates.map((d) => (
+                <li>
+                  <time datetime={d.date}>{dateRange(d.date, d.endDate)}</time>
+                  <strong>{d.label}</strong>
+                  {d.note && <span>{d.note}</span>}
+                </li>
+              ))}
+            </ol>
+          </aside>
+        </div>
+      </section>
+    ) : (
+      <section class="section section--tight">
+        <div class="container">
+          <p class="callout callout--navy">
+            <Icon name="info" />
+            <span>
+              Registrations for Session {school.admissionSession} are not open yet. Seats may still be available in some
+              classes, so please <a href="#enquiry">send us an enquiry</a> or call {school.phones[0]}.
+            </span>
+          </p>
+        </div>
+      </section>
+    )
+  }
+
+  <!-- ========== PROCESS ========== -->
+  <section class="section section--navy section--jali" id="process">
+    <div class="container">
+      <SectionHead
+        eyebrow="Admission process"
+        title="Five simple steps"
+        lead="Our admission team will guide you at every stage. Most families complete the process within two to three weeks."
+      />
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li class="step reveal">
+              <span class="step-top">
+                <span class="step-icon">
+                  <Icon name={s.icon} />
+                </span>
+                <span class="step-num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              </span>
+              <h3>
+                <span class="visually-hidden">Step {i + 1}: </span>
+                {s.title}
+              </h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ========== AGE CRITERIA ========== -->
+  <section class="section" id="age">
+    <div class="container age">
+      <div class="reveal">
+        <SectionHead
+          eyebrow="Age criteria"
+          title="Is my child the right age?"
+          lead={`For the early years and Class I, a child’s age is counted as on ${formatDateLong(ageCutoff)}.`}
+        />
+        <div class="table-wrap">
+          <table class="table age-table">
+            <caption class="visually-hidden">Age criteria for Session {school.admissionSession}</caption>
+            <thead>
+              <tr>
+                <th scope="col">Class</th>
+                <th scope="col">Minimum age</th>
+                <th scope="col">Date of birth between</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                ageRules.map((r) => {
+                  const range = dobRange(r.minAge);
+                  return (
+                    <tr>
+                      <th scope="row">{r.cls}</th>
+                      <td>{r.minAge}+ years</td>
+                      <td class="dob">
+                        <time datetime={range.from}>{formatDate(range.from)}</time> –{' '}
+                        <time datetime={range.to}>{formatDate(range.to)}</time>
+                      </td>
+                    </tr>
+                  );
+                })
+              }
+              <tr>
+                <th scope="row">Class II onwards</th>
+                <td>Age-appropriate</td>
+                <td>As per the previous school’s records and TC</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <aside class="card age-notes reveal" aria-labelledby="age-notes-title">
+        <span class="icon-badge icon-badge--navy">
+          <Icon name="info" />
+        </span>
+        <h3 id="age-notes-title">Good to know</h3>
+        <ul class="check-list">
+          <li>
+            “{ageRules[0].minAge}+” means the child has completed {ageRules[0].minAge} years on 31 March {admissionYear}.
+          </li>
+          <li>
+            The criteria follow the National Education Policy (NEP) 2020, which places Class I at age 6+, and the norms
+            of the Government of {school.address.state}. They may be revised if new orders are issued.
+          </li>
+          <li>Please bring the child’s original birth certificate at the time of registration.</li>
+        </ul>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========== DOCUMENTS ========== -->
+  <section class="section section--cream" id="documents">
+    <div class="container">
+      <SectionHead
+        eyebrow="Documents"
+        title="Documents required"
+        lead="Please bring one set of self-attested photocopies, along with the originals for verification."
+      />
+      <ul class="docs">
+        {
+          documents.map((d) => (
+            <li class="doc reveal">
+              <span class="doc-icon">
+                <Icon name="file-text" size={20} />
+              </span>
+              <span>
+                <strong>{d.title}</strong>
+                {d.note && <small>{d.note}</small>}
+              </span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== FEES ========== -->
+  <section class="section" id="fees">
+    <div class="container">
+      <div class="fees-head">
+        <SectionHead
+          eyebrow={`Fee structure · Session ${feeSession}`}
+          title="Fees, clearly explained"
+          lead="No hidden charges. Fees are paid quarterly, and every payment is acknowledged with a receipt."
+        />
+        {
+          school.feePaymentUrl && (
+            <a href={school.feePaymentUrl} class="btn btn--gold" target="_blank" rel="noopener">
+              <Icon name="credit-card" /> Pay fees online
+            </a>
+          )
+        }
+      </div>
+
+      <h3 class="fees-sub">One-time charges (new admissions)</h3>
+      <div class="grid grid-3 onetime">
+        {
+          oneTimeCharges.map((c) => (
+            <div class="card onetime-card reveal">
+              <p class="onetime-label">{c.label}</p>
+              <p class="onetime-amount">{formatINR(c.amount)}</p>
+              <p class="small">{c.note}</p>
+            </div>
+          ))
+        }
+      </div>
+
+      <h3 class="fees-sub">Class-wise fees</h3>
+      <p class="scroll-hint small muted" aria-hidden="true">
+        Swipe the table sideways to see all columns <Icon name="arrow-right" size={16} />
+      </p>
+      <div class="table-wrap reveal">
+        <table class="table fee-table">
+          <caption class="visually-hidden">Class-wise fees for Session {feeSession}</caption>
+          <thead>
+            <tr>
+              <th scope="col">Class</th>
+              <th scope="col" class="num">Annual charges</th>
+              <th scope="col" class="num">Tuition / month</th>
+              <th scope="col" class="num">Tuition / quarter</th>
+              <th scope="col" class="num">Total for the year*</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              classFees.map((f) => (
+                <tr>
+                  <th scope="row">
+                    {f.group}
+                    {f.detail && <span class="fee-detail">{f.detail}</span>}
+                  </th>
+                  <td class="num">{formatINR(f.annual)}</td>
+                  <td class="num">{formatINR(f.tuitionMonthly)}</td>
+                  <td class="num">{formatINR(tuitionQuarterly(f))}</td>
+                  <td class="num total">{formatINR(yearlyTotal(f))}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted table-note">
+        * Annual charges plus 12 months’ tuition. Does not include one-time charges, transport, books or uniform.
+        Annual charges cover development, activities, library, the computer lab and examinations.
+      </p>
+
+      <div class="fees-lower">
+        <div class="reveal">
+          <h3 class="fees-sub">Transport fee (optional)</h3>
+          <div class="table-wrap">
+            <table class="table transport-table">
+              <caption class="visually-hidden">School bus fee by distance</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Distance from school</th>
+                  <th scope="col" class="num">Per month</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  transportSlabs.map((t) => (
+                    <tr>
+                      <th scope="row">{t.distance}</th>
+                      <td class="num">{formatINR(t.monthly)}</td>
+                    </tr>
+                  ))
+                }
+              </tbody>
+            </table>
+          </div>
+          <p class="small muted table-note">{transportNote}</p>
+        </div>
+
+        <div class="reveal">
+          <h3 class="fees-sub">Important notes</h3>
+          <dl class="fee-notes">
+            {
+              feeNotes.map((n) => (
+                <div>
+                  <dt>{n.title}</dt>
+                  <dd>{n.text}</dd>
+                </div>
+              ))
+            }
+          </dl>
+        </div>
+      </div>
+
+      <aside class="rte reveal" aria-labelledby="rte-title">
+        <span class="icon-badge icon-badge--maroon">
+          <Icon name="scale" />
+        </span>
+        <div>
+          <h3 id="rte-title">Free seats under the RTE Act</h3>
+          <p>
+            Under Section 12(1)(c) of the Right of Children to Free and Compulsory Education (RTE) Act, 2009, 25% of seats
+            at the entry level are reserved for children from Economically Weaker Sections (EWS) and Disadvantaged Groups
+            (DG), who study free of cost. These seats are not applied for at the school: applications are made online
+            through the {school.address.state} state admission portal, as notified by the state government each year.
+            Please watch for the notification for dates and eligibility, or ask our admission office for help.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ========== FAQ ========== -->
+  <section class="section section--cream" id="faq">
+    <div class="container faq-wrap">
+      <div class="faq-intro reveal">
+        <SectionHead
+          eyebrow="FAQs"
+          title="Questions parents ask us"
+          lead="Can’t find your answer here? Our admission team is happy to help."
+        />
+        <div class="btn-row">
+          <a href={whatsappLink(enquiryMessage)} class="btn btn--whatsapp" target="_blank" rel="noopener">
+            <Icon name="whatsapp" /> WhatsApp us
+          </a>
+          <a href={`mailto:${school.admissionsEmail}`} class="btn btn--outline"><Icon name="mail" /> Email</a>
+        </div>
+        <Photo
+          src="images/campus/classroom.jpg"
+          alt="Students in their classroom with their class teacher"
+          ratio="4 / 3"
+          class="faq-photo"
+        />
+      </div>
+      <div class="faq-list reveal">
+        {
+          faqs.map((f) => (
+            <details class="faq">
+              <summary>
+                <span>{f.q}</span>
+                <Icon name="plus" size={20} class="faq-icon" />
+              </summary>
+              <p>{f.a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ENQUIRY ========== -->
+  <section class="section" id="enquiry">
+    <div class="container enquiry">
+      <div class="card enquiry-card reveal">
+        <SectionHead
+          eyebrow="Admission enquiry"
+          title="Tell us about your child"
+          lead="Share a few details and our admission team will get back to you with the next steps."
+        />
+        <EnquiryForm variant="admission" />
+      </div>
+
+      <aside class="office reveal" aria-labelledby="office-title">
+        <h3 id="office-title">Admission office</h3>
+        <ul class="office-list">
+          <li>
+            <Icon name="phone" size={20} />
+            <span>
+              <small>Call</small>
+              {school.phones.map((p) => <a href={telLink(p)}>{p}</a>)}
+            </span>
+          </li>
+          <li>
+            <Icon name="whatsapp" size={20} />
+            <span>
+              <small>WhatsApp</small>
+              <a href={whatsappLink(enquiryMessage)} target="_blank" rel="noopener">Chat with the admission team</a>
+            </span>
+          </li>
+          <li>
+            <Icon name="mail" size={20} />
+            <span>
+              <small>Email</small>
+              <a href={`mailto:${school.admissionsEmail}`}>
+                {emailParts(school.admissionsEmail)[0]}<wbr />{emailParts(school.admissionsEmail)[1]}
+              </a>
+            </span>
+          </li>
+          <li>
+            <Icon name="clock" size={20} />
+            <span>
+              <small>Visiting hours</small>
+              {admissionOffice.visitingHours}
+            </span>
+          </li>
+          <li>
+            <Icon name="school" size={20} />
+            <span>
+              <small>Campus tours</small>
+              {admissionOffice.campusTours}
+            </span>
+          </li>
+        </ul>
+        <a href={url(admissionOffice.prospectus)} class="prospectus" download>
+          <span class="prospectus-icon">
+            <Icon name="download" />
+          </span>
+          <span>
+            <strong>Download the prospectus</strong>
+            <small>Session {school.admissionSession} · PDF</small>
+          </span>
+        </a>
+        <a href={url('/contact/')} class="link-arrow">Directions &amp; all contacts <Icon name="arrow-right" /></a>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .intro > *,
+  .age > *,
+  .fees-lower > *,
+  .faq-wrap > *,
+  .enquiry > * {
+    min-width: 0;
+  }
+  .table tbody tr:last-child th {
+    border-bottom: 0;
+  }
+
+  /* ---------- Intro ---------- */
+  .intro {
+    display: grid;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .intro {
+      grid-template-columns: 1.3fr 1fr;
+    }
+  }
+  .intro .tag {
+    margin-bottom: 14px;
+  }
+  .intro :global(.section-head) {
+    margin-bottom: 20px;
+  }
+  .dates-card {
+    position: relative;
+    padding: clamp(22px, 3vw, 32px);
+    border-radius: var(--radius-lg);
+    background: var(--cream);
+    border: 1px solid var(--line);
+  }
+  .dates-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    height: 5px;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    background: linear-gradient(90deg, var(--gold-600), var(--gold-400));
+  }
+  .dates-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--step-2);
+    padding-bottom: 14px;
+    margin-bottom: 6px;
+    border-bottom: 2px solid var(--navy-900);
+  }
+  .dates-title :global(.icon) {
+    color: var(--gold-600);
+  }
+  .dates {
+    list-style: none;
+    padding: 0;
+  }
+  .dates li {
+    position: relative;
+    display: grid;
+    gap: 2px;
+    padding: 14px 0 14px 26px;
+  }
+  .dates li + li {
+    border-top: 1px dashed var(--line);
+  }
+  .dates li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 21px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--gold-500);
+    box-shadow: 0 0 0 4px var(--gold-100);
+  }
+  .dates time {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--maroon-600);
+  }
+  .dates strong {
+    color: var(--navy-900);
+    line-height: 1.35;
+  }
+  .dates span {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* ---------- Process ---------- */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+  }
+  .step {
+    position: relative;
+    padding: 24px 22px;
+    border-radius: var(--radius);
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .step-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .step-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--gold-500);
+    color: var(--navy-950);
+  }
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1;
+    color: rgb(255 255 255 / 0.16);
+  }
+  .step h3 {
+    font-size: 1.2rem;
+  }
+  .step p {
+    margin-top: 8px;
+    font-size: 0.92rem;
+    color: #b9c6df;
+  }
+  @media (min-width: 1100px) {
+    .step:not(:last-child)::after {
+      content: '';
+      position: absolute;
+      top: 47px;
+      right: -17px;
+      width: 18px;
+      height: 2px;
+      background: var(--gold-500);
+      opacity: 0.6;
+    }
+  }
+
+  /* ---------- Age ---------- */
+  .age {
+    display: grid;
+    gap: clamp(28px, 4vw, 48px);
+    align-items: end;
+  }
+  @media (min-width: 960px) {
+    .age {
+      grid-template-columns: 1.5fr 1fr;
+    }
+  }
+  .age-table {
+    min-width: 0;
+  }
+  .age-table tbody th {
+    font-weight: 800;
+    color: var(--navy-900);
+  }
+  .age-table .dob {
+    white-space: nowrap;
+  }
+  .age-table .dob time {
+    white-space: nowrap;
+  }
+  .age-notes h3 {
+    margin-bottom: 14px;
+  }
+  .age-notes .check-list {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 480px) {
+    .age-table th,
+    .age-table td {
+      padding: 10px 12px;
+      font-size: 0.88rem;
+    }
+    .age-table thead th {
+      white-space: normal;
+      font-size: 0.72rem;
+    }
+    .age-table .dob {
+      white-space: normal;
+    }
+  }
+
+  /* ---------- Documents ---------- */
+  .docs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr));
+    gap: 14px;
+    list-style: none;
+    padding: 0;
+  }
+  .doc {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 18px;
+    background: #fff;
+    border: 1px solid var(--line-soft);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+  }
+  .doc-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: 10px;
+    background: var(--navy-50);
+    color: var(--navy-700);
+  }
+  .doc strong {
+    display: block;
+    color: var(--navy-900);
+    line-height: 1.35;
+  }
+  .doc small {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.85rem;
+    line-height: 1.5;
+    color: var(--muted);
+  }
+
+  /* ---------- Fees ---------- */
+  .fees-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0 24px;
+  }
+  .fees-head .btn {
+    margin-bottom: clamp(28px, 4vw, 48px);
+  }
+  .fees-sub {
+    font-size: var(--step-1);
+    margin: 0 0 14px;
+  }
+  .onetime {
+    margin-bottom: clamp(32px, 4vw, 48px);
+  }
+  .onetime-card {
+    border-top: 4px solid var(--gold-500);
+  }
+  .onetime-label {
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .onetime-amount {
+    margin: 6px 0 8px;
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--navy-900);
+  }
+  .fee-table tbody th {
+    font-weight: 800;
+    color: var(--navy-900);
+    white-space: nowrap;
+  }
+  .fee-detail {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .fee-table td.total {
+    font-weight: 800;
+    color: var(--navy-900);
+  }
+  .table-note {
+    margin-top: 10px;
+  }
+  .scroll-hint {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    margin: -6px 0 10px;
+  }
+  @media (max-width: 720px) {
+    .scroll-hint {
+      display: flex;
+    }
+  }
+  .fees-lower {
+    display: grid;
+    gap: clamp(28px, 4vw, 48px);
+    margin-top: clamp(32px, 4vw, 48px);
+  }
+  @media (min-width: 900px) {
+    .fees-lower {
+      grid-template-columns: 1fr 1.3fr;
+    }
+  }
+  .transport-table {
+    min-width: 0;
+  }
+  .fee-notes {
+    display: grid;
+    gap: 12px;
+  }
+  @media (min-width: 640px) {
+    .fee-notes {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .fee-notes div {
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    background: var(--cream);
+    border: 1px solid var(--line-soft);
+  }
+  .fee-notes dt {
+    font-weight: 800;
+    color: var(--navy-900);
+  }
+  .fee-notes dd {
+    margin: 4px 0 0;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+  }
+  .rte {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    margin-top: clamp(32px, 4vw, 48px);
+    padding: clamp(20px, 3vw, 30px);
+    border-radius: var(--radius);
+    background: var(--maroon-50);
+    border: 1px solid #f1d3d8;
+    border-left: 5px solid var(--maroon-600);
+  }
+  .rte .icon-badge {
+    margin-bottom: 0;
+    background: #fff;
+  }
+  .rte h3 {
+    font-size: var(--step-1);
+    color: var(--maroon-700);
+  }
+  .rte p {
+    margin-top: 6px;
+    color: var(--ink-soft);
+    max-width: 90ch;
+  }
+  @media (max-width: 560px) {
+    .rte {
+      flex-direction: column;
+    }
+  }
+
+  /* ---------- FAQ ---------- */
+  .faq-wrap {
+    display: grid;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .faq-wrap {
+      grid-template-columns: 0.8fr 1.2fr;
+    }
+    .faq-intro {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+  }
+  .faq-intro :global(.faq-photo) {
+    margin-top: 28px;
+    box-shadow: var(--shadow);
+  }
+  .faq-list {
+    display: grid;
+    gap: 12px;
+  }
+  .faq {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .faq[open] {
+    border-color: var(--gold-200);
+    box-shadow: var(--shadow-sm);
+  }
+  .faq summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 18px 20px;
+    font-weight: 800;
+    color: var(--navy-900);
+    line-height: 1.4;
+    cursor: pointer;
+    list-style: none;
+    border-radius: var(--radius);
+  }
+  .faq summary::-webkit-details-marker {
+    display: none;
+  }
+  .faq summary:hover {
+    color: var(--navy-700);
+  }
+  .faq :global(.faq-icon) {
+    flex: none;
+    color: var(--gold-600);
+    transition: transform 0.2s ease;
+  }
+  .faq[open] :global(.faq-icon) {
+    transform: rotate(45deg);
+  }
+  .faq p {
+    padding: 0 20px 20px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- Enquiry ---------- */
+  .enquiry {
+    display: grid;
+    gap: clamp(24px, 4vw, 40px);
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .enquiry {
+      grid-template-columns: 1.55fr 1fr;
+    }
+  }
+  .enquiry-card {
+    padding: clamp(22px, 3.4vw, 40px);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+  .enquiry-card :global(.section-head) {
+    margin-bottom: 24px;
+  }
+  .enquiry-card :global(.section-head h2) {
+    font-size: var(--step-3);
+  }
+  .office {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: clamp(24px, 3vw, 34px);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(150deg, var(--navy-900), var(--navy-800));
+    color: #c7d2e6;
+  }
+  .office::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--jali);
+    background-size: 64px 64px;
+    opacity: 0.07;
+  }
+  .office h3 {
+    color: #fff;
+    font-size: var(--step-2);
+  }
+  .office-list {
+    list-style: none;
+    padding: 0;
+    margin: 16px 0 22px;
+  }
+  .office-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 0;
+    font-size: 0.95rem;
+  }
+  .office-list li + li {
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .office-list :global(.icon) {
+    flex: none;
+    margin-top: 2px;
+    color: var(--gold-400);
+  }
+  .office-list span {
+    display: grid;
+    min-width: 0;
+  }
+  .office-list small {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8597b9;
+  }
+  .office-list a {
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .office-list a:hover {
+    color: var(--gold-400);
+    text-decoration: underline;
+  }
+  .prospectus {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    border-radius: var(--radius);
+    background: var(--gold-500);
+    color: var(--navy-950);
+    text-decoration: none;
+    transition:
+      background 0.2s,
+      transform 0.2s;
+  }
+  .prospectus:hover {
+    background: var(--gold-400);
+    color: var(--navy-950);
+    transform: translateY(-2px);
+  }
+  .prospectus-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 10px;
+    background: rgb(255 255 255 / 0.35);
+  }
+  .prospectus strong {
+    display: block;
+    line-height: 1.3;
+  }
+  .prospectus small {
+    font-size: 0.82rem;
+    font-weight: 700;
+    opacity: 0.8;
+  }
+  .office .link-arrow {
+    color: var(--gold-400);
+  }
+</style>

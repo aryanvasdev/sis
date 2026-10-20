@@ -1,0 +1,696 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { school } from '../data/school';
+import {
+  achievements,
+  achievementAreas,
+  achievementLevels,
+  olympiadRoll,
+  achievementStats,
+  celebrations,
+  awards,
+  type AchievementArea,
+  type AchievementLevel,
+} from '../data/achievements';
+import { url } from '../lib/url';
+
+const levelRank = (l: AchievementLevel) => achievementLevels.indexOf(l);
+const sortedAchievements = [...achievements].sort(
+  (a, b) => b.session.localeCompare(a.session) || levelRank(a.level) - levelRank(b.level),
+);
+const areas = achievementAreas
+  .map((name) => ({ name, count: achievements.filter((a) => a.area === name).length }))
+  .filter((a) => a.count > 0);
+
+const areaStyle: Record<AchievementArea, { icon: string; tone: string }> = {
+  Olympiads: { icon: 'brain', tone: 'navy' },
+  Sports: { icon: 'trophy', tone: 'green' },
+  'Dance & Culture': { icon: 'music', tone: 'maroon' },
+  Science: { icon: 'flask-conical', tone: '' },
+  Art: { icon: 'palette', tone: 'maroon' },
+  'Quiz & Spell Bee': { icon: 'spell-check', tone: 'navy' },
+  Scholarships: { icon: 'graduation-cap', tone: 'green' },
+};
+const levelTag: Record<AchievementLevel, string> = {
+  International: 'tag--maroon',
+  National: 'tag--maroon',
+  State: 'tag--gold',
+  District: 'tag--green',
+  Zonal: '',
+  'Inter-school': '',
+};
+
+const jumpLinks = [
+  { label: 'Celebrating every child', href: '#celebrate' },
+  { label: 'Medals & prizes', href: '#highlights' },
+  { label: 'Olympiads', href: '#olympiads' },
+  { label: 'Awards', href: '#awards' },
+];
+---
+
+<BaseLayout
+  title="Achievements"
+  description={`Olympiad medals, inter-school sports, dance and cultural prizes, science exhibitions, art and quiz achievements of students at ${school.name}.`}
+>
+  <PageHero
+    title="Achievements"
+    eyebrow="Celebrating our students"
+    lead="Olympiad medals, sports trophies, stage performances, science models and art prizes: every success of our students, from Nursery to Class VIII, is worth celebrating."
+    crumbs={[{ label: 'Campus Life', href: '/facilities/' }, { label: 'Achievements' }]}
+  >
+    <nav class="jump" aria-label="On this page">
+      {
+        jumpLinks.map((l) => (
+          <a href={l.href} class="jump-link">
+            {l.label}
+          </a>
+        ))
+      }
+    </nav>
+  </PageHero>
+
+  <!-- ========== CELEBRATING EVERY CHILD ========== -->
+  <section class="section" id="celebrate">
+    <div class="container">
+      <div class="split split--wide-right">
+        <figure class="feature-photo reveal">
+          <Photo
+            src="images/gallery/cultural-dance/01.jpg"
+            alt="Ten students in red and gold dance costumes with ornate headdresses, lined up before their performance at a cultural event"
+            ratio="4 / 3"
+          />
+          <figcaption>Our dance troupe, ready to go on stage</figcaption>
+        </figure>
+        <div class="reveal">
+          <SectionHead
+            eyebrow="Celebrating every child"
+            title="Every effort counts, not just first prizes"
+            lead="A medal is wonderful, but so is the shy child who speaks in assembly for the first time. We make sure every child’s effort is seen and applauded."
+          />
+          <ul class="celebrate-list">
+            {
+              celebrations.map((c) => (
+                <li>
+                  <span class="celebrate-icon">
+                    <Icon name={c.icon} size={20} />
+                  </span>
+                  <span>
+                    <strong>{c.title}</strong>
+                    <span>{c.text}</span>
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+
+      <dl class="stats reveal" aria-label={`Session ${achievementStats.session} at a glance`}>
+        {
+          achievementStats.items.map((s) => (
+            <div class="stat">
+              <dt>{s.label}</dt>
+              <dd>{s.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+      <p class="stats-note small muted">Figures for Session {achievementStats.session}.</p>
+    </div>
+  </section>
+
+  <!-- ========== STUDENT ACHIEVEMENTS ========== -->
+  <section class="section section--cream" id="highlights">
+    <div class="container" data-achievements>
+      <SectionHead
+        eyebrow="Beyond the classroom"
+        title="Medals, trophies and prizes"
+        lead="Our students compete, perform and present at inter-school, zonal, district, state and national level. Choose an area to filter."
+      />
+
+      <div class="chips" role="group" aria-label="Filter achievements by area">
+        <button type="button" class="chip" data-filter="All" aria-pressed="true">
+          All <span class="chip-count">{achievements.length}</span>
+        </button>
+        {
+          areas.map((a) => (
+            <button type="button" class="chip" data-filter={a.name} aria-pressed="false">
+              <Icon name={areaStyle[a.name].icon} size={16} />
+              {a.name} <span class="chip-count">{a.count}</span>
+            </button>
+          ))
+        }
+      </div>
+      <p class="visually-hidden" data-count aria-live="polite"></p>
+
+      <ul class="grid grid-3 ach-grid">
+        {
+          sortedAchievements.map((a) => (
+            <li class="card card--hover ach reveal" data-achievement data-area={a.area}>
+              <div class="ach-top">
+                <span class:list={['icon-badge', areaStyle[a.area].tone && `icon-badge--${areaStyle[a.area].tone}`]}>
+                  <Icon name={areaStyle[a.area].icon} />
+                </span>
+                <span class="ach-tags">
+                  <span class:list={['tag', levelTag[a.level]]}>{a.level}</span>
+                  <span class="ach-year">{a.session}</span>
+                </span>
+              </div>
+              <p class="ach-area">{a.area}</p>
+              <h3>{a.title}</h3>
+              {a.event && <p class="ach-event">{a.event}</p>}
+              {a.who && (
+                <p class="ach-who">
+                  <Icon name="user-round" size={16} /> {a.who}
+                </p>
+              )}
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== OLYMPIADS ========== -->
+  <section class="section" id="olympiads">
+    <div class="container">
+      <SectionHead
+        eyebrow="Olympiad honour roll"
+        title="Young minds, big ranks"
+        lead="Every year our students from Class I to VIII take part in Olympiads in mathematics, science, English, computers and general knowledge. Congratulations to our medal winners."
+      />
+      <div class="table-wrap reveal">
+        <table class="table olympiad-table">
+          <caption class="visually-hidden">Olympiad medal winners</caption>
+          <thead>
+            <tr>
+              <th scope="col">Student</th>
+              <th scope="col">Class</th>
+              <th scope="col">Olympiad</th>
+              <th scope="col">Award</th>
+              <th scope="col">Session</th>
+            </tr>
+          </thead>
+          <tbody>
+            {
+              olympiadRoll.map((o) => (
+                <tr>
+                  <th scope="row" class="o-name">{o.name}</th>
+                  <td class="o-cls nowrap">Class {o.cls}</td>
+                  <td class="o-oly">{o.olympiad}</td>
+                  <td class="o-award">
+                    <span class="award-cell">
+                      <Icon name="medal" size={16} /> {o.award}
+                    </span>
+                  </td>
+                  <td class="o-session nowrap">{o.session}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ON STAGE ========== -->
+  <section class="section section--cream">
+    <div class="container split">
+      <div class="reveal">
+        <SectionHead
+          eyebrow="Dance & culture"
+          title="Confidence that starts on stage"
+          lead="Dance, music and drama are part of school life from Nursery onwards. Our troupes perform at school festivals and inter-school competitions, and many children discover a lifelong love of performing."
+        />
+        <ul class="check-list">
+          <li>Folk and classical dance for every age group</li>
+          <li>Group singing, instrumental music and poetry recitation</li>
+          <li>Skits, role-plays and the Annual Day production</li>
+        </ul>
+        <div class="btn-row stage-cta">
+          <a href={url('/gallery/')} class="btn btn--navy">
+            <Icon name="images" /> Photo gallery
+          </a>
+          <a href={url('/student-life/')} class="btn btn--outline">Student life</a>
+        </div>
+      </div>
+      <figure class="feature-photo reveal">
+        <Photo
+          src="images/gallery/cultural-dance/02.jpg"
+          alt="Seven girls in orange lehengas with yellow dupattas and flower garlands, dressed for a dance performance"
+          ratio="16 / 9"
+        />
+        <figcaption>Dressed and ready for a group dance performance</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ========== AWARDS ========== -->
+  <section class="section section--navy section--jali" id="awards">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow="Recognition"
+        title="School awards & recognitions"
+        lead="Honours received by the school for teaching, sustainability, Olympiad participation and innovation."
+      />
+      <ul class="grid grid-4 award-grid">
+        {
+          awards.map((a) => (
+            <li class="award reveal">
+              <span class="award-icon">
+                <Icon name={a.icon} />
+              </span>
+              <span class="award-year">{a.year}</span>
+              <h3>{a.title}</h3>
+              <p class="award-by">{a.by}</p>
+              {a.text && <p>{a.text}</p>}
+            </li>
+          ))
+        }
+      </ul>
+      <div class="btn-row awards-cta">
+        <a href={url('/admissions/')} class="btn btn--gold">
+          Admissions {school.admissionSession} <Icon name="arrow-right" />
+        </a>
+        <a href={url('/gallery/')} class="btn btn--light">See the photo gallery</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-achievements]');
+
+  if (root) {
+    const chips = root.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const cards = root.querySelectorAll<HTMLElement>('[data-achievement]');
+    const status = root.querySelector<HTMLElement>('[data-count]')!;
+
+    chips.forEach((chip) =>
+      chip.addEventListener('click', () => {
+        const area = chip.dataset.filter ?? 'All';
+        chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+        let shown = 0;
+        cards.forEach((card) => {
+          const match = area === 'All' || card.dataset.area === area;
+          card.hidden = !match;
+          if (match) {
+            shown++;
+            card.classList.add('is-visible');
+          }
+        });
+        const label = area === 'All' ? '' : ` in ${area}`;
+        status.textContent = `Showing ${shown} achievement${shown === 1 ? '' : 's'}${label}`;
+      }),
+    );
+  }
+</script>
+
+<style>
+  /* ---------- Hero jump links ---------- */
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 28px;
+  }
+  .jump-link {
+    padding: 8px 16px;
+    border-radius: 999px;
+    border: 1px solid rgb(255 255 255 / 0.25);
+    background: rgb(255 255 255 / 0.06);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition:
+      background 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .jump-link:hover {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    color: var(--navy-950);
+  }
+
+  /* ---------- Feature photos ---------- */
+  .feature-photo :global(.photo) {
+    box-shadow: var(--shadow-lg);
+  }
+  .feature-photo figcaption {
+    margin-top: 12px;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  /* ---------- Celebrating every child ---------- */
+  .celebrate-list {
+    display: grid;
+    gap: 18px;
+    list-style: none;
+    padding: 0;
+  }
+  @media (min-width: 640px) {
+    .celebrate-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .celebrate-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .celebrate-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--gold-100);
+    color: var(--gold-600);
+  }
+  .celebrate-list strong {
+    display: block;
+    color: var(--navy-900);
+    line-height: 1.3;
+  }
+  .celebrate-list li > span:last-child > span {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.92rem;
+    color: var(--muted);
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin-top: clamp(40px, 6vw, 72px);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(90deg, var(--gold-600), var(--gold-500) 50%, var(--gold-600));
+    color: var(--navy-950);
+    overflow: hidden;
+  }
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: clamp(20px, 3vw, 32px) 12px;
+    text-align: center;
+  }
+  .stat + .stat {
+    border-left: 1px solid rgb(10 31 68 / 0.15);
+  }
+  .stat dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 1.5rem + 2vw, 3rem);
+    font-weight: 600;
+    line-height: 1;
+  }
+  .stat dt {
+    margin-top: 8px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgb(6 20 48 / 0.75);
+  }
+  .stats-note {
+    margin-top: 10px;
+    text-align: right;
+  }
+  @media (max-width: 760px) {
+    .stats {
+      grid-template-columns: 1fr 1fr;
+    }
+    .stat:nth-child(3) {
+      border-left: 0;
+    }
+    .stat:nth-child(-n + 2) {
+      border-bottom: 1px solid rgb(10 31 68 / 0.15);
+    }
+  }
+
+  /* ---------- Filter chips ---------- */
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  :global(.no-js) .chips {
+    display: none;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 6px 14px;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    font-weight: 750;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    transition:
+      background 0.15s,
+      border-color 0.15s,
+      color 0.15s;
+  }
+  .chip:hover {
+    border-color: var(--navy-600);
+    color: var(--navy-900);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: #fff;
+  }
+  .chip-count {
+    display: grid;
+    place-items: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--navy-50);
+    color: var(--navy-700);
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+  .chip[aria-pressed='true'] .chip-count {
+    background: var(--gold-500);
+    color: var(--navy-950);
+  }
+
+  /* ---------- Achievement cards ---------- */
+  .ach-grid {
+    list-style: none;
+    padding: 0;
+  }
+  .ach[hidden] {
+    display: none;
+  }
+  .ach {
+    display: flex;
+    flex-direction: column;
+  }
+  .ach-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .ach-tags {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 6px 8px;
+  }
+  .ach-year {
+    font-weight: 800;
+    font-size: 0.85rem;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .ach-area {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-600);
+    margin-bottom: 4px;
+  }
+  .ach h3 {
+    line-height: 1.3;
+    text-wrap: pretty;
+  }
+  .ach-event {
+    font-weight: 700;
+    color: var(--ink-soft);
+    font-size: 0.95rem;
+  }
+  .ach-who {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: auto;
+    padding-top: 14px;
+    font-size: 0.9rem;
+  }
+  .ach-who :global(.icon) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--gold-600);
+  }
+
+  /* ---------- Olympiad table ---------- */
+  .olympiad-table {
+    min-width: 720px;
+  }
+  .olympiad-table tbody th {
+    font-weight: 800;
+    color: var(--navy-900);
+    white-space: nowrap;
+  }
+  .nowrap {
+    white-space: nowrap;
+  }
+  .award-cell {
+    display: inline-flex;
+    align-items: flex-start;
+    gap: 6px;
+    font-weight: 700;
+    color: var(--maroon-700);
+  }
+  .award-cell :global(.icon) {
+    flex: none;
+    margin-top: 4px;
+    color: var(--gold-600);
+  }
+
+  /* Narrow screens: each winner becomes a small stacked card. */
+  @media (max-width: 640px) {
+    .olympiad-table {
+      min-width: 0;
+    }
+    .olympiad-table thead {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+    .olympiad-table,
+    .olympiad-table tbody {
+      display: block;
+    }
+    .olympiad-table tr {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-areas:
+        'name cls'
+        'oly oly'
+        'award session';
+      gap: 4px 12px;
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .olympiad-table tbody tr:last-child {
+      border-bottom: 0;
+    }
+    .olympiad-table th,
+    .olympiad-table td {
+      display: block;
+      padding: 0;
+      border: 0;
+    }
+    .o-name {
+      grid-area: name;
+    }
+    .o-cls {
+      grid-area: cls;
+      font-weight: 700;
+      color: var(--muted);
+    }
+    .o-oly {
+      grid-area: oly;
+      font-size: 0.92rem;
+    }
+    .o-award {
+      grid-area: award;
+      font-size: 0.92rem;
+    }
+    .o-session {
+      grid-area: session;
+      align-self: end;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+  }
+
+  /* ---------- On stage ---------- */
+  .stage-cta {
+    margin-top: 28px;
+  }
+
+  /* ---------- Awards ---------- */
+  .award-grid {
+    list-style: none;
+    padding: 0;
+  }
+  .award {
+    position: relative;
+    padding: 26px 22px;
+    border-radius: var(--radius);
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.12);
+  }
+  .award-icon {
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 14px;
+    background: var(--gold-500);
+    color: var(--navy-950);
+    margin-bottom: 16px;
+  }
+  .award-year {
+    position: absolute;
+    top: 26px;
+    right: 22px;
+    font-family: var(--font-display);
+    font-size: 1.1rem;
+    color: var(--gold-400);
+  }
+  .award h3 {
+    font-size: 1.2rem;
+  }
+  .award-by {
+    margin: 4px 0 10px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--gold-400);
+  }
+  .award p:last-child {
+    font-size: 0.92rem;
+    color: #b9c6df;
+  }
+  .awards-cta {
+    justify-content: center;
+    margin-top: clamp(32px, 4vw, 48px);
+  }
+</style>

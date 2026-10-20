@@ -1,0 +1,548 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { school } from '../data/school';
+import { benefits, currentOpenings, type Opening } from '../data/careers';
+import { formatDate } from '../lib/format';
+
+const openings = currentOpenings();
+const emailDomain = school.careersEmail.split('@')[1];
+
+const mailto = (subject: string, body: string) =>
+  `mailto:${school.careersEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+
+const applyBody = (post: string) =>
+  [
+    'Dear Principal,',
+    '',
+    `I would like to apply for the post of ${post} at ${school.name}. My CV and documents are attached.`,
+    '',
+    'Name:',
+    'Mobile number:',
+    'Highest qualification:',
+    'CTET / other eligibility (if any):',
+    'Teaching experience (years):',
+    'Current / last school:',
+    '',
+    'Thank you.',
+  ].join('\n');
+
+const applyLink = (job: Opening) => mailto(`Application for ${job.title} (Ref: ${job.ref})`, applyBody(job.title));
+const generalLink = mailto('General application: [post of interest]', applyBody('[post of interest]'));
+
+const steps = [
+  {
+    icon: 'mail',
+    title: 'Email your application',
+    text: 'Send your CV, a short cover letter, scanned copies of your certificates and mark sheets, your CTET / HTET result where applicable and a recent photograph. Mention the post in the subject line.',
+  },
+  {
+    icon: 'search-check',
+    title: 'Shortlisting',
+    text: 'We read every application. Shortlisted candidates are contacted by phone or email, usually within two weeks.',
+  },
+  {
+    icon: 'presentation',
+    title: 'Test, demo class & interview',
+    text: 'A short subject test and a demo lesson for teaching posts, followed by an interview with the Principal and management.',
+  },
+  {
+    icon: 'badge-check',
+    title: 'Verification & offer',
+    text: 'Original documents, references and police verification are checked, for the safety of our children, before the appointment letter is issued.',
+  },
+];
+---
+
+<BaseLayout
+  title="Careers"
+  description={`Teaching vacancies at ${school.name}, ${school.address.city}, ${school.address.district} (${school.classes}). See current openings, qualifications and how to apply.`}
+>
+  <PageHero
+    title="Careers"
+    eyebrow="Join our team"
+    lead="Great schools are built by great teachers. If you are passionate about children, love your subject and enjoy learning yourself, we would like to hear from you."
+    crumbs={[{ label: 'Careers' }]}
+  >
+    <div class="btn-row">
+      <a href="#openings" class="btn btn--gold">Current openings <Icon name="arrow-right" /></a>
+      <a href="#apply" class="btn btn--light">How to apply</a>
+    </div>
+  </PageHero>
+
+  <!-- ========== INTRO ========== -->
+  <section class="section">
+    <div class="container">
+      <div class="intro">
+        <div class="reveal">
+          <SectionHead eyebrow="Work with us" title="Teach, grow and make a difference" />
+        </div>
+        <div class="stack reveal">
+          <p>
+            At {school.name}, teachers are mentors first. We follow the {school.curriculum}, in the spirit
+            of NEP 2020, so there is room to try new ideas: projects, experiments, stories, games and technology.
+          </p>
+          <p>
+            We look for people who are warm with children, thorough in their subject and happy to work as part of a team.
+            In return, we offer a respectful workplace, steady support and real opportunities to grow.
+          </p>
+          <ul class="check-list">
+            <li>Teaching posts from Nursery to Class VIII</li>
+            <li>Computer, sports, art, music and dance roles</li>
+            <li>Fresh graduates welcome for selected posts</li>
+          </ul>
+        </div>
+      </div>
+      <figure class="team reveal">
+        <Photo
+          src="images/people/our-teachers.jpg"
+          alt={`The teaching staff of ${school.name}`}
+          ratio="1800 / 831"
+        />
+        <figcaption>
+          <span class="tag tag--gold">Our teachers</span>
+          Join a team like ours
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- ========== WHY US ========== -->
+  <section class="section section--cream">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow="Why work with us"
+        title="A school that invests in its teachers"
+        lead="Happy, confident teachers make for happy, confident children. Here is what you can expect."
+      />
+      <div class="grid grid-3">
+        {
+          benefits.map((b) => (
+            <article class="card card--hover reveal">
+              <span class:list={['icon-badge', b.tone && `icon-badge--${b.tone}`]}>
+                <Icon name={b.icon} />
+              </span>
+              <h3>{b.title}</h3>
+              <p>{b.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== OPENINGS ========== -->
+  <section class="section" id="openings">
+    <div class="container">
+      <div class="openings-head">
+        <SectionHead
+          eyebrow="Current openings"
+          title={openings.length ? `${openings.length} open ${openings.length === 1 ? 'position' : 'positions'}` : 'No openings right now'}
+          lead="Qualifications are as per NCTE norms. Click “Apply” to email us with the post already filled in."
+        />
+      </div>
+
+      {
+        openings.length > 0 ? (
+          <div class="jobs">
+            {openings.map((job) => (
+              <article class="job reveal" aria-labelledby={`job-${job.ref}`}>
+                <div class="job-tags">
+                  <span
+                    class:list={[
+                      'tag',
+                      { 'tag--gold': job.category === 'Teaching', 'tag--green': job.category === 'Co-curricular' },
+                    ]}
+                  >
+                    {job.category}
+                  </span>
+                  <span class="tag">{job.type}</span>
+                  <span class="job-count">
+                    {job.positions} {job.positions === 1 ? 'post' : 'posts'}
+                  </span>
+                </div>
+                <h3 id={`job-${job.ref}`}>{job.title}</h3>
+                <ul class="job-meta">
+                  <li>
+                    <Icon name="school" size={16} /> {job.level}
+                  </li>
+                  <li>
+                    <Icon name="briefcase" size={16} /> {job.experience}
+                  </li>
+                </ul>
+                <div class="job-body">
+                  <h4 class="job-label">Qualifications</h4>
+                  <ul class="check-list job-quals">
+                    {job.qualifications.map((q) => (
+                      <li>{q}</li>
+                    ))}
+                  </ul>
+                  {job.preferred && (
+                    <p class="job-pref">
+                      <strong>Preferred:</strong> {job.preferred}
+                    </p>
+                  )}
+                </div>
+                <div class="job-foot">
+                  <span class="job-dates">
+                    {job.lastDate ? (
+                      <span>
+                        Apply by <time datetime={job.lastDate}>{formatDate(job.lastDate)}</time>
+                      </span>
+                    ) : (
+                      <span>
+                        Posted <time datetime={job.postedOn}>{formatDate(job.postedOn)}</time>
+                      </span>
+                    )}
+                    <small>Ref: {job.ref}</small>
+                  </span>
+                  <a href={applyLink(job)} class="btn btn--navy btn--sm">
+                    <Icon name="send" /> Apply<span class="visually-hidden"> for {job.title}</span>
+                  </a>
+                </div>
+              </article>
+            ))}
+          </div>
+        ) : (
+          <div class="card empty reveal">
+            <span class="icon-badge icon-badge--navy">
+              <Icon name="briefcase" />
+            </span>
+            <p>
+              There are no vacancies at the moment, but we are always happy to hear from good teachers. Send us your CV and
+              we will keep it on file for future openings.
+            </p>
+          </div>
+        )
+      }
+
+      <div class="general reveal">
+        <div>
+          <h3>Don’t see the right role?</h3>
+          <p>Send us your CV anyway. We keep applications on file and contact candidates when a suitable post opens.</p>
+        </div>
+        <a href={generalLink} class="btn btn--outline"><Icon name="mail" /> Send your CV</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HOW TO APPLY ========== -->
+  <section class="section section--navy section--jali" id="apply">
+    <div class="container">
+      <SectionHead
+        eyebrow="How to apply"
+        title="From application to appointment"
+        lead={`Email your application to ${school.careersEmail}. Here is what happens next.`}
+      />
+      <ol class="steps">
+        {
+          steps.map((s, i) => (
+            <li class="step reveal">
+              <span class="step-top">
+                <span class="step-icon">
+                  <Icon name={s.icon} />
+                </span>
+                <span class="step-num" aria-hidden="true">
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+              </span>
+              <h3>
+                <span class="visually-hidden">Step {i + 1}: </span>
+                {s.title}
+              </h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="btn-row" style="margin-top:36px">
+        <a href={`mailto:${school.careersEmail}`} class="btn btn--gold"><Icon name="mail" /> {school.careersEmail}</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FRAUD NOTE ========== -->
+  <section class="section section--tight">
+    <div class="container">
+      <aside class="fraud reveal" aria-labelledby="fraud-title">
+        <span class="icon-badge icon-badge--maroon">
+          <Icon name="shield-alert" />
+        </span>
+        <div>
+          <h2 id="fraud-title">We never charge a fee for recruitment</h2>
+          <p>
+            {school.name} does not ask for any money at any stage of recruitment: not for application forms, tests,
+            interviews, training or appointment letters. All official communication comes only from an
+            <strong>@{emailDomain}</strong> email address or the school’s published phone numbers. If anyone asks you for
+            payment in the school’s name, please do not pay, and inform the school office at once on {school.phones[0]}.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Intro ---------- */
+  .intro {
+    display: grid;
+    gap: 0 clamp(28px, 5vw, 72px);
+    align-items: start;
+  }
+  @media (min-width: 900px) {
+    .intro {
+      grid-template-columns: 1fr 1.25fr;
+    }
+  }
+  .team {
+    position: relative;
+    margin-top: clamp(32px, 4vw, 48px);
+  }
+  .team :global(.photo) {
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+  }
+  .team figcaption {
+    position: absolute;
+    left: clamp(12px, 2.4vw, 28px);
+    bottom: clamp(12px, 2.4vw, 28px);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 16px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.94);
+    box-shadow: var(--shadow);
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  @media (max-width: 560px) {
+    .team figcaption {
+      position: static;
+      margin-top: 12px;
+      padding: 0;
+      background: none;
+      box-shadow: none;
+    }
+  }
+
+  /* ---------- Openings ---------- */
+  .jobs {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr));
+    gap: clamp(16px, 2.4vw, 24px);
+  }
+  .job {
+    display: flex;
+    flex-direction: column;
+    padding: clamp(20px, 2.6vw, 28px);
+    background: #fff;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--gold-500);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-sm);
+    transition:
+      box-shadow 0.2s ease,
+      transform 0.2s ease;
+  }
+  .job:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+  .job-tags {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px;
+  }
+  .job-count {
+    margin-left: auto;
+    font-size: 0.82rem;
+    font-weight: 800;
+    color: var(--maroon-600);
+  }
+  .job h3 {
+    margin-top: 12px;
+    font-size: var(--step-2);
+  }
+  .job-meta {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 4px;
+    margin: 10px 0 16px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .job-meta li {
+    display: flex;
+    gap: 8px;
+    align-items: flex-start;
+  }
+  .job-meta :global(.icon) {
+    flex: none;
+    margin-top: 4px;
+    color: var(--gold-600);
+  }
+  .job-label {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--navy-700);
+    margin-bottom: 10px;
+  }
+  .job-quals {
+    gap: 6px;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  .job-pref {
+    margin-top: 14px;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .job-pref strong {
+    color: var(--navy-900);
+  }
+  .job-body {
+    flex: 1;
+  }
+  .job-foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 20px;
+    padding-top: 18px;
+    border-top: 1px dashed var(--line);
+  }
+  .job-dates {
+    display: grid;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--navy-900);
+  }
+  .job-dates small {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .empty {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+  }
+  .empty .icon-badge {
+    margin-bottom: 0;
+  }
+  .general {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px 24px;
+    margin-top: clamp(24px, 3vw, 36px);
+    padding: clamp(20px, 3vw, 28px);
+    border-radius: var(--radius);
+    background: var(--cream);
+    border: 1px dashed var(--gold-400);
+  }
+  .general h3 {
+    font-size: var(--step-1);
+  }
+  .general p {
+    margin-top: 4px;
+    color: var(--muted);
+  }
+
+  /* ---------- Steps ---------- */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+  }
+  .step {
+    position: relative;
+    padding: 24px 22px;
+    border-radius: var(--radius);
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .step-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+  }
+  .step-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--gold-500);
+    color: var(--navy-950);
+  }
+  .step-num {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1;
+    color: rgb(255 255 255 / 0.16);
+  }
+  .step h3 {
+    font-size: 1.2rem;
+  }
+  .step p {
+    margin-top: 8px;
+    font-size: 0.92rem;
+    color: #b9c6df;
+  }
+  #apply .btn--gold {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+
+  /* ---------- Fraud note ---------- */
+  .fraud {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: clamp(20px, 3vw, 32px);
+    border-radius: var(--radius);
+    background: var(--maroon-50);
+    border: 1px solid #f1d3d8;
+    border-left: 5px solid var(--maroon-600);
+  }
+  .fraud .icon-badge {
+    margin-bottom: 0;
+    background: #fff;
+  }
+  .fraud h2 {
+    font-size: var(--step-2);
+    color: var(--maroon-700);
+  }
+  .fraud p {
+    margin-top: 8px;
+    color: var(--ink-soft);
+    max-width: 90ch;
+  }
+  @media (max-width: 560px) {
+    .fraud,
+    .empty {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+</style>

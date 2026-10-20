@@ -1,0 +1,956 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { school } from '../data/school';
+import {
+  houses,
+  clubs,
+  sports,
+  signatureEvents,
+  councilSession,
+  councilLeaders,
+  houseCaptains,
+  prefects,
+  counsellor,
+} from '../data/student-life';
+import { url } from '../lib/url';
+
+/** Put photos in /public/images/ and set their paths here, e.g. 'images/life/assembly.jpg'. */
+const introImages = { main: '', second: '', third: '' };
+const outreachImage = '';
+const excursionImage = '';
+
+const jumpLinks = [
+  { label: 'Houses', href: '#houses' },
+  { label: 'Clubs', href: '#clubs' },
+  { label: 'Sports', href: '#sports' },
+  { label: 'Events', href: '#events' },
+  { label: 'Student Council', href: '#council' },
+  { label: 'Wellbeing', href: '#wellbeing' },
+];
+
+const counts = [
+  { value: houses.length, label: 'Houses' },
+  { value: clubs.length, label: 'Clubs & societies' },
+  { value: `${sports.length}+`, label: 'Sports & games' },
+  { value: signatureEvents.length, label: 'Signature events' },
+];
+
+/** Sports glyphs that Lucide does not have, drawn on the same 24 × 24 grid. */
+const glyphs: Record<string, string> = {
+  cricket:
+    '<path d="M17.5 3.5 6 15l3 3 11.5-11.5a2.12 2.12 0 0 0-3-3Z"/><path d="m7.5 16.5-4 4"/><circle cx="17.5" cy="17.5" r="2.5"/>',
+  football:
+    '<circle cx="12" cy="12" r="10"/><path d="m12 7 4.76 3.46-1.82 5.6H9.06l-1.82-5.6Z"/><path d="M12 7V2M16.76 10.46l4.75-1.54M14.94 16.06l2.94 4.04M9.06 16.06l-2.94 4.04M7.24 10.46 2.49 8.92"/>',
+  basketball:
+    '<circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/><path d="M4.93 4.93c4.08 4.08 4.08 10.06 0 14.14M19.07 4.93c-4.08 4.08-4.08 10.06 0 14.14"/>',
+  badminton:
+    '<path d="M9 16h6v1.5a3 3 0 0 1-6 0Z"/><path d="M9 16 6 3h12l-3 13"/><path d="M10.5 16 10 3M13.5 16 14 3M7.15 8h9.7"/>',
+  'table-tennis':
+    '<circle cx="9.5" cy="9.5" r="6.5"/><path d="M12.91 15.03 17.15 19.27a1.5 1.5 0 0 0 2.12-2.12L15.03 12.91"/><circle cx="19" cy="5" r="2"/>',
+};
+
+const houseWork = [
+  { icon: 'star', title: 'House points', text: 'Earned for academics, sports, discipline, cleanliness and community service throughout the year.' },
+  { icon: 'swords', title: 'Inter-house contests', text: 'Debates, quizzes, dance, music, art and sports, with every student representing their house.' },
+  { icon: 'trophy', title: 'The House Cup', text: 'Awarded on Annual Day to the house with the most points, and proudly displayed for the year.' },
+];
+
+const outreach = [
+  'Cleanliness drives on campus and in the neighbourhood under Swachh Bharat',
+  'Tree plantation and water conservation campaigns with the Eco Club',
+  'Joy of Giving week: books, clothes and food collected for those in need',
+  'Visits to old-age homes and special schools to share time and talents',
+  'Road safety, health and anti-plastic awareness rallies',
+  'Each One Teach One: senior students help younger children with reading',
+];
+
+const excursions = [
+  { stage: 'Pre-primary', text: 'Park, farm and post-office visits, and nature walks.' },
+  { stage: 'Classes I – V', text: 'Zoo, museum, science centre and a local market or bakery.' },
+  { stage: 'Classes VI – VIII', text: 'Heritage sites, planetarium, water treatment plant and local industries.' },
+  { stage: 'Classes IX – XII', text: 'Educational tours, university and industry visits, and adventure camps.' },
+];
+
+const wellbeing = [
+  {
+    icon: 'message-circle-heart',
+    title: 'School counsellor',
+    text: `${counsellor.name} (${counsellor.qualification}) meets students individually and in groups, and supports parents with guidance on study habits, stress and career choices.`,
+    extra: `Available ${counsellor.hours}`,
+    tone: 'maroon',
+  },
+  {
+    icon: 'flower-2',
+    title: 'Yoga & mindfulness',
+    text: 'Regular yoga in PE periods, breathing exercises in assembly and quiet reflection time to help children stay calm and focused.',
+    tone: 'green',
+  },
+  {
+    icon: 'stethoscope',
+    title: 'Health check-ups',
+    text: 'Annual medical, dental and eye check-ups by visiting doctors, with a health record maintained for every child.',
+    tone: 'navy',
+  },
+  {
+    icon: 'shield-check',
+    title: 'Anti-bullying',
+    text: 'A zero-tolerance policy, an Anti-Bullying Committee and a confidential complaint box. Every concern is looked into promptly.',
+    tone: '',
+  },
+  {
+    icon: 'heart-pulse',
+    title: 'Medical room',
+    text: 'A medical room with a trained first-aid attendant, and tie-ups with nearby hospitals for emergencies.',
+    tone: 'maroon',
+  },
+  {
+    icon: 'apple',
+    title: 'Healthy habits',
+    text: 'Healthy tiffin guidelines, water breaks, hygiene drills and age-appropriate sessions on safety and personal health.',
+    tone: 'green',
+  },
+];
+---
+
+<BaseLayout
+  title="Student Life"
+  description={`Houses, clubs, sports, annual events, the Student Council and student wellbeing at ${school.name}.`}
+>
+  <PageHero
+    title="Student Life"
+    eyebrow="Beyond the classroom"
+    lead="Houses, clubs, sports, celebrations and service: the experiences that help every child discover a talent, make friends and grow in confidence."
+    crumbs={[{ label: 'Campus Life', href: '/facilities/' }, { label: 'Student Life' }]}
+  >
+    <nav class="btn-row jump" aria-label="On this page">
+      {
+        jumpLinks.map((j) => (
+          <a href={j.href} class="btn btn--light btn--sm">
+            {j.label}
+          </a>
+        ))
+      }
+    </nav>
+  </PageHero>
+
+  <!-- ========== INTRO ========== -->
+  <section class="section">
+    <div class="container split">
+      <div class="reveal">
+        <SectionHead eyebrow="Every child, every week" title="A full and happy school day" />
+        <div class="stack">
+          <p>
+            At {school.name}, learning does not stop when the bell rings. Every week has time for sport, the arts, clubs
+            and community work, and every child is encouraged to try something new, whether that is a role in the school
+            play, a place in the football team or a project for the science exhibition.
+          </p>
+          <p>
+            Through the house system and the Student Council, children learn to lead, to cooperate and to take pride in
+            their school. Through our celebrations they learn about one another’s cultures, languages and festivals.
+          </p>
+        </div>
+        <dl class="counts">
+          {
+            counts.map((c) => (
+              <div>
+                <dt>{c.label}</dt>
+                <dd>{c.value}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+      <div class="collage reveal">
+        <Photo src={introImages.main} label="Morning assembly" icon="sun" tone="gold" ratio="auto" class="c1" />
+        <Photo src={introImages.second} label="Club time" icon="palette" tone="plum" ratio="auto" class="c2" />
+        <Photo src={introImages.third} label="Sports period" icon="trophy" tone="green" ratio="auto" class="c3" />
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== HOUSES ========== -->
+  <section class="section section--cream" aria-labelledby="houses">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow="The house system"
+        title="Four houses, one school"
+        id="houses"
+        lead="Every student and teacher belongs to one of four houses, named after India’s great mountain ranges. Houses build friendships across classes and a healthy spirit of competition."
+      />
+      <div class="grid grid-4">
+        {
+          houses.map((h) => (
+            <article class="house reveal" style={`--house:${h.hex}`}>
+              <div class="house-top">
+                <Icon name="mountain-snow" size={34} strokeWidth={1.6} />
+                <h3>{h.name}</h3>
+                <span class="house-colour">
+                  <span class="swatch" aria-hidden="true" />
+                  {h.colour} House
+                </span>
+              </div>
+              <div class="house-body">
+                <p class="house-value">
+                  <span>Value</span>
+                  {h.value}
+                </p>
+                <p>{h.text}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+      <ul class="house-work">
+        {
+          houseWork.map((w) => (
+            <li class="reveal">
+              <span class="icon-badge icon-badge--navy">
+                <Icon name={w.icon} />
+              </span>
+              <div>
+                <h3>{w.title}</h3>
+                <p>{w.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== CLUBS ========== -->
+  <section class="section" aria-labelledby="clubs">
+    <div class="container">
+      <SectionHead
+        eyebrow="Clubs & societies"
+        title="Find your passion"
+        id="clubs"
+        lead="Club periods are part of the weekly timetable. Students choose a club at the start of the session and can change at the half-year."
+      />
+      <ul class="clubs">
+        {
+          clubs.map((c) => (
+            <li class="club card card--hover reveal">
+              <span class:list={['icon-badge', c.tone && `icon-badge--${c.tone}`]}>
+                <Icon name={c.icon} />
+              </span>
+              <div>
+                <h3>{c.name}</h3>
+                <p>{c.text}</p>
+                <span class="tag">Classes {c.classes}</span>
+              </div>
+            </li>
+          ))
+        }
+        <li class="club club--idea reveal">
+          <span class="icon-badge"><Icon name="lightbulb" /></span>
+          <div>
+            <h3>Have an idea for a new club?</h3>
+            <p>Students can propose a new club to the Student Council, with a teacher as mentor.</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== SPORTS ========== -->
+  <section class="section section--navy section--jali" aria-labelledby="sports">
+    <div class="container split sports">
+      <div class="reveal">
+        <SectionHead
+          eyebrow="Sports & games"
+          title="Play hard, play fair"
+          id="sports"
+          lead="Every class has regular PE periods with trained coaches. Students represent the school at zonal, district, state and CBSE cluster competitions."
+        />
+        <ul class="check-list sports-points">
+          <li>Large playground, basketball court and athletics track</li>
+          <li>Indoor games room for chess, table tennis and carrom</li>
+          <li>After-school coaching for school teams</li>
+          <li>Annual Sports Meet and inter-house leagues</li>
+        </ul>
+      </div>
+      <ul class="sports-grid reveal" aria-label="Sports offered">
+        {
+          sports.map((s) => (
+            <li>
+              <span class="sport-icon">
+                {glyphs[s.icon] ? (
+                  <svg
+                    viewBox="0 0 24 24"
+                    width="30"
+                    height="30"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="1.8"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    aria-hidden="true"
+                    focusable="false"
+                    set:html={glyphs[s.icon]}
+                  />
+                ) : (
+                  <Icon name={s.icon} size={30} strokeWidth={1.8} />
+                )}
+              </span>
+              <span class="sport-name">{s.name}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== SIGNATURE EVENTS ========== -->
+  <section class="section" aria-labelledby="events">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow="Celebrations"
+        title="Signature events of the year"
+        id="events"
+        lead="The days our students look forward to, and remember long after they leave school."
+      />
+      <div class="grid grid-4">
+        {
+          signatureEvents.map((e) => (
+            <article class="event reveal">
+              <Photo icon={e.icon} tone={e.tone} ratio="16 / 10" class="event-photo" />
+              <div class="event-body">
+                <span class="tag tag--gold">{e.when}</span>
+                <h3>{e.title}</h3>
+                <p>{e.text}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+      <div class="center events-more">
+        <a href={url('/academics/#calendar')} class="link-arrow">
+          See dates in the academic calendar <Icon name="arrow-right" />
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== STUDENT COUNCIL ========== -->
+  <section class="section section--cream" aria-labelledby="council">
+    <div class="container">
+      <SectionHead
+        eyebrow={`Student Council ${councilSession}`}
+        title="Student leadership"
+        id="council"
+        lead="Council members are chosen each April through nominations, speeches and a vote by students and teachers, and take their oath at the Investiture Ceremony. They help run assemblies, events and house activities, and are the voice of students to the school."
+      />
+
+      <h3 class="tier-h">Council leaders</h3>
+      <ul class="leaders">
+        {
+          councilLeaders.map((m) => (
+            <li class="leader reveal">
+              <span class="leader-avatar">
+                <Icon name="user-round" size={30} />
+              </span>
+              <span class="leader-role">{m.role}</span>
+              <strong>{m.name}</strong>
+              <span class="leader-class">{m.cls}</span>
+            </li>
+          ))
+        }
+      </ul>
+
+      <h3 class="tier-h">House captains</h3>
+      <ul class="captains">
+        {
+          houseCaptains.map((c) => {
+            const house = houses.find((h) => h.name === c.house);
+            return (
+              <li class="captain reveal" style={`--house:${house?.hex ?? 'var(--navy-700)'}`}>
+                <span class="captain-house">{c.house}</span>
+                <strong>{c.name}</strong>
+                <span>{c.cls}</span>
+              </li>
+            );
+          })
+        }
+      </ul>
+
+      <h3 class="tier-h">Prefects</h3>
+      <ul class="prefects reveal">
+        {
+          prefects.map((p) => (
+            <li>
+              <span>{p.role}</span>
+              <strong>{p.name}</strong>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== OUTREACH & EXCURSIONS ========== -->
+  <section class="section">
+    <div class="container out-grid">
+      <div class="out-col reveal">
+        <Photo src={outreachImage} label="Community outreach" icon="hand-heart" tone="maroon" ratio="16 / 9" />
+        <SectionHead
+          eyebrow="Giving back"
+          title="Community outreach"
+          lead="We want our students to notice the needs of others and to know that they can make a difference."
+        />
+        <ul class="check-list">
+          {outreach.map((o) => <li>{o}</li>)}
+        </ul>
+      </div>
+      <div class="out-col reveal">
+        <Photo src={excursionImage} label="Field trips" icon="bus" tone="sky" ratio="16 / 9" />
+        <SectionHead
+          eyebrow="Learning outside"
+          title="Excursions & field trips"
+          lead="Every class goes on at least one educational trip a year, planned to connect with what children are learning."
+        />
+        <ul class="trips">
+          {
+            excursions.map((x) => (
+              <li>
+                <span class="tag">{x.stage}</span>
+                <span>{x.text}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="callout callout--navy trip-note">
+          <Icon name="shield-check" />
+          <span>
+            All trips need written consent from parents and travel in school buses with teachers, female attendants and
+            a first-aid kit.
+          </span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WELLBEING ========== -->
+  <section class="section section--cream" aria-labelledby="wellbeing">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow="Health & wellbeing"
+        title="Happy, healthy, safe"
+        id="wellbeing"
+        lead="Children learn best when they feel safe and cared for. We look after their bodies, minds and feelings with the same attention we give their studies."
+      />
+      <div class="grid grid-3">
+        {
+          wellbeing.map((w) => (
+            <article class="card reveal">
+              <span class:list={['icon-badge', w.tone && `icon-badge--${w.tone}`]}>
+                <Icon name={w.icon} />
+              </span>
+              <h3>{w.title}</h3>
+              <p>{w.text}</p>
+              {w.extra && (
+                <p class="w-extra">
+                  <Icon name="clock" size={16} /> {w.extra}
+                </p>
+              )}
+            </article>
+          ))
+        }
+      </div>
+      <p class="callout well-note reveal">
+        <Icon name="message-circle-heart" />
+        <span>
+          If your child is worried about anything, at school or at home, please speak to the class teacher or the school
+          counsellor. Every conversation is treated with care and in confidence.
+        </span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== CTA ========== -->
+  <section class="section--tight">
+    <div class="container center cta">
+      <h2>See student life for yourself</h2>
+      <p class="lead">Browse photos from recent events, or visit the campus with your child.</p>
+      <div class="btn-row">
+        <a href={url('/gallery/')} class="btn btn--navy"><Icon name="camera" /> Photo gallery</a>
+        <a href={url('/facilities/')} class="btn btn--outline">Our facilities</a>
+        <a href={url('/admissions/#enquiry')} class="btn btn--gold">Book a campus visit <Icon name="arrow-right" /></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Jump links ---------- */
+  .jump .btn {
+    min-height: 36px;
+  }
+
+  /* ---------- Intro ---------- */
+  .counts {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-top: 32px;
+  }
+  @media (max-width: 560px) {
+    .counts {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .counts div {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 16px 14px;
+    border-radius: var(--radius);
+    background: var(--cream);
+    border: 1px solid var(--line);
+  }
+  .counts dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--navy-900);
+  }
+  .counts dt {
+    margin-top: 6px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    line-height: 1.3;
+  }
+  .collage {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    grid-template-rows: repeat(2, clamp(130px, 16vw, 210px));
+    gap: 14px;
+  }
+  .collage :global(.photo) {
+    height: 100%;
+  }
+  .collage :global(.c1) {
+    grid-row: span 2;
+  }
+
+  /* ---------- Houses ---------- */
+  .house {
+    overflow: hidden;
+    border-radius: var(--radius-lg);
+    background: #fff;
+    border: 1px solid var(--line-soft);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+  .house:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .house-top {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding: 24px 24px 22px;
+    background: linear-gradient(150deg, color-mix(in srgb, var(--house) 78%, #000), var(--house));
+    color: #fff;
+  }
+  .house-top::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--jali);
+    background-size: 52px 52px;
+    opacity: 0.18;
+    filter: brightness(2.4);
+  }
+  .house-top h3 {
+    margin-top: 14px;
+    color: #fff;
+    font-size: var(--step-3);
+  }
+  .house-colour {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.92;
+  }
+  .swatch {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--house);
+    border: 2px solid #fff;
+  }
+  .house-body {
+    padding: 20px 24px 24px;
+  }
+  .house-value {
+    display: grid;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--navy-900);
+    line-height: 1.2;
+  }
+  .house-value span {
+    font-family: var(--font-body);
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--house) 80%, #000);
+  }
+  .house-body p:last-child {
+    margin-top: 8px;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .house-work {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 16px 32px;
+    list-style: none;
+    padding: clamp(24px, 3vw, 32px) 0 0;
+    margin-top: clamp(28px, 4vw, 44px);
+    border-top: 1px solid var(--line);
+  }
+  .house-work li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+  }
+  .house-work .icon-badge {
+    margin: 0;
+  }
+  .house-work h3 {
+    font-size: var(--step-1);
+  }
+  .house-work p {
+    margin-top: 2px;
+    font-size: 0.95rem;
+    color: var(--muted);
+  }
+
+  /* ---------- Clubs ---------- */
+  .clubs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+  }
+  .club {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px;
+  }
+  .club .icon-badge {
+    margin: 0;
+    width: 48px;
+    height: 48px;
+  }
+  .club h3 {
+    font-size: 1.15rem;
+    margin-bottom: 4px;
+  }
+  .club p {
+    font-size: 0.93rem;
+    color: var(--muted);
+  }
+  .club .tag {
+    margin-top: 10px;
+  }
+  .club--idea {
+    border-radius: var(--radius);
+    border: 2px dashed var(--gold-200);
+    background: var(--gold-100);
+  }
+  .club--idea p {
+    color: #5f4510;
+  }
+
+  /* ---------- Sports ---------- */
+  .sports {
+    align-items: center;
+  }
+  .sports-points {
+    color: #dfe6f3;
+  }
+  .sports-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+  }
+  @media (max-width: 560px) {
+    .sports-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+  }
+  .sports-grid li {
+    display: grid;
+    justify-items: center;
+    align-content: start;
+    gap: 10px;
+    padding: 18px 8px 16px;
+    border-radius: var(--radius);
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    text-align: center;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
+  }
+  .sports-grid li:hover {
+    background: rgb(255 255 255 / 0.09);
+    border-color: rgb(228 185 76 / 0.5);
+  }
+  .sport-icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--gold-500);
+    color: var(--navy-950);
+  }
+  .sport-name {
+    font-size: 0.88rem;
+    font-weight: 800;
+    line-height: 1.25;
+    color: #fff;
+  }
+
+  /* ---------- Events ---------- */
+  .event {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--line-soft);
+    box-shadow: var(--shadow-sm);
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s;
+  }
+  .event:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow);
+  }
+  .event :global(.event-photo) {
+    border-radius: 0;
+  }
+  .event-body {
+    padding: 18px 20px 22px;
+  }
+  .event h3 {
+    margin-top: 10px;
+    font-size: var(--step-1);
+  }
+  .event p {
+    margin-top: 6px;
+    font-size: 0.93rem;
+    color: var(--muted);
+  }
+  .events-more {
+    margin-top: 32px;
+  }
+
+  /* ---------- Student Council ---------- */
+  .tier-h {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin: 32px 0 16px;
+    font-size: var(--step-1);
+  }
+  .tier-h::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .section-head + .tier-h {
+    margin-top: 0;
+  }
+  .leaders,
+  .captains {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+  }
+  .leader {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    padding: 24px 18px;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--line-soft);
+    box-shadow: var(--shadow-sm);
+    text-align: center;
+  }
+  .leader-avatar {
+    display: grid;
+    place-items: center;
+    width: 72px;
+    height: 72px;
+    margin-bottom: 12px;
+    border-radius: 50%;
+    background: var(--navy-50);
+    color: var(--navy-700);
+    box-shadow:
+      0 0 0 4px #fff,
+      0 0 0 6px var(--gold-500);
+  }
+  .leader-role {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-600);
+  }
+  .leader strong {
+    font-size: 1.1rem;
+    color: var(--navy-900);
+  }
+  .leader-class {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .captain {
+    display: grid;
+    gap: 2px;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--line-soft);
+    border-left: 6px solid var(--house);
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .captain-house {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: color-mix(in srgb, var(--house) 80%, #000);
+  }
+  .captain strong {
+    font-size: 1.05rem;
+    color: var(--navy-900);
+  }
+  .prefects {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
+    gap: 10px;
+    list-style: none;
+    padding: 0;
+  }
+  .prefects li {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    padding: 12px 16px;
+    border-radius: var(--radius-sm);
+    background: #fff;
+    border: 1px solid var(--line-soft);
+    font-size: 0.9rem;
+  }
+  .prefects span {
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .prefects strong {
+    color: var(--navy-900);
+  }
+
+  /* ---------- Outreach & excursions ---------- */
+  .out-grid {
+    display: grid;
+    gap: clamp(48px, 6vw, 72px);
+  }
+  @media (min-width: 960px) {
+    .out-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .out-col > :global(.photo) {
+    margin-bottom: 28px;
+  }
+  .out-col :global(.section-head) {
+    margin-bottom: 22px;
+  }
+  .out-col :global(.section-head h2) {
+    font-size: var(--step-3);
+  }
+  .trips {
+    display: grid;
+    gap: 12px;
+    list-style: none;
+    padding: 0;
+  }
+  .trips li {
+    display: grid;
+    gap: 6px;
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    background: var(--cream);
+    border: 1px solid var(--line-soft);
+  }
+  .trips .tag {
+    justify-self: start;
+  }
+  .trip-note {
+    margin-top: 18px;
+  }
+
+  /* ---------- Wellbeing ---------- */
+  .w-extra {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--navy-700);
+  }
+  .well-note {
+    margin-top: clamp(24px, 3vw, 36px);
+  }
+
+  /* ---------- CTA ---------- */
+  .cta h2 {
+    font-size: var(--step-3);
+  }
+  .cta .btn-row {
+    margin-top: 24px;
+  }
+</style>

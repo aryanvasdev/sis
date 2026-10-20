@@ -1,0 +1,1290 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
+import { school } from '../data/school';
+import {
+  stages,
+  languages,
+  academicCalendar,
+  calendarTypes,
+  calendarSession,
+  documents,
+  uniform,
+} from '../data/academics';
+import { url } from '../lib/url';
+
+const jumpLinks = [
+  { label: 'Curriculum', href: '#curriculum' },
+  { label: 'Subjects', href: '#subjects' },
+  { label: 'Assessment', href: '#assessment' },
+  { label: 'Calendar', href: '#calendar' },
+  { label: 'School timings', href: '#timings' },
+  { label: 'Book list & uniform', href: '#booklist' },
+];
+
+const approach = [
+  { icon: 'monitor-smartphone', title: 'Smart classrooms', text: 'Interactive panels, animations and digital resources make abstract ideas visible and lessons more engaging.', tone: 'navy' },
+  { icon: 'flask-conical', title: 'Experiential learning', text: 'Children learn by doing: experiments, field visits, role-play, models and surveys of the world around them.', tone: 'green' },
+  { icon: 'palette', title: 'Art-integrated learning', text: 'Music, drama, drawing and craft are woven into lessons, as NEP 2020 recommends, so that concepts stay with children.', tone: 'maroon' },
+  { icon: 'brain', title: 'Competency-based questions', text: 'Case studies, source-based and real-life questions that test understanding and application, not memory alone.', tone: '' },
+  { icon: 'microscope', title: 'Hands-on learning spaces', text: 'A science lab, a maths corner and a computer room where children test ideas, build models and learn to code.', tone: 'navy' },
+  { icon: 'life-buoy', title: 'Remedial & enrichment', text: 'Extra support classes for students who need them, and olympiad, quiz and project work for those ready to go further.', tone: 'green' },
+];
+
+const examYear = [
+  { when: 'July', title: 'Periodic Test 1', text: 'Covers the first unit of the syllabus.' },
+  { when: 'September', title: 'Half-Yearly Examination', text: 'Written and practical papers; results shared at the PTM.' },
+  { when: 'November', title: 'Periodic Test 2', text: 'Covers the units taught after the half-yearly examination.' },
+  { when: 'March', title: 'Annual Examination', text: 'Followed by report cards and a parent–teacher meeting.' },
+];
+
+const assessment = [
+  {
+    stage: 'Nursery – UKG',
+    title: 'Holistic Progress Card',
+    icon: 'sprout',
+    tone: 'green',
+    points: [
+      'No formal written examinations',
+      'Teachers observe and record progress through play, activities and conversation',
+      'A portfolio of each child’s work, shared with parents',
+      'Progress card covering language, numbers, social-emotional and physical development',
+    ],
+  },
+  {
+    stage: 'Classes I – V',
+    title: 'Gentle term assessments',
+    icon: 'clipboard-check',
+    tone: 'navy',
+    points: [
+      'Periodic tests, a half-yearly and an annual examination, in a simple, stress-free format',
+      'Oral work, activities, projects and class participation count towards the result',
+      'Holistic progress card with co-scholastic areas, values and habits',
+      'Regular feedback at parent–teacher meetings',
+    ],
+  },
+  {
+    stage: 'Classes VI – VIII',
+    title: 'Term examinations',
+    icon: 'notebook-pen',
+    tone: 'maroon',
+    points: [
+      'Two periodic tests, a half-yearly and an annual examination',
+      'Internal assessment: notebooks, projects, practical work and subject enrichment',
+      'Competency-based questions that test understanding and application',
+      'Holistic progress card covering scholastic and co-scholastic growth',
+    ],
+  },
+];
+
+const typeOrder = Object.keys(calendarTypes) as (keyof typeof calendarTypes)[];
+
+const monthName = (ym: string) => {
+  const d = new Date(`${ym}-01T00:00:00`);
+  return {
+    month: d.toLocaleDateString('en-IN', { month: 'long' }),
+    year: String(d.getFullYear()),
+  };
+};
+---
+
+<BaseLayout
+  title="Academics"
+  description={`Curriculum, subjects, assessment and the academic calendar at ${school.name} (${school.classes}). We follow the CBSE curriculum with NCERT textbooks, in the spirit of NEP 2020.`}
+>
+  <PageHero
+    title="Academics"
+    eyebrow={`CBSE curriculum · ${school.classes}`}
+    lead="Joyful early years, strong foundations and real understanding: the CBSE curriculum with NCERT textbooks, taught in the spirit of NEP 2020."
+    crumbs={[{ label: 'Academics' }]}
+  >
+    <nav class="btn-row jump" aria-label="On this page">
+      {
+        jumpLinks.map((j) => (
+          <a href={j.href} class="btn btn--light btn--sm">
+            {j.label}
+          </a>
+        ))
+      }
+    </nav>
+  </PageHero>
+
+  <!-- ========== CURRICULUM ========== -->
+  <section class="section" aria-labelledby="curriculum">
+    <div class="container">
+      <div class="split curriculum-intro">
+        <div class="reveal">
+          <SectionHead eyebrow="Curriculum" title="Learning that grows with your child" id="curriculum" />
+          <div class="stack">
+            <p>
+              We follow the CBSE curriculum with NCERT textbooks, from {school.classes}. In line with the National
+              Education Policy 2020, our teaching puts understanding before memorisation, and activity before lecture.
+            </p>
+            <p>
+              Learning is organised in the three school stages set out by NEP 2020: <strong>Foundational</strong>,
+              <strong>Preparatory</strong> and <strong>Middle</strong>, so that each stage matches how children grow.
+            </p>
+          </div>
+          <ul class="check-list curriculum-points">
+            <li>NCERT and recommended supplementary books</li>
+            <li>{school.medium} medium, with Hindi from the early years</li>
+            <li>Computer studies and coding from the primary classes</li>
+            <li>Sports, arts and values in every week’s timetable</li>
+          </ul>
+        </div>
+        <figure class="class-photo reveal">
+          <Photo
+            src="images/campus/classroom.jpg"
+            alt="Girls in school uniform with their class teacher in a classroom"
+            ratio="4 / 3"
+          />
+          <figcaption>Every class has a class teacher who knows each child well.</figcaption>
+        </figure>
+      </div>
+
+      <ol class="nep" aria-label="NEP 2020 school stages">
+        {
+          stages.map((s) => (
+            <li class:list={['nep-seg', 'reveal', `tone-${s.tone}`]} style={`--span:${s.years}`}>
+              <div class="nep-top">
+                <span class="nep-years">
+                  {s.years}
+                  <small>years</small>
+                </span>
+                <span class="nep-icon">
+                  <Icon name={s.icon} size={22} />
+                </span>
+              </div>
+              <h3>{s.name}</h3>
+              <p class="nep-classes">{s.classes}</p>
+              <p class="nep-ages">{s.ages}</p>
+              <p class="nep-text">{s.summary}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <!-- ========== SUBJECTS BY STAGE ========== -->
+  <section class="section section--cream" aria-labelledby="subjects">
+    <div class="container">
+      <SectionHead
+        eyebrow="What children learn"
+        title="Subjects at each stage"
+        id="subjects"
+        lead="Select a stage to see the subjects taught. Every stage also includes library periods, assemblies, clubs and sports."
+      />
+      <div class="tabs reveal" data-tabs>
+        <div class="tablist" role="tablist" aria-label="School stages">
+          {
+            stages.map((s, i) => (
+              <button
+                type="button"
+                role="tab"
+                class:list={['tab', `tone-${s.tone}`]}
+                id={`tab-${s.id}`}
+                aria-controls={`panel-${s.id}`}
+                aria-selected={i === 0 ? 'true' : 'false'}
+                tabindex={i === 0 ? 0 : -1}
+              >
+                <span class="tab-name">{s.name}</span>
+                <span class="tab-classes">{s.classes}</span>
+              </button>
+            ))
+          }
+        </div>
+        {
+          stages.map((s, i) => (
+            <div
+              class="tab-panel"
+              role="tabpanel"
+              id={`panel-${s.id}`}
+              aria-labelledby={`tab-${s.id}`}
+              tabindex="0"
+              hidden={i !== 0}
+            >
+              <div class="panel-intro">
+                <span class:list={['panel-icon', `tone-${s.tone}`]}>
+                  <Icon name={s.icon} size={28} />
+                </span>
+                <h3>
+                  {s.name} stage <span>{s.classes}</span>
+                </h3>
+                <p>{s.summary}</p>
+                <p class="panel-note">
+                  <Icon name="info" size={18} />
+                  <span>{s.note}</span>
+                </p>
+              </div>
+              <ul class="check-list subject-list">
+                {s.subjects.map((sub) => (
+                  <li>{sub}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LANGUAGES ========== -->
+  <section class="section" aria-labelledby="languages-h">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow="Languages"
+        title="Three languages, many voices"
+        id="languages-h"
+        lead="Following the three-language formula of NEP 2020, children study English and Hindi from the early years, and add a third language from Class VI."
+      />
+      <div class="grid grid-3">
+        {
+          languages.map((l) => (
+            <article class="card lang reveal">
+              <span class="lang-code" aria-hidden="true">
+                {l.code}
+              </span>
+              <h3>{l.name}</h3>
+              <span class="tag tag--gold">{l.from}</span>
+              <p>{l.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TEACHING APPROACH ========== -->
+  <section class="section" aria-labelledby="approach-h">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow="How we teach"
+        title="Learning that sticks"
+        id="approach-h"
+        lead="Teachers plan lessons around activities, questions and real-life connections, and keep a close eye on how each child is progressing."
+      />
+      <div class="grid grid-3">
+        {
+          approach.map((a) => (
+            <article class="card card--hover reveal">
+              <span class:list={['icon-badge', a.tone && `icon-badge--${a.tone}`]}>
+                <Icon name={a.icon} />
+              </span>
+              <h3>{a.title}</h3>
+              <p>{a.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ASSESSMENT ========== -->
+  <section class="section section--cream" aria-labelledby="assessment">
+    <div class="container">
+      <SectionHead
+        eyebrow="Assessment"
+        title="Assessment that helps children grow"
+        id="assessment"
+        lead="We assess regularly and gently, so that teachers can support each child in time and parents always know where their child stands."
+      />
+
+      <h3 class="year-h">The examination year (Classes I–VIII)</h3>
+      <ol class="exam-year">
+        {
+          examYear.map((e, i) => (
+            <li class="reveal">
+              <span class="exam-step" aria-hidden="true">
+                {i + 1}
+              </span>
+              <span class="exam-when">{e.when}</span>
+              <strong>{e.title}</strong>
+              <span class="exam-text">{e.text}</span>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="grid grid-3 assess-grid">
+        {
+          assessment.map((a) => (
+            <article class="card reveal">
+              <span class:list={['icon-badge', `icon-badge--${a.tone}`]}>
+                <Icon name={a.icon} />
+              </span>
+              <span class="tag">{a.stage}</span>
+              <h3>{a.title}</h3>
+              <ul class="check-list">
+                {a.points.map((p) => (
+                  <li>{p}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ACADEMIC CALENDAR ========== -->
+  <section class="section" aria-labelledby="calendar">
+    <div class="container">
+      <SectionHead
+        eyebrow={`Session ${calendarSession}`}
+        title="Academic Calendar"
+        id="calendar"
+        lead="Key dates for the session at a glance. Detailed circulars are shared before every examination and event."
+      />
+      <div class="cal-layout">
+        <div class="reveal">
+          <ul class="cal-legend" aria-label="Key">
+            {
+              typeOrder.map((t) => (
+                <li>
+                  <span class:list={['cal-dot', `type-${t}`]} aria-hidden="true" />
+                  {calendarTypes[t]}
+                </li>
+              ))
+            }
+          </ul>
+          <div class="table-wrap">
+            <table class="table cal-table">
+              <caption class="visually-hidden">Academic calendar, Session {calendarSession}</caption>
+              <thead>
+                <tr>
+                  <th scope="col">Month</th>
+                  <th scope="col">Key dates</th>
+                </tr>
+              </thead>
+              <tbody>
+                {
+                  academicCalendar.map((m) => {
+                    const { month, year } = monthName(m.month);
+                    return (
+                      <tr data-month={m.month}>
+                        <th scope="row">
+                          <span class="cal-m">{month}</span>
+                          <span class="cal-y">{year}</span>
+                          <span class="tag tag--maroon cal-now" hidden>
+                            This month
+                          </span>
+                        </th>
+                        <td>
+                          <ul class="cal-list">
+                            {m.items.map((it) => (
+                              <li>
+                                <span class:list={['cal-dot', `type-${it.type}`]} aria-hidden="true" />
+                                <span class="cal-when">{it.when}</span>
+                                <span class="cal-what">
+                                  {it.what}
+                                  <span class="visually-hidden"> ({calendarTypes[it.type]})</span>
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
+                        </td>
+                      </tr>
+                    );
+                  })
+                }
+              </tbody>
+            </table>
+          </div>
+          <p class="small muted cal-foot">
+            Dates may change. Any change is announced through a circular. See the
+            <a href={url('/notices/')}>Notices &amp; Circulars</a> page for the latest updates.
+          </p>
+        </div>
+
+        <aside class="cal-aside reveal" aria-labelledby="timings">
+          <div class="timings">
+            <h3 id="timings">School timings</h3>
+            <dl>
+              <div class="timing timing--summer">
+                <dt><Icon name="sun" size={20} /> Summer</dt>
+                <dd>{school.schoolHours.summer}</dd>
+              </div>
+              <div class="timing timing--winter">
+                <dt><Icon name="snowflake" size={20} /> Winter</dt>
+                <dd>{school.schoolHours.winter}</dd>
+              </div>
+              <div class="timing">
+                <dt><Icon name="clock" size={20} /> School office</dt>
+                <dd>{school.officeHours}</dd>
+              </div>
+            </dl>
+            <p class="small">
+              Pre-primary classes are dismissed earlier. Exact timings for each wing are shared in the welcome circular.
+            </p>
+          </div>
+          <a href={url('/notices/')} class="aside-link">
+            <span class="icon-badge icon-badge--navy"><Icon name="bell" /></span>
+            <span>
+              <strong>Notices &amp; circulars</strong>
+              <small>Date sheets, holidays and PTMs</small>
+            </span>
+            <Icon name="arrow-right" size={18} />
+          </a>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== BOOK LIST & UNIFORM ========== -->
+  <section class="section section--cream" aria-labelledby="booklist">
+    <div class="container">
+      <SectionHead
+        eyebrow={`Session ${calendarSession}`}
+        title="Book List & Uniform"
+        id="booklist"
+        lead="Download the class-wise book list and the uniform guidelines. Printed copies are also available at the school office."
+      />
+      <div class="grid grid-2">
+        {
+          documents.map((d) => (
+            <a href={url(d.file)} class="doc reveal" target="_blank" rel="noopener">
+              <span class="doc-icon">
+                <Icon name={d.icon} size={28} />
+              </span>
+              <span class="doc-body">
+                <strong>{d.title}</strong>
+                <span>{d.text}</span>
+                <span class="doc-meta">PDF</span>
+              </span>
+              <span class="doc-cta">
+                <Icon name="download" size={20} />
+                <span class="visually-hidden">Download</span>
+              </span>
+            </a>
+          ))
+        }
+      </div>
+      {/* ⚠ PLACEHOLDER: remove this note once the real PDFs are in /public/documents/. */}
+      <p class="callout callout--navy doc-note reveal">
+        <Icon name="info" />
+        <span>
+          The documents for Session {calendarSession} are being updated and will be available here shortly. Until then,
+          please collect a copy from the school office or ask your child’s class teacher.
+        </span>
+      </p>
+
+      <h3 class="uniform-h">School uniform</h3>
+      <div class="grid grid-2">
+        {
+          (['summer', 'winter'] as const).map((season) => {
+            const u = uniform[season];
+            return (
+              <article class:list={['card', 'uniform', `uniform--${season}`, 'reveal']}>
+                <div class="uniform-head">
+                  <span class:list={['icon-badge', season === 'winter' && 'icon-badge--navy']}>
+                    <Icon name={season === 'summer' ? 'sun' : 'snowflake'} />
+                  </span>
+                  <div>
+                    <h4>{season === 'summer' ? 'Summer uniform' : 'Winter uniform'}</h4>
+                    <span class="small muted">{u.from}</span>
+                  </div>
+                </div>
+                <div class="uniform-cols">
+                  <div>
+                    <h5>Boys</h5>
+                    <ul>
+                      {u.boys.map((x) => (
+                        <li>{x}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div>
+                    <h5>Girls</h5>
+                    <ul>
+                      {u.girls.map((x) => (
+                        <li>{x}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </article>
+            );
+          })
+        }
+      </div>
+      <p class="sports-uniform reveal">
+        <Icon name="shirt" size={20} />
+        <span><strong>Sports uniform:</strong> {uniform.sports}</span>
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  // Stage tabs: arrow keys move between tabs (WAI-ARIA tabs pattern, automatic activation).
+  document.querySelectorAll<HTMLElement>('[data-tabs]').forEach((root) => {
+    const tabs = [...root.querySelectorAll<HTMLButtonElement>('[role="tab"]')];
+    const panels = tabs.map((t) => document.getElementById(t.getAttribute('aria-controls') ?? ''));
+    const select = (index: number, focus = false) => {
+      tabs.forEach((tab, i) => {
+        const on = i === index;
+        tab.setAttribute('aria-selected', String(on));
+        tab.tabIndex = on ? 0 : -1;
+        if (panels[i]) panels[i]!.hidden = !on;
+      });
+      if (focus) tabs[index].focus();
+    };
+    tabs.forEach((tab, i) => {
+      tab.addEventListener('click', () => select(i));
+      tab.addEventListener('keydown', (e) => {
+        const last = tabs.length - 1;
+        const next: Record<string, number> = {
+          ArrowRight: i === last ? 0 : i + 1,
+          ArrowDown: i === last ? 0 : i + 1,
+          ArrowLeft: i === 0 ? last : i - 1,
+          ArrowUp: i === 0 ? last : i - 1,
+          Home: 0,
+          End: last,
+        };
+        if (e.key in next) {
+          e.preventDefault();
+          select(next[e.key], true);
+        }
+      });
+    });
+  });
+
+  // Highlight the current month in the academic calendar.
+  const now = new Date();
+  const key = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+  const row = document.querySelector<HTMLElement>(`tr[data-month="${key}"]`);
+  if (row) {
+    row.classList.add('is-current');
+    row.querySelector('.cal-now')?.removeAttribute('hidden');
+  }
+</script>
+
+<style>
+  /* ---------- Jump links ---------- */
+  .jump .btn {
+    min-height: 36px;
+  }
+
+  /* ---------- Curriculum ---------- */
+  .curriculum-points {
+    margin-top: 24px;
+    padding: 22px 24px;
+    border-radius: var(--radius);
+    background: var(--cream);
+    border: 1px solid var(--line);
+    font-weight: 600;
+  }
+  .class-photo {
+    margin: 0;
+  }
+  .class-photo :global(.photo) {
+    box-shadow: var(--shadow-lg);
+  }
+  .class-photo figcaption {
+    margin-top: 12px;
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .nep {
+    display: grid;
+    gap: 14px;
+    list-style: none;
+    padding: 0;
+    margin-top: clamp(36px, 5vw, 56px);
+  }
+  @media (min-width: 760px) {
+    .nep {
+      grid-template-columns: 5fr 3fr 3fr;
+    }
+  }
+  .nep-seg {
+    --c: var(--gold-600);
+    --bg: var(--gold-100);
+    position: relative;
+    padding: 22px 22px 24px;
+    border-radius: var(--radius);
+    background: var(--bg);
+    border-top: 6px solid var(--c);
+  }
+  .nep-seg.tone-sky {
+    --c: #1d4f8f;
+    --bg: #e7f0fb;
+  }
+  .nep-seg.tone-green {
+    --c: var(--green-600);
+    --bg: var(--green-50);
+  }
+  .nep-top {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .nep-years {
+    font-family: var(--font-display);
+    font-size: 3rem;
+    line-height: 1;
+    font-weight: 600;
+    color: var(--c);
+  }
+  .nep-years small {
+    margin-left: 6px;
+    font-family: var(--font-body);
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .nep-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: #fff;
+    color: var(--c);
+  }
+  .nep-seg h3 {
+    font-size: var(--step-2);
+  }
+  .nep-classes {
+    margin-top: 2px;
+    font-weight: 800;
+    color: var(--c);
+  }
+  .nep-ages {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .nep-text {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgb(10 31 68 / 0.1);
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- Tabs ---------- */
+  .tabs {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-sm);
+    overflow: hidden;
+  }
+  .tablist {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    border-bottom: 1px solid var(--line);
+    background: var(--navy-50);
+  }
+  .tab {
+    --c: var(--gold-600);
+    display: grid;
+    gap: 2px;
+    padding: 16px 18px;
+    text-align: left;
+    background: transparent;
+    border: 0;
+    border-bottom: 4px solid transparent;
+    transition:
+      background 0.2s,
+      border-color 0.2s;
+  }
+  .tab + .tab {
+    border-left: 1px solid var(--line);
+  }
+  .tab.tone-sky {
+    --c: #1d4f8f;
+  }
+  .tab.tone-green {
+    --c: var(--green-600);
+  }
+  .tab:hover {
+    background: rgb(255 255 255 / 0.6);
+  }
+  .tab[aria-selected='true'] {
+    background: #fff;
+    border-bottom-color: var(--c);
+  }
+  .tab:focus-visible {
+    outline-offset: -4px;
+  }
+  .tab-name {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .tab-classes {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .tab[aria-selected='true'] .tab-classes {
+    color: var(--c);
+  }
+  @media (max-width: 640px) {
+    .tablist {
+      grid-template-columns: 1fr;
+    }
+    .tab {
+      grid-template-columns: 1fr auto;
+      align-items: baseline;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 0;
+      border-left: 4px solid transparent;
+    }
+    .tab + .tab {
+      border-left: 4px solid transparent;
+      border-top: 1px solid var(--line);
+    }
+    .tab[aria-selected='true'],
+    .tab + .tab[aria-selected='true'] {
+      border-left-color: var(--c);
+    }
+  }
+  .tab-panel {
+    display: grid;
+    gap: clamp(20px, 4vw, 48px);
+    padding: clamp(22px, 4vw, 40px);
+  }
+  .tab-panel:focus-visible {
+    outline-offset: -6px;
+  }
+  @media (min-width: 900px) {
+    .tab-panel {
+      grid-template-columns: 1fr 1.4fr;
+    }
+  }
+  .tab-panel[hidden] {
+    display: none;
+  }
+  :global(.no-js) .tablist {
+    display: none;
+  }
+  :global(.no-js) .tab-panel[hidden] {
+    display: grid;
+  }
+  :global(.no-js) .tab-panel + .tab-panel {
+    border-top: 1px solid var(--line);
+  }
+  .panel-icon {
+    display: grid;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 16px;
+    border-radius: 16px;
+    background: var(--gold-100);
+    color: var(--gold-600);
+  }
+  .panel-icon.tone-sky {
+    background: #e7f0fb;
+    color: #1d4f8f;
+  }
+  .panel-icon.tone-green {
+    background: var(--green-50);
+    color: var(--green-600);
+  }
+  .panel-intro h3 span {
+    display: block;
+    margin-top: 4px;
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--muted);
+  }
+  .panel-intro > p {
+    margin-top: 12px;
+    color: var(--ink-soft);
+  }
+  .panel-note {
+    display: flex;
+    gap: 10px;
+    padding: 12px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--cream);
+    font-size: 0.9rem;
+  }
+  .panel-note :global(.icon) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--gold-600);
+  }
+  .panel-intro .link-arrow {
+    margin-top: 14px;
+  }
+  .subject-list {
+    align-content: start;
+    gap: 12px 24px;
+  }
+  @media (min-width: 560px) {
+    .subject-list {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  /* ---------- Languages ---------- */
+  .lang {
+    position: relative;
+    overflow: hidden;
+  }
+  .lang-code {
+    position: absolute;
+    top: -10px;
+    right: 14px;
+    font-family: var(--font-display);
+    font-size: 5.5rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--gold-100);
+    z-index: 0;
+  }
+  .lang > :not(.lang-code) {
+    position: relative;
+  }
+  .lang h3 {
+    font-size: var(--step-2);
+    margin-bottom: 10px;
+  }
+  .lang p {
+    margin-top: 14px;
+  }
+
+  /* ---------- Assessment ---------- */
+  .year-h {
+    font-size: var(--step-1);
+    margin-bottom: 18px;
+  }
+  .exam-year {
+    position: relative;
+    display: grid;
+    gap: 14px;
+    list-style: none;
+    padding: 0;
+    margin-bottom: clamp(32px, 4vw, 48px);
+  }
+  @media (min-width: 860px) {
+    .exam-year {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 18px;
+    }
+    .exam-year::before {
+      content: '';
+      position: absolute;
+      left: 24px;
+      right: 24px;
+      top: 22px;
+      height: 2px;
+      background: repeating-linear-gradient(90deg, var(--gold-500) 0 8px, transparent 8px 14px);
+    }
+  }
+  .exam-year li {
+    position: relative;
+    display: grid;
+    gap: 2px;
+    align-content: start;
+  }
+  .exam-step {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    background: var(--navy-900);
+    color: var(--gold-400);
+    font-weight: 800;
+    box-shadow: 0 0 0 6px var(--cream);
+  }
+  .exam-when {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-600);
+  }
+  .exam-year strong {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .exam-text {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  @media (max-width: 859px) {
+    .exam-year li {
+      grid-template-columns: 44px 1fr;
+      column-gap: 16px;
+    }
+    .exam-step {
+      grid-row: span 3;
+      margin: 0;
+    }
+  }
+  .assess-grid .tag {
+    margin-bottom: 10px;
+  }
+  .assess-grid h3 {
+    margin-bottom: 14px;
+  }
+  .assess-grid .check-list {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- Calendar ---------- */
+  .cal-layout {
+    display: grid;
+    gap: clamp(24px, 3vw, 40px);
+    align-items: start;
+  }
+  @media (min-width: 1000px) {
+    .cal-layout {
+      grid-template-columns: 1fr 340px;
+    }
+    .cal-aside {
+      position: sticky;
+      top: calc(var(--header-h) + 24px);
+    }
+  }
+  .cal-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 18px;
+    list-style: none;
+    padding: 0;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .cal-legend li {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .cal-dot {
+    display: inline-block;
+    flex: none;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--navy-600);
+  }
+  .cal-dot.type-exam {
+    background: var(--maroon-600);
+  }
+  .cal-dot.type-event {
+    background: var(--gold-500);
+  }
+  .cal-dot.type-holiday {
+    background: var(--green-600);
+  }
+  .cal-dot.type-meeting {
+    background: #7a4fa8;
+  }
+  .cal-table {
+    min-width: 0;
+  }
+  .cal-table tbody th {
+    width: 150px;
+    padding-top: 16px;
+  }
+  .cal-m {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .cal-y {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .cal-now {
+    margin-top: 6px;
+  }
+  .cal-now[hidden] {
+    display: none;
+  }
+  .cal-table tr.is-current {
+    background: var(--gold-100) !important;
+    box-shadow: inset 4px 0 0 var(--gold-500);
+  }
+  .cal-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .cal-list li {
+    display: grid;
+    grid-template-columns: 10px 112px 1fr;
+    align-items: baseline;
+    gap: 12px;
+  }
+  .cal-when {
+    font-weight: 800;
+    color: var(--navy-900);
+    font-variant-numeric: tabular-nums;
+  }
+  .cal-what {
+    color: var(--ink-soft);
+  }
+  @media (max-width: 640px) {
+    .cal-table th,
+    .cal-table td {
+      padding: 12px 12px;
+    }
+    .cal-table tbody th {
+      width: 86px;
+    }
+    .cal-m {
+      font-size: 1rem;
+    }
+    .cal-list li {
+      grid-template-columns: 10px 1fr;
+      gap: 0 10px;
+    }
+    .cal-what {
+      grid-column: 2;
+      font-size: 0.92rem;
+    }
+  }
+  .cal-foot {
+    margin-top: 14px;
+  }
+  .cal-aside {
+    display: grid;
+    gap: 16px;
+  }
+  .timings {
+    padding: 26px;
+    border-radius: var(--radius-lg);
+    background: var(--navy-900);
+    color: #c7d2e6;
+  }
+  .timings h3 {
+    color: #fff;
+    font-size: var(--step-2);
+  }
+  .timings dl {
+    display: grid;
+    gap: 14px;
+    margin: 18px 0 16px;
+  }
+  .timing {
+    padding: 14px 16px;
+    border-radius: var(--radius-sm);
+    background: rgb(255 255 255 / 0.06);
+    border: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .timing dt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #8597b9;
+  }
+  .timing dt :global(.icon) {
+    color: var(--gold-400);
+  }
+  .timing--winter dt :global(.icon) {
+    color: #9cc3f0;
+  }
+  .timing dd {
+    margin: 4px 0 0;
+    font-weight: 700;
+    color: #fff;
+  }
+  .timings .small {
+    color: #8fa0c0;
+  }
+  .aside-link {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--line);
+    text-decoration: none;
+    color: var(--ink);
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
+  }
+  .aside-link:hover {
+    color: var(--ink);
+    border-color: var(--gold-200);
+    box-shadow: var(--shadow);
+  }
+  .aside-link .icon-badge {
+    margin: 0;
+    width: 44px;
+    height: 44px;
+  }
+  .aside-link > span:nth-child(2) {
+    display: grid;
+    flex: 1;
+  }
+  .aside-link strong {
+    color: var(--navy-900);
+  }
+  .aside-link small {
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  /* ---------- Book list & uniform ---------- */
+  .doc {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 24px;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+    text-decoration: none;
+    color: var(--ink);
+    transition:
+      transform 0.2s,
+      box-shadow 0.2s,
+      border-color 0.2s;
+  }
+  .doc:hover {
+    color: var(--ink);
+    transform: translateY(-2px);
+    border-color: var(--gold-200);
+    box-shadow: var(--shadow);
+  }
+  .doc-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 60px;
+    height: 68px;
+    border-radius: 10px;
+    background: var(--maroon-50);
+    color: var(--maroon-600);
+  }
+  .doc-body {
+    display: grid;
+    gap: 2px;
+    flex: 1;
+    min-width: 0;
+  }
+  .doc-body strong {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .doc-body > span:not(.doc-meta) {
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .doc-meta {
+    margin-top: 4px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    color: var(--maroon-600);
+  }
+  .doc-cta {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: var(--navy-900);
+    color: #fff;
+    transition: background 0.2s;
+  }
+  .doc:hover .doc-cta {
+    background: var(--gold-500);
+    color: var(--navy-950);
+  }
+  .doc-note {
+    margin-top: 18px;
+  }
+  .uniform-h {
+    margin: clamp(40px, 5vw, 56px) 0 20px;
+    font-size: var(--step-3);
+  }
+  .uniform-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .uniform-head .icon-badge {
+    margin: 0;
+  }
+  .uniform-head h4 {
+    line-height: 1.2;
+  }
+  .uniform-cols {
+    display: grid;
+    gap: 18px 24px;
+  }
+  @media (min-width: 520px) {
+    .uniform-cols {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .uniform h5 {
+    margin-bottom: 8px;
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-600);
+  }
+  .uniform ul {
+    padding-left: 1.1em;
+    display: grid;
+    gap: 6px;
+    font-size: 0.93rem;
+    color: var(--ink-soft);
+  }
+  .uniform li::marker {
+    color: var(--gold-500);
+  }
+  .sports-uniform {
+    display: flex;
+    gap: 12px;
+    margin-top: 18px;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  .sports-uniform :global(.icon) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--gold-600);
+  }
+  .sports-uniform strong {
+    color: var(--navy-900);
+  }
+</style>

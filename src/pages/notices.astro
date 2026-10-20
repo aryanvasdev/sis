@@ -1,0 +1,615 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import Icon from '../components/Icon.astro';
+import { school, whatsappLink } from '../data/school';
+import { sortedNotices, upcomingEvents } from '../data/notices';
+import { formatDate, dateParts } from '../lib/format';
+import { url } from '../lib/url';
+
+const notices = sortedNotices();
+const events = upcomingEvents();
+
+// Chips are built from the categories actually used, in this order (any others go last).
+const categoryOrder = ['Admissions', 'Circular', 'Examination', 'Holiday', 'Event', 'News'];
+const rank = (c: string) => (categoryOrder.includes(c) ? categoryOrder.indexOf(c) : categoryOrder.length);
+const categories = [...new Set(notices.map((n) => n.category as string))]
+  .sort((a, b) => rank(a) - rank(b) || a.localeCompare(b))
+  .map((name) => ({ name, count: notices.filter((n) => n.category === name).length }));
+
+const tagTone: Record<string, string> = {
+  Admissions: 'tag--maroon',
+  Circular: 'tag--gold',
+  Holiday: 'tag--green',
+  Event: 'tag--gold',
+};
+
+const searchText = (n: (typeof notices)[number]) =>
+  [n.title, n.summary, n.category, formatDate(n.date)].filter(Boolean).join(' ').toLowerCase();
+
+const eventWhen = (e: (typeof events)[number]) =>
+  [e.endDate ? `${formatDate(e.date)} – ${formatDate(e.endDate)}` : `${dateParts(e.date).weekday}, ${formatDate(e.date)}`, e.time]
+    .filter(Boolean)
+    .join(' · ');
+---
+
+<BaseLayout
+  title="Notices & Circulars"
+  description={`Latest notices, circulars, examination schedules, holidays and upcoming events at ${school.name}.`}
+>
+  <PageHero
+    title="Notices & Circulars"
+    eyebrow={`Session ${school.currentSession}`}
+    lead="Circulars, holiday announcements, examination schedules and school news, all in one place. Use the filters to find what you need."
+    crumbs={[{ label: 'Notices' }]}
+  />
+
+  <section class="section">
+    <div class="container notices-layout">
+      <!-- ========== NOTICE BOARD ========== -->
+      <div class="board reveal" data-notices>
+        <div class="board-head">
+          <h2><Icon name="bell" /> Notice board</h2>
+          <p class="board-count" data-count aria-live="polite">{notices.length} notices</p>
+        </div>
+
+        <div class="tools">
+          <div class="search">
+            <label for="notice-search" class="visually-hidden">Search notices</label>
+            <Icon name="search" size={20} />
+            <input
+              id="notice-search"
+              type="search"
+              placeholder="Search, e.g. exam, holiday, PTM"
+              autocomplete="off"
+              data-search
+            />
+          </div>
+          <div class="chips" role="group" aria-label="Filter by category">
+            <button type="button" class="chip" data-filter="All" aria-pressed="true">
+              All <span class="chip-count">{notices.length}</span>
+            </button>
+            {
+              categories.map((c) => (
+                <button type="button" class="chip" data-filter={c.name} aria-pressed="false">
+                  {c.name} <span class="chip-count">{c.count}</span>
+                </button>
+              ))
+            }
+          </div>
+        </div>
+
+        <ol class="notice-list">
+          {
+            notices.map((n) => {
+              const d = dateParts(n.date);
+              return (
+                <li class="notice" data-notice data-category={n.category} data-text={searchText(n)}>
+                  <time class="notice-date" datetime={n.date}>
+                    <span class="d">{d.day}</span>
+                    <span class="m">{d.month}</span>
+                    <span class="y">{d.year}</span>
+                  </time>
+                  <div class="notice-body">
+                    <span class:list={['tag', tagTone[n.category] ?? '']}>{n.category}</span>
+                    <h3>{n.title}</h3>
+                    {n.summary && <p>{n.summary}</p>}
+                    {(n.file || n.link) && (
+                      <div class="notice-actions">
+                        {n.file && (
+                          <a href={url(`/documents/${n.file}`)} class="btn btn--navy btn--sm" target="_blank" rel="noopener">
+                            <Icon name="download" /> Download PDF
+                            <span class="visually-hidden"> (opens in a new tab)</span>
+                          </a>
+                        )}
+                        {n.link && (
+                          <a href={url(n.link)} class="link-arrow">
+                            Read more <Icon name="arrow-right" />
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </li>
+              );
+            })
+          }
+        </ol>
+
+        <div class="empty" data-empty hidden>
+          <Icon name="search-x" size={40} />
+          <p class="empty-title">No notices match your search</p>
+          <p>
+            Try a different word or category, or
+            <button type="button" class="link-btn" data-reset>show all notices</button>.
+          </p>
+        </div>
+      </div>
+
+      <!-- ========== SIDEBAR ========== -->
+      <aside class="side">
+        <section id="events" class="events reveal" aria-labelledby="events-h">
+          <h2 id="events-h"><Icon name="calendar-days" /> Upcoming events</h2>
+          {
+            events.length ? (
+              <ul class="event-list">
+                {events.map((e) => {
+                  const d = dateParts(e.date);
+                  return (
+                    <li>
+                      <time class="event-date" datetime={e.date}>
+                        <span class="d">{d.day}</span>
+                        <span class="m">{d.month}</span>
+                      </time>
+                      <div>
+                        <h3>{e.title}</h3>
+                        <p class="event-info">{eventWhen(e)}</p>
+                        {e.venue && (
+                          <p class="event-info">
+                            <Icon name="map-pin" size={14} /> {e.venue}
+                          </p>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ul>
+            ) : (
+              <p class="muted">New events will be announced here soon.</p>
+            )
+          }
+          <a href={url('/academics/#calendar')} class="link-arrow">
+            Full academic calendar <Icon name="arrow-right" />
+          </a>
+        </section>
+
+        <div class="callout wa-callout reveal">
+          <Icon name="whatsapp" />
+          <div>
+            <p class="wa-title">Get updates on WhatsApp</p>
+            <p>
+              Message the school office with your child’s name and class to receive circulars, holiday notices and
+              reminders on your phone.
+            </p>
+            <a
+              href={whatsappLink('Hello, please add me to the school updates list. Student name: , Class: ')}
+              class="btn btn--whatsapp btn--sm"
+              target="_blank"
+              rel="noopener"
+            >
+              <Icon name="whatsapp" /> Message us
+            </a>
+          </div>
+        </div>
+
+        <p class="side-note reveal">
+          <Icon name="info" size={18} />
+          <span>
+            Looking for an older circular? Contact the school office at
+            <a href={`mailto:${school.email}`}>{school.email}</a>.
+          </span>
+        </p>
+      </aside>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-notices]');
+
+  if (root) {
+    const chips = root.querySelectorAll<HTMLButtonElement>('[data-filter]');
+    const search = root.querySelector<HTMLInputElement>('[data-search]')!;
+    const items = root.querySelectorAll<HTMLElement>('[data-notice]');
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    const count = root.querySelector<HTMLElement>('[data-count]')!;
+    let category = 'All';
+
+    function apply() {
+      const words = search.value.toLowerCase().split(/\s+/).filter(Boolean);
+      let shown = 0;
+      items.forEach((item) => {
+        const text = item.dataset.text ?? '';
+        const match =
+          (category === 'All' || item.dataset.category === category) && words.every((w) => text.includes(w));
+        item.hidden = !match;
+        if (match) shown++;
+      });
+      empty.hidden = shown > 0;
+      const filtered = category !== 'All' || words.length > 0;
+      count.textContent = filtered ? `${shown} of ${items.length} notices` : `${items.length} notices`;
+    }
+
+    function setCategory(name: string) {
+      category = name;
+      chips.forEach((chip) => chip.setAttribute('aria-pressed', String(chip.dataset.filter === name)));
+      apply();
+    }
+
+    chips.forEach((chip) => chip.addEventListener('click', () => setCategory(chip.dataset.filter ?? 'All')));
+    search.addEventListener('input', apply);
+    root.querySelector('[data-reset]')?.addEventListener('click', () => {
+      search.value = '';
+      setCategory('All');
+      search.focus();
+    });
+  }
+</script>
+
+<style>
+  .notices-layout {
+    display: grid;
+    gap: clamp(28px, 4vw, 48px);
+    align-items: start;
+  }
+  @media (min-width: 1000px) {
+    .notices-layout {
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1fr);
+    }
+  }
+
+  /* ---------- Board ---------- */
+  .board {
+    min-width: 0;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(18px, 3vw, 32px);
+    box-shadow: var(--shadow-sm);
+  }
+  .board-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px 12px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--navy-900);
+  }
+  .board-head h2,
+  .events h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--step-2);
+  }
+  .board-head h2 :global(.icon),
+  .events h2 :global(.icon) {
+    color: var(--gold-600);
+  }
+  .board-count {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+
+  /* ---------- Search & chips ---------- */
+  .tools {
+    display: grid;
+    gap: 14px;
+    padding: 18px 0 8px;
+  }
+  :global(.no-js) .tools {
+    display: none;
+  }
+  .search {
+    position: relative;
+  }
+  .search :global(.icon) {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--muted);
+    pointer-events: none;
+  }
+  .search input {
+    width: 100%;
+    min-height: 48px;
+    padding: 10px 14px 10px 44px;
+    background: var(--cream);
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    -webkit-appearance: none;
+    appearance: none;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s,
+      background 0.15s;
+  }
+  .search input:focus {
+    outline: none;
+    background: #fff;
+    border-color: var(--navy-600);
+    box-shadow: 0 0 0 4px rgb(36 80 154 / 0.14);
+  }
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 6px 14px;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: #fff;
+    font-weight: 750;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+    transition:
+      background 0.15s,
+      border-color 0.15s,
+      color 0.15s;
+  }
+  .chip:hover {
+    border-color: var(--navy-600);
+    color: var(--navy-900);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: #fff;
+  }
+  .chip-count {
+    display: grid;
+    place-items: center;
+    min-width: 22px;
+    height: 22px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--navy-50);
+    color: var(--navy-700);
+    font-size: 0.75rem;
+    font-weight: 800;
+  }
+  .chip[aria-pressed='true'] .chip-count {
+    background: var(--gold-500);
+    color: var(--navy-950);
+  }
+
+  /* ---------- Notices ---------- */
+  .notice-list {
+    list-style: none;
+    padding: 0;
+  }
+  .notice {
+    display: flex;
+    gap: clamp(14px, 2.4vw, 22px);
+    padding: 20px 0;
+  }
+  .notice + .notice {
+    border-top: 1px dashed var(--line);
+  }
+  .notice[hidden] {
+    display: none;
+  }
+  .notice-date {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    flex: none;
+    width: 66px;
+    height: 76px;
+    border-radius: 12px;
+    background: var(--navy-900);
+    color: #fff;
+    line-height: 1;
+  }
+  .notice-date .d {
+    font-family: var(--font-display);
+    font-size: 1.65rem;
+    font-weight: 600;
+  }
+  .notice-date .m {
+    margin-top: 4px;
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-400);
+  }
+  .notice-date .y {
+    margin-top: 3px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: #8597b9;
+  }
+  .notice-body {
+    min-width: 0;
+  }
+  .notice-body h3 {
+    margin-top: 8px;
+    font-family: var(--font-body);
+    font-size: 1.05rem;
+    font-weight: 800;
+    line-height: 1.4;
+    letter-spacing: 0;
+    color: var(--navy-900);
+    text-wrap: pretty;
+  }
+  .notice-body p {
+    margin-top: 6px;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .notice-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 20px;
+    margin-top: 12px;
+  }
+  .notice-actions .link-arrow {
+    font-size: 0.92rem;
+  }
+
+  /* ---------- Empty state ---------- */
+  .empty {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    padding: 40px 16px 24px;
+    text-align: center;
+    color: var(--muted);
+  }
+  .empty[hidden] {
+    display: none;
+  }
+  .empty :global(.icon) {
+    color: var(--gold-500);
+    margin-bottom: 6px;
+  }
+  .empty-title {
+    font-family: var(--font-display);
+    font-size: var(--step-1);
+    color: var(--navy-900);
+  }
+  .link-btn {
+    padding: 0;
+    border: 0;
+    background: none;
+    font-weight: 800;
+    color: var(--navy-700);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ---------- Sidebar ---------- */
+  .side {
+    display: grid;
+    gap: 20px;
+    min-width: 0;
+  }
+  .events {
+    padding: clamp(18px, 3vw, 28px);
+    border-radius: var(--radius-lg);
+    background: var(--cream);
+    border: 1px solid var(--line);
+  }
+  .events h2 {
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--navy-900);
+  }
+  .event-list {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 16px;
+  }
+  .event-list li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 14px 0;
+  }
+  .event-list li + li {
+    border-top: 1px dashed var(--line);
+  }
+  .event-date {
+    display: grid;
+    place-items: center;
+    align-content: center;
+    flex: none;
+    width: 54px;
+    height: 58px;
+    border-radius: 12px;
+    background: #fff;
+    border: 1px solid var(--line);
+    line-height: 1;
+  }
+  .event-date .d {
+    font-family: var(--font-display);
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  .event-date .m {
+    margin-top: 4px;
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--maroon-600);
+  }
+  .event-list h3 {
+    font-family: var(--font-body);
+    font-size: 0.98rem;
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: 0;
+    color: var(--navy-900);
+  }
+  .event-info {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-top: 3px;
+    font-size: 0.84rem;
+    color: var(--muted);
+  }
+  .event-info :global(.icon) {
+    flex: none;
+    color: var(--gold-600);
+  }
+  .events .link-arrow {
+    font-size: 0.92rem;
+  }
+
+  .wa-callout {
+    background: var(--green-50);
+    border-color: #bfe3cf;
+    color: #17553a;
+  }
+  .wa-callout > :global(svg) {
+    color: #1fa855;
+  }
+  .wa-callout > div {
+    display: grid;
+    gap: 8px;
+  }
+  .wa-title {
+    font-weight: 800;
+    color: var(--green-600);
+  }
+  .wa-callout p:not(.wa-title) {
+    font-size: 0.92rem;
+  }
+  .wa-callout .btn {
+    justify-self: start;
+    margin-top: 4px;
+  }
+  .wa-callout .btn :global(svg) {
+    width: 18px;
+    height: 18px;
+    margin-top: 0;
+    color: currentColor;
+  }
+  .side-note {
+    display: flex;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .side-note :global(.icon) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--navy-600);
+  }
+  .side-note a {
+    font-weight: 700;
+    overflow-wrap: anywhere;
+  }
+
+  @media (max-width: 480px) {
+    .notice-date {
+      width: 56px;
+      height: 66px;
+    }
+    .notice-date .d {
+      font-size: 1.4rem;
+    }
+  }
+</style>

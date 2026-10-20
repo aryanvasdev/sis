@@ -1,0 +1,736 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import EnquiryForm from '../components/EnquiryForm.astro';
+import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
+import { school, fullAddress, telLink, whatsappLink } from '../data/school';
+import { departments, landmarks, busRoutes } from '../data/contacts';
+import { url } from '../lib/url';
+
+const emails = [
+  { label: 'General', address: school.email },
+  { label: 'Admissions', address: school.admissionsEmail },
+  { label: 'Careers', address: school.careersEmail },
+];
+
+const timings = [
+  { icon: 'sun', label: 'Summer', value: school.schoolHours.summer },
+  { icon: 'snowflake', label: 'Winter', value: school.schoolHours.winter },
+];
+
+/** Split an email address so it can wrap before the "@" in narrow cards. */
+const emailParts = (email: string) => {
+  const i = email.indexOf('@');
+  return [email.slice(0, i), email.slice(i)];
+};
+
+/** '7:30 AM – 1:30 PM (April – September)' → ['7:30 AM – 1:30 PM', 'April – September'] */
+const splitHours = (s: string) => {
+  const m = s.match(/^(.*?)\s*\((.*)\)\s*$/);
+  return m ? [m[1], m[2]] : [s, ''];
+};
+---
+
+<BaseLayout
+  title="Contact Us"
+  description={`Contact ${school.name}, ${school.address.city}, ${school.address.district}: address and directions, phone numbers, email, office hours, school timings and department contacts.`}
+>
+  <PageHero
+    title="Contact Us"
+    eyebrow="We’re here to help"
+    lead="Questions about admissions, fees, transport or anything else? Call, WhatsApp or write to us, or simply drop in during office hours. We would love to meet you."
+    crumbs={[{ label: 'Contact' }]}
+  />
+
+  <!-- ========== CONTACT CARDS ========== -->
+  <section class="section section--tight">
+    <div class="container">
+      <h2 class="visually-hidden">Contact details</h2>
+      <div class="grid contact-cards">
+        <article class="card contact-card reveal">
+          <span class="icon-badge">
+            <Icon name="map-pin" />
+          </span>
+          <h3>Visit us</h3>
+          <address>{fullAddress}</address>
+          <a href={school.mapLink} class="link-arrow" target="_blank" rel="noopener">
+            Get directions <Icon name="arrow-right" />
+          </a>
+        </article>
+
+        <article class="card contact-card reveal">
+          <span class="icon-badge icon-badge--navy">
+            <Icon name="phone" />
+          </span>
+          <h3>Call us</h3>
+          <ul class="plain">
+            {
+              school.phones.map((p) => (
+                <li>
+                  <a href={telLink(p)}>{p}</a>
+                </li>
+              ))
+            }
+          </ul>
+          <a href={whatsappLink(`Hello, I have a question for ${school.name}.`)} class="link-arrow wa" target="_blank" rel="noopener">
+            <Icon name="whatsapp" /> WhatsApp us
+          </a>
+        </article>
+
+        <article class="card contact-card reveal">
+          <span class="icon-badge icon-badge--maroon">
+            <Icon name="mail" />
+          </span>
+          <h3>Email us</h3>
+          <ul class="plain emails">
+            {
+              emails.map((e) => (
+                <li>
+                  <small>{e.label}</small>
+                  <a href={`mailto:${e.address}`}>
+                    {emailParts(e.address)[0]}<wbr />{emailParts(e.address)[1]}
+                  </a>
+                </li>
+              ))
+            }
+          </ul>
+        </article>
+
+        <article class="card contact-card reveal">
+          <span class="icon-badge icon-badge--green">
+            <Icon name="clock" />
+          </span>
+          <h3>Office hours</h3>
+          <p class="strong">{school.officeHours}</p>
+          <p class="small">Closed on Sundays and gazetted holidays. Please call ahead if you are coming from far away.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FORM + TIMINGS ========== -->
+  <section class="section section--cream" id="message">
+    <div class="container contact-main">
+      <div class="card form-card reveal">
+        <SectionHead
+          eyebrow="Send a message"
+          title="Write to us"
+          lead="Fill in the form and the right person in our office will reply within one working day."
+        />
+        <EnquiryForm variant="contact" />
+      </div>
+
+      <div class="side">
+        <aside class="timings reveal" aria-labelledby="timings-title">
+          <h3 id="timings-title">School timings</h3>
+          <ul class="timing-list">
+            {
+              timings.map((t) => {
+                const [hours, months] = splitHours(t.value);
+                return (
+                  <li>
+                    <span class="timing-icon">
+                      <Icon name={t.icon} />
+                    </span>
+                    <span>
+                      <small>
+                        {t.label}
+                        {months && ` · ${months}`}
+                      </small>
+                      <strong>{hours}</strong>
+                    </span>
+                  </li>
+                );
+              })
+            }
+            <li>
+              <span class="timing-icon">
+                <Icon name="building-2" />
+              </span>
+              <span>
+                <small>School office</small>
+                <strong>{school.officeHours}</strong>
+              </span>
+            </li>
+          </ul>
+          <p class="timing-note">
+            Timings may change for examinations and special events. Watch the <a href={url('/notices/')}>notice board</a> for updates.
+          </p>
+        </aside>
+
+        <div class="quick-help reveal">
+          <h3>Looking for admissions?</h3>
+          <p>Age criteria, documents, fees and the admission enquiry form are all on one page.</p>
+          <a href={url('/admissions/')} class="link-arrow">Go to Admissions <Icon name="arrow-right" /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MAP + HOW TO REACH ========== -->
+  <section class="section" id="reach">
+    <div class="container">
+      <SectionHead eyebrow="Find us" title="How to reach us" lead={fullAddress} />
+      <div class="reach">
+        <div class="map reveal">
+          {
+            school.mapEmbedUrl ? (
+              <iframe
+                src={school.mapEmbedUrl}
+                title={`Map showing the location of ${school.name}`}
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"
+                allowfullscreen
+              />
+            ) : (
+              <div class="map-placeholder">
+                <span class="map-roads" aria-hidden="true" />
+                <span class="map-pin" aria-hidden="true">
+                  <Icon name="school" size={30} />
+                </span>
+                <div class="map-label">
+                  <strong>{school.name}</strong>
+                  <span>{fullAddress}</span>
+                  <a href={school.mapLink} class="btn btn--navy btn--sm" target="_blank" rel="noopener">
+                    <Icon name="map" /> Open in Google Maps
+                  </a>
+                </div>
+              </div>
+            )
+          }
+        </div>
+
+        <div class="reach-info reveal">
+          <figure class="gate">
+            <Photo
+              src="images/campus/school-gate.jpg"
+              alt={`The main gate of ${school.name}, with the school name board`}
+              ratio="16 / 7"
+            />
+            <figcaption><Icon name="map-pin" size={16} /> Look for our main gate and name board</figcaption>
+          </figure>
+          <ul class="landmarks">
+            {
+              landmarks.map((l) => (
+                <li>
+                  <span class="lm-icon">
+                    <Icon name={l.icon} size={20} />
+                  </span>
+                  <span>
+                    <small>{l.label}</small>
+                    {l.text}
+                  </span>
+                </li>
+              ))
+            }
+          </ul>
+
+          <h3 class="routes-title"><Icon name="bus" /> School bus routes</h3>
+          <ul class="routes">
+            {
+              busRoutes.map((r) => (
+                <li>
+                  <span class="tag tag--gold">{r.route}</span>
+                  <span>{r.areas}</span>
+                </li>
+              ))
+            }
+          </ul>
+          <p class="small muted">
+            For stops, pick-up times and the transport fee, please contact the transport office (see below).
+          </p>
+          <div class="btn-row">
+            <a href={school.mapLink} class="btn btn--outline btn--sm" target="_blank" rel="noopener">
+              <Icon name="navigation" /> Get directions
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== DEPARTMENTS ========== -->
+  <section class="section section--cream" id="departments">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow="Department directory"
+        title="Reach the right desk"
+        lead="Contact the office that handles your query directly for the quickest answer."
+      />
+      <div class="grid grid-3">
+        {
+          departments.map((d) => (
+            <article class="card dept reveal">
+              <div class="dept-head">
+                <span class="icon-badge icon-badge--navy">
+                  <Icon name={d.icon} />
+                </span>
+                <div>
+                  <h3>{d.name}</h3>
+                  <p class="dept-person">
+                    {d.person} · {d.role}
+                  </p>
+                </div>
+              </div>
+              <p class="dept-handles">{d.handles}</p>
+              <ul class="dept-list">
+                {d.phone && (
+                  <li>
+                    <Icon name="phone" size={16} />
+                    <span>
+                      <a href={telLink(d.phone)}>{d.phone}</a>
+                      {d.ext && <span class="ext"> · Ext. {d.ext}</span>}
+                    </span>
+                  </li>
+                )}
+                {d.email && (
+                  <li>
+                    <Icon name="mail" size={16} />
+                    <a href={`mailto:${d.email}`}>
+                      {emailParts(d.email)[0]}<wbr />{emailParts(d.email)[1]}
+                    </a>
+                  </li>
+                )}
+                {d.hours && (
+                  <li>
+                    <Icon name="clock" size={16} />
+                    <span>{d.hours}</span>
+                  </li>
+                )}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Contact cards ---------- */
+  .contact-cards {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  @media (min-width: 760px) {
+    .contact-cards {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1200px) {
+    .contact-cards {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr);
+    }
+  }
+  .contact-card {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .contact-card h3 {
+    margin-bottom: 0;
+  }
+  .contact-card address {
+    font-style: normal;
+    color: var(--ink-soft);
+    line-height: 1.55;
+  }
+  .contact-card .link-arrow {
+    margin-top: auto;
+    padding-top: 10px;
+  }
+  .contact-card .wa :global(svg) {
+    color: #1fa855;
+  }
+  .plain {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 6px;
+  }
+  .plain a {
+    font-weight: 700;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .plain a:hover {
+    text-decoration: underline;
+  }
+  .emails li {
+    display: grid;
+  }
+  .emails small {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .emails a {
+    font-size: 0.9rem;
+  }
+  .contact-card .strong {
+    font-weight: 800;
+    color: var(--navy-900);
+  }
+
+  /* ---------- Form + timings ---------- */
+  .contact-main > *,
+  .reach > * {
+    min-width: 0;
+  }
+  .contact-main {
+    display: grid;
+    gap: clamp(24px, 4vw, 40px);
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .contact-main {
+      grid-template-columns: 1.55fr 1fr;
+    }
+  }
+  .form-card {
+    padding: clamp(22px, 3.4vw, 40px);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow);
+  }
+  .form-card :global(.section-head) {
+    margin-bottom: 24px;
+  }
+  .form-card :global(.section-head h2) {
+    font-size: var(--step-3);
+  }
+  .side {
+    display: grid;
+    gap: 20px;
+  }
+  .timings {
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    padding: clamp(24px, 3vw, 32px);
+    border-radius: var(--radius-lg);
+    background: linear-gradient(150deg, var(--navy-900), var(--navy-800));
+    color: #c7d2e6;
+  }
+  .timings::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--jali);
+    background-size: 64px 64px;
+    opacity: 0.07;
+  }
+  .timings h3 {
+    color: #fff;
+    font-size: var(--step-2);
+  }
+  .timing-list {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0 16px;
+  }
+  .timing-list li {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 0;
+  }
+  .timing-list li + li {
+    border-top: 1px solid rgb(255 255 255 / 0.1);
+  }
+  .timing-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 12px;
+    background: rgb(255 255 255 / 0.08);
+    color: var(--gold-400);
+  }
+  .timing-list span {
+    display: grid;
+  }
+  .timing-list small {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8597b9;
+  }
+  .timing-list strong {
+    color: #fff;
+    font-size: 1.02rem;
+  }
+  .timing-note {
+    font-size: 0.85rem;
+    color: #b9c6df;
+  }
+  .timing-note a {
+    color: var(--gold-400);
+  }
+  .quick-help {
+    padding: 22px 24px;
+    border-radius: var(--radius);
+    background: var(--gold-100);
+    border: 1px solid var(--gold-200);
+  }
+  .quick-help h3 {
+    font-size: var(--step-1);
+  }
+  .quick-help p {
+    margin: 6px 0 10px;
+    color: #5f4510;
+    font-size: 0.95rem;
+  }
+
+  /* ---------- Map + reach ---------- */
+  .reach {
+    display: grid;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .reach {
+      grid-template-columns: 1.3fr 1fr;
+      align-items: stretch;
+    }
+    .map {
+      display: grid;
+    }
+    .map > iframe,
+    .map > .map-placeholder {
+      height: auto;
+      min-height: 420px;
+    }
+  }
+  .map {
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+  }
+  .map iframe {
+    display: block;
+    width: 100%;
+    height: clamp(340px, 70vw, 460px);
+    border: 0;
+  }
+  .map-placeholder {
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: clamp(360px, 70vw, 460px);
+    overflow: hidden;
+    isolation: isolate;
+    background: #eef1ea;
+  }
+  .map-roads {
+    position: absolute;
+    inset: -20%;
+    z-index: -1;
+    background:
+      linear-gradient(90deg, transparent 47%, #fff 47%, #fff 53%, transparent 53%) 0 0 / 100% 100%,
+      linear-gradient(0deg, transparent 46%, #fff 46%, #fff 54%, transparent 54%) 0 0 / 100% 100%,
+      repeating-linear-gradient(90deg, transparent 0 88px, rgb(255 255 255 / 0.85) 88px 92px),
+      repeating-linear-gradient(0deg, transparent 0 76px, rgb(255 255 255 / 0.85) 76px 80px),
+      radial-gradient(circle at 22% 28%, #d7e8cf 0 70px, transparent 71px),
+      radial-gradient(circle at 78% 74%, #d7e8cf 0 90px, transparent 91px),
+      radial-gradient(ellipse 120px 60px at 82% 18%, #cfe1f2 0 100%, transparent 100%);
+    transform: rotate(-12deg);
+  }
+  .map-pin {
+    display: grid;
+    place-items: center;
+    width: 64px;
+    height: 64px;
+    margin-top: -90px;
+    border-radius: 50% 50% 50% 0;
+    background: var(--maroon-600);
+    color: #fff;
+    transform: rotate(-45deg);
+    box-shadow: 0 12px 24px -8px rgb(122 26 40 / 0.6);
+  }
+  .map-pin :global(svg) {
+    transform: rotate(45deg);
+  }
+  .map-label {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 20px;
+    justify-self: stretch;
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    max-width: 340px;
+    margin-inline: auto;
+    padding: 16px 18px;
+    border-radius: var(--radius);
+    background: #fff;
+    box-shadow: var(--shadow);
+    text-align: center;
+  }
+  .map-label strong {
+    font-family: var(--font-display);
+    font-size: 1.15rem;
+    color: var(--navy-900);
+  }
+  .map-label span {
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .map-label .btn {
+    margin-top: 10px;
+  }
+  .gate {
+    margin-bottom: 12px;
+  }
+  .gate :global(.photo) {
+    box-shadow: var(--shadow-sm);
+  }
+  .gate figcaption {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 10px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .gate figcaption :global(.icon) {
+    color: var(--maroon-600);
+  }
+  .landmarks {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 28px;
+  }
+  .landmarks li {
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+    padding: 12px 0;
+  }
+  .landmarks li + li {
+    border-top: 1px dashed var(--line);
+  }
+  .lm-icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    flex: none;
+    border-radius: 10px;
+    background: var(--gold-100);
+    color: var(--gold-600);
+  }
+  .landmarks li > span:last-child {
+    display: grid;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .landmarks small {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .routes-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--step-1);
+    margin-bottom: 12px;
+  }
+  .routes-title :global(.icon) {
+    color: var(--gold-600);
+  }
+  .routes {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+    margin-bottom: 14px;
+  }
+  .routes li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 14px;
+    border-radius: var(--radius-sm);
+    background: var(--cream);
+    border: 1px solid var(--line-soft);
+    font-size: 0.92rem;
+    color: var(--ink-soft);
+  }
+  .routes .tag {
+    flex: none;
+  }
+  .reach-info .btn-row {
+    margin-top: 16px;
+  }
+
+  /* ---------- Departments ---------- */
+  .dept {
+    display: flex;
+    flex-direction: column;
+  }
+  .dept-head {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .dept-head .icon-badge {
+    margin-bottom: 0;
+  }
+  .dept-head h3 {
+    margin-bottom: 2px;
+  }
+  .dept-person {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .dept-handles {
+    margin: 14px 0 16px;
+    font-size: 0.95rem;
+  }
+  .dept-list {
+    list-style: none;
+    padding: 14px 0 0;
+    margin-top: auto;
+    display: grid;
+    gap: 8px;
+    border-top: 1px solid var(--line-soft);
+    font-size: 0.9rem;
+  }
+  .dept-list li {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    min-width: 0;
+  }
+  .dept-list :global(.icon) {
+    flex: none;
+    margin-top: 4px;
+    color: var(--gold-600);
+  }
+  .dept-list a {
+    font-weight: 700;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .dept-list a:hover {
+    text-decoration: underline;
+  }
+  .ext {
+    color: var(--muted);
+  }
+</style>

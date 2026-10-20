@@ -1,0 +1,976 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { school, telLink } from '../data/school';
+import {
+  campusStats,
+  introPhoto,
+  featureFacilities,
+  moreFacilities,
+  transport,
+  transportFeatures,
+  busRoutes,
+  entrance,
+  safetyMeasures,
+  committees,
+} from '../data/facilities';
+import { url } from '../lib/url';
+
+/** Put a photo of the school bus or van in /public/images/campus/ and set its path here. */
+const transportImage = '';
+
+const jumpLinks = [
+  ...featureFacilities.map((f) => ({ label: f.eyebrow, href: `#${f.id}` })),
+  { label: 'More facilities', href: '#more' },
+  { label: 'Transport', href: '#transport' },
+  { label: 'Safety & security', href: '#safety' },
+];
+---
+
+<BaseLayout
+  title="Facilities"
+  description={`Smart classrooms, a science lab, computer lab, library, playground, GPS-tracked school transport and a safe, CCTV-monitored campus at ${school.name}.`}
+>
+  <PageHero
+    title="Campus & Facilities"
+    eyebrow="Campus life"
+    lead="Safe, cheerful and thoughtfully equipped: a campus where children can learn, explore, read, play and create, every single day."
+    crumbs={[{ label: 'Facilities' }]}
+  >
+    <div class="btn-row">
+      <a href="#transport" class="btn btn--gold"><Icon name="bus" /> School transport</a>
+      <a href="#safety" class="btn btn--light"><Icon name="shield-check" /> Safety &amp; security</a>
+    </div>
+  </PageHero>
+
+  <!-- ========== AT A GLANCE ========== -->
+  <section class="section">
+    <div class="container">
+      <div class="intro">
+        <div class="reveal">
+          <SectionHead eyebrow="At a glance" title="A campus designed around children" />
+          <div class="stack">
+            <p>
+              Every space at {school.name} has been planned around one question: what helps a young child learn best? The
+              answer is bright classrooms, labs where children do things for themselves, a library that invites them in, and
+              open space to run and play.
+            </p>
+            <p>
+              Ours is a close-knit campus where teachers know every child by name, and we keep adding to our facilities
+              every year.
+            </p>
+          </div>
+          <nav class="jump" aria-label="On this page">
+            <p class="jump-label">On this page</p>
+            <ul>
+              {
+                jumpLinks.map((j) => (
+                  <li>
+                    <a href={j.href}>{j.label}</a>
+                  </li>
+                ))
+              }
+            </ul>
+          </nav>
+        </div>
+        <figure class="intro-media reveal">
+          <Photo src={introPhoto.src} alt={introPhoto.alt} ratio="16 / 9" />
+          <figcaption><Icon name="camera" size={16} /> {introPhoto.caption}</figcaption>
+        </figure>
+      </div>
+
+      <dl class="facts reveal">
+        {
+          campusStats.map((s, i) => (
+            <div class:list={['fact', { 'fact--lead': i === 0 }]}>
+              <dt>{s.label}</dt>
+              <dd>
+                <span class="fact-icon">
+                  <Icon name={s.icon} size={22} />
+                </span>
+                <span class="fact-value">{s.value}</span>
+              </dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- ========== HEADLINE FACILITIES ========== -->
+  <section class="section section--cream" aria-labelledby="spaces-title">
+    <div class="container">
+      <SectionHead
+        center
+        id="spaces-title"
+        eyebrow="Learning spaces"
+        title="Where learning comes alive"
+        lead="Rooms planned for every subject and every age, so that ideas are seen, touched, tried out and remembered."
+      />
+      <div class="features">
+        {
+          featureFacilities.map((f, i) => (
+            <article class:list={['feature', { 'feature--flip': i % 2 === 1 }]} id={f.id} aria-labelledby={`${f.id}-title`}>
+              <div class="feature-media reveal">
+                <Photo
+                  src={f.photo}
+                  alt={f.photo ? (f.photoAlt ?? f.title) : ''}
+                  label={f.photo ? undefined : f.eyebrow}
+                  icon={f.icon}
+                  tone={f.tone}
+                  ratio="4 / 3"
+                />
+                {f.badge && (
+                  <p class="feature-badge">
+                    <strong>{f.badge.value}</strong>
+                    <span>{f.badge.label}</span>
+                  </p>
+                )}
+              </div>
+              <div class="feature-copy reveal">
+                <p class="eyebrow">{f.eyebrow}</p>
+                <h3 id={`${f.id}-title`}>{f.title}</h3>
+                <p class="feature-text">{f.text}</p>
+                <ul class="check-list">
+                  {f.points.map((p) => (
+                    <li>{p}</li>
+                  ))}
+                </ul>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== MORE FACILITIES ========== -->
+  <section class="section" id="more" aria-labelledby="more-title">
+    <div class="container">
+      <SectionHead
+        center
+        id="more-title"
+        eyebrow="Beyond the classroom"
+        title="Everything else a school day needs"
+        lead="From the playground and the music room to clean drinking water and first aid: the details that make a school day happy, healthy and safe."
+      />
+      <div class="grid grid-3">
+        {
+          moreFacilities.map((m) => (
+            <article class="card card--hover mini reveal">
+              <span class:list={['icon-badge', m.tone && `icon-badge--${m.tone}`]}>
+                <Icon name={m.icon} />
+              </span>
+              <h3>{m.title}</h3>
+              <p>{m.text}</p>
+              <ul class="mini-list">
+                {m.points.map((p) => (
+                  <li>{p}</li>
+                ))}
+              </ul>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TRANSPORT ========== -->
+  <section class="section section--cream" id="transport" aria-labelledby="transport-title">
+    <div class="container">
+      <div class="split split--wide-left transport-top">
+        <div class="reveal">
+          <SectionHead id="transport-title" eyebrow="School transport" title="Safe, punctual and tracked every day" />
+          <div class="stack">
+            <p>
+              Our {transport.vehicles} school vehicles cover {busRoutes.length} routes in and around {school.address.city}.
+              Every vehicle follows the state’s safe school-vehicle norms, and every journey is supervised from the moment
+              your child boards until they are safely home.
+            </p>
+            <p class="muted">
+              Transport is optional and can be chosen at admission or at the start of a term, subject to seats on the route.
+            </p>
+          </div>
+          <dl class="t-stats">
+            <div>
+              <dt>School vehicles</dt>
+              <dd>{transport.vehicles}</dd>
+            </div>
+            <div>
+              <dt>Routes</dt>
+              <dd>{busRoutes.length}</dd>
+            </div>
+            <div>
+              <dt>Lady attendant</dt>
+              <dd>Every vehicle</dd>
+            </div>
+          </dl>
+        </div>
+        <div class="transport-media reveal">
+          <Photo
+            src={transportImage || undefined}
+            alt={transportImage ? 'The school bus' : ''}
+            label="School transport"
+            icon="bus"
+            tone="gold"
+            ratio="5 / 4"
+          />
+        </div>
+      </div>
+
+      <ul class="t-features">
+        {
+          transportFeatures.map((t) => (
+            <li class="reveal">
+              <span class="t-icon">
+                <Icon name={t.icon} size={22} />
+              </span>
+              <div>
+                <h3>{t.title}</h3>
+                <p>{t.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="routes reveal">
+        <div class="routes-head">
+          <h3>Routes &amp; timings</h3>
+          <p>{transport.timingsNote}</p>
+        </div>
+        <div class="table-wrap">
+          <table class="table">
+            <caption class="visually-hidden">
+              School transport routes, areas covered and timings, Session {school.currentSession}
+            </caption>
+            <thead>
+              <tr>
+                <th scope="col">Route</th>
+                <th scope="col">Areas covered</th>
+                <th scope="col">Pick-up</th>
+                <th scope="col">Drop</th>
+              </tr>
+            </thead>
+            <tbody>
+              {
+                busRoutes.map((r) => (
+                  <tr>
+                    <th scope="row">
+                      <span class="route-no">{r.route}</span>
+                    </th>
+                    <td>{r.areas.join(' · ')}</td>
+                    <td class="time">{r.pickup}</td>
+                    <td class="time">{r.drop}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+        </div>
+        <div class="callout callout--navy routes-note">
+          <Icon name="info" />
+          <p>
+            Need a new stop or a change of route? Please call the school office ({transport.officeHours}) on
+            <a href={telLink(school.phones[0])}>{school.phones[0]}</a>. Transport charges are listed with the
+            <a href={url('/admissions/#fees')}>fee structure</a>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SAFETY ========== -->
+  <section class="section section--navy section--jali" id="safety" aria-labelledby="safety-title">
+    <div class="container">
+      <SectionHead
+        id="safety-title"
+        eyebrow="Safety & security"
+        title="Your child’s safety comes first"
+        lead="A safe school is one where children are protected, supervised and heard. These are the measures we take every day, and the committees that hold us to account."
+      />
+
+      <div class="gate reveal">
+        <div class="gate-media">
+          <Photo src={entrance.photo} alt={entrance.photoAlt} ratio="1600 / 695" />
+        </div>
+        <div>
+          <h3>A walled, gated campus</h3>
+          <p>
+            Nobody enters without being checked, and no child leaves without a parent or an adult the family has
+            authorised.
+          </p>
+          <ul class="check-list">
+            {entrance.points.map((p) => <li>{p}</li>)}
+          </ul>
+        </div>
+      </div>
+
+      <ul class="safety-grid">
+        {
+          safetyMeasures.map((s) => (
+            <li class="safety-item reveal">
+              <span class="safety-icon">
+                <Icon name={s.icon} />
+              </span>
+              <h3>{s.title}</h3>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ul>
+
+      <div class="committees reveal">
+        <div class="committees-intro">
+          <span class="icon-badge icon-badge--navy">
+            <Icon name="scale" />
+          </span>
+          <h3>Committees for child safety and welfare</h3>
+          <p>
+            To keep every child safe and every voice heard, the school has constituted the following committees. Names of
+            members are displayed on the school notice board and are available from the school office.
+          </p>
+          <p>
+            Any concern can also be raised in confidence with the Principal at
+            <a href={`mailto:${school.principal.email}`}>{school.principal.email}</a>.
+          </p>
+          <a href={url('/contact/')} class="link-arrow">Contact the school office <Icon name="arrow-right" /></a>
+        </div>
+        <ul class="committee-list">
+          {
+            committees.map((c) => (
+              <li>
+                <span class="committee-mark" aria-hidden="true">
+                  <Icon name="shield-check" size={20} />
+                </span>
+                <div>
+                  <strong>{c.name}</strong>
+                  {c.basis && <span class="committee-basis">{c.basis}</span>}
+                  <p>{c.text}</p>
+                </div>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== VISIT ========== -->
+  <section class="section section--tight">
+    <div class="container">
+      <div class="visit reveal">
+        <div>
+          <p class="eyebrow">Come and see</p>
+          <h2>The best way to know a school is to walk through it</h2>
+          <p>
+            Visit our classrooms, labs, library and playground, and meet our teachers. Campus tours are welcome during
+            office hours ({school.officeHours}).
+          </p>
+        </div>
+        <div class="btn-row">
+          <a href={url('/contact/')} class="btn btn--navy"><Icon name="calendar-check" /> Plan a campus visit</a>
+          <a href={url('/gallery/')} class="btn btn--outline"><Icon name="images" /> Photo gallery</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- At a glance ---------- */
+  .intro {
+    display: grid;
+    gap: clamp(32px, 5vw, 72px);
+    align-items: center;
+  }
+  @media (min-width: 960px) {
+    .intro {
+      grid-template-columns: 1fr 1.05fr;
+    }
+  }
+  .jump {
+    margin-top: 28px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .jump-label {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 12px;
+  }
+  .jump ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    padding: 0;
+  }
+  .jump a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    background: var(--paper);
+    font-size: 0.86rem;
+    font-weight: 700;
+    color: var(--navy-800);
+    text-decoration: none;
+    transition:
+      background 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .jump a:hover {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: #fff;
+  }
+  .intro-media {
+    position: relative;
+    isolation: isolate;
+    margin: 0 10px 0 0;
+  }
+  .intro-media::before {
+    content: '';
+    position: absolute;
+    inset: 12px -10px 34px 12px;
+    z-index: -1;
+    border: 2px solid var(--gold-400);
+    border-radius: var(--radius);
+  }
+  .intro-media :global(.photo) {
+    box-shadow: var(--shadow-lg);
+  }
+  .intro-media figcaption {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 22px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .intro-media figcaption :global(.icon) {
+    color: var(--gold-600);
+  }
+  @media (min-width: 900px) {
+    .intro-media {
+      margin-right: 18px;
+    }
+    .intro-media::before {
+      inset: 18px -18px 26px 18px;
+    }
+    .intro-media figcaption {
+      margin-top: 28px;
+    }
+  }
+
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: clamp(40px, 6vw, 72px);
+  }
+  @media (min-width: 720px) {
+    .facts {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+  @media (min-width: 1100px) {
+    .facts {
+      grid-template-columns: 1.7fr repeat(4, minmax(0, 1fr));
+    }
+  }
+  .fact {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    padding: clamp(18px, 2.4vw, 26px);
+    border-radius: var(--radius);
+    background: var(--cream);
+    border: 1px solid var(--line-soft);
+  }
+  .fact dd {
+    margin: 0;
+    display: grid;
+    gap: 14px;
+  }
+  .fact-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+    background: var(--navy-50);
+    color: var(--navy-700);
+  }
+  .fact-value {
+    font-family: var(--font-display);
+    font-size: clamp(1.9rem, 1.5rem + 1.6vw, 2.6rem);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--navy-900);
+  }
+  .fact dt {
+    margin-top: 6px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .fact--lead {
+    grid-column: 1 / -1;
+    position: relative;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(120deg, var(--gold-600), var(--gold-500) 60%, var(--gold-400));
+    border-color: transparent;
+  }
+  @media (min-width: 1100px) {
+    .fact--lead {
+      grid-column: auto;
+    }
+  }
+  .fact--lead::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--jali);
+    background-size: 56px 56px;
+    opacity: 0.35;
+    filter: brightness(0.6);
+    mask-image: linear-gradient(90deg, transparent 35%, #000);
+  }
+  .fact--lead .fact-icon {
+    background: rgb(255 255 255 / 0.35);
+    color: var(--navy-950);
+  }
+  .fact--lead .fact-value {
+    color: var(--navy-950);
+    font-size: clamp(1.8rem, 1.5rem + 1vw, 2.2rem);
+    white-space: nowrap;
+  }
+  .fact--lead dt {
+    color: rgb(6 20 48 / 0.75);
+  }
+
+  /* ---------- Feature rows ---------- */
+  .features {
+    display: grid;
+    gap: clamp(56px, 8vw, 104px);
+  }
+  .feature {
+    display: grid;
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+    scroll-margin-top: calc(var(--header-h) + 24px);
+  }
+  @media (min-width: 900px) {
+    .feature {
+      grid-template-columns: 1fr 1.05fr;
+    }
+    .feature--flip {
+      grid-template-columns: 1.05fr 1fr;
+    }
+    .feature--flip .feature-media {
+      order: 2;
+    }
+  }
+  .feature-media {
+    position: relative;
+    isolation: isolate;
+    margin: 0 10px 10px 0;
+  }
+  .feature-media::after {
+    content: '';
+    position: absolute;
+    inset: 12px -10px -10px 12px;
+    z-index: -1;
+    border: 2px solid var(--gold-400);
+    border-radius: var(--radius);
+  }
+  .feature-media :global(.photo) {
+    box-shadow: var(--shadow);
+  }
+  @media (min-width: 900px) {
+    .feature-media {
+      margin: 0 18px 18px 0;
+    }
+    .feature-media::after {
+      inset: 18px -18px -18px 18px;
+    }
+    .feature--flip .feature-media {
+      margin: 0 0 18px 18px;
+    }
+    .feature--flip .feature-media::after {
+      inset: 18px 18px -18px -18px;
+    }
+  }
+  .feature-badge {
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    display: grid;
+    min-width: 128px;
+    padding: 12px 16px;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: var(--shadow-lg);
+    line-height: 1.2;
+  }
+  .feature-badge strong {
+    font-family: var(--font-display);
+    font-size: 1.85rem;
+    font-weight: 600;
+    line-height: 1;
+    color: var(--navy-900);
+  }
+  .feature-badge span {
+    margin-top: 4px;
+    font-size: 0.74rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--gold-600);
+  }
+  .feature-copy h3 {
+    margin-top: 10px;
+    font-size: var(--step-3);
+  }
+  .feature-text {
+    margin: 14px 0 22px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- More facilities ---------- */
+  .mini {
+    display: flex;
+    flex-direction: column;
+  }
+  .mini > p {
+    margin-bottom: 16px;
+  }
+  .mini-list {
+    display: grid;
+    gap: 6px;
+    list-style: none;
+    padding: 14px 0 0;
+    margin-top: auto;
+    border-top: 1px dashed var(--line);
+    font-size: 0.9rem;
+    color: var(--ink-soft);
+  }
+  .mini-list li {
+    position: relative;
+    padding-left: 18px;
+  }
+  .mini-list li::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 0.6em;
+    width: 7px;
+    height: 7px;
+    border-radius: 2px;
+    background: var(--gold-500);
+    transform: rotate(45deg);
+  }
+
+  /* ---------- Transport ---------- */
+  .transport-top .section-head {
+    margin-bottom: 20px;
+  }
+  .t-stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 36px;
+    margin-top: 26px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+  }
+  .t-stats div {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .t-stats dt {
+    font-size: 0.75rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .t-stats dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
+    font-weight: 600;
+    line-height: 1.1;
+    color: var(--navy-900);
+  }
+  .transport-media :global(.photo) {
+    box-shadow: var(--shadow-lg);
+  }
+  .t-features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+    margin-top: clamp(40px, 6vw, 64px);
+  }
+  .t-features li {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    padding: 20px;
+    border-radius: var(--radius);
+    background: var(--paper);
+    border: 1px solid var(--line-soft);
+    box-shadow: var(--shadow-sm);
+  }
+  .t-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--gold-100);
+    color: var(--gold-600);
+  }
+  .t-features h3 {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    color: var(--navy-900);
+  }
+  .t-features p {
+    margin-top: 4px;
+    font-size: 0.92rem;
+    color: var(--muted);
+    line-height: 1.55;
+  }
+  .routes {
+    margin-top: clamp(40px, 6vw, 64px);
+  }
+  .routes-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 6px 24px;
+    margin-bottom: 16px;
+  }
+  .routes-head h3 {
+    font-size: var(--step-2);
+  }
+  .routes-head p {
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .route-no {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 999px;
+    background: var(--gold-100);
+    color: #8a6412;
+    font-size: 0.82rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .table td.time {
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .routes-note {
+    margin-top: 16px;
+  }
+
+  /* ---------- Safety ---------- */
+  .gate {
+    display: grid;
+    gap: clamp(24px, 4vw, 56px);
+    align-items: center;
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  @media (min-width: 960px) {
+    .gate {
+      grid-template-columns: 1.3fr 1fr;
+    }
+  }
+  .gate-media :global(.photo) {
+    border: 4px solid rgb(255 255 255 / 0.12);
+    box-shadow: 0 30px 60px -30px rgb(0 0 0 / 0.6);
+  }
+  .gate h3 {
+    font-size: var(--step-3);
+  }
+  .gate p {
+    margin: 12px 0 20px;
+    color: #b9c6df;
+  }
+  .safety-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 240px), 1fr));
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+  }
+  .safety-item {
+    padding: 26px 24px;
+    border-radius: var(--radius);
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    transition:
+      background 0.2s,
+      border-color 0.2s;
+  }
+  .safety-item:hover {
+    background: rgb(255 255 255 / 0.09);
+    border-color: rgb(228 185 76 / 0.5);
+  }
+  .safety-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 16px;
+    border-radius: 12px;
+    background: var(--gold-500);
+    color: var(--navy-950);
+  }
+  .safety-item h3 {
+    font-size: 1.25rem;
+  }
+  .safety-item p {
+    margin-top: 6px;
+    font-size: 0.94rem;
+    color: #b9c6df;
+  }
+  .committees {
+    display: grid;
+    gap: clamp(24px, 4vw, 48px);
+    margin-top: clamp(40px, 6vw, 64px);
+    padding: clamp(22px, 4vw, 44px);
+    border-radius: var(--radius-lg);
+    background: var(--paper);
+    color: var(--ink);
+    box-shadow: var(--shadow-lg);
+  }
+  @media (min-width: 960px) {
+    .committees {
+      grid-template-columns: 0.8fr 1.2fr;
+    }
+  }
+  .committees h3 {
+    color: var(--navy-900);
+    font-size: var(--step-2);
+  }
+  .committees-intro p {
+    margin-top: 12px;
+    color: var(--muted);
+  }
+  .committees-intro a:not(.link-arrow) {
+    overflow-wrap: anywhere;
+  }
+  .committees-intro .link-arrow {
+    margin-top: 18px;
+  }
+  .committee-list {
+    list-style: none;
+    padding: 0;
+  }
+  .committee-list li {
+    display: flex;
+    gap: 14px;
+    padding: 16px 0;
+  }
+  .committee-list li:first-child {
+    padding-top: 0;
+  }
+  .committee-list li:last-child {
+    padding-bottom: 0;
+  }
+  .committee-list li + li {
+    border-top: 1px dashed var(--line);
+  }
+  .committee-mark {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background: var(--gold-100);
+    color: var(--gold-600);
+  }
+  .committee-list strong {
+    display: block;
+    color: var(--navy-900);
+    font-size: 1.05rem;
+    line-height: 1.3;
+  }
+  .committee-basis {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--maroon-600);
+  }
+  .committee-list p {
+    margin-top: 4px;
+    font-size: 0.94rem;
+    color: var(--muted);
+  }
+
+  /* ---------- Visit ---------- */
+  .visit {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    display: grid;
+    gap: 24px;
+    align-items: center;
+    padding: clamp(26px, 4vw, 48px);
+    border-radius: var(--radius-lg);
+    background: var(--gold-100);
+    border: 1px solid var(--gold-200);
+  }
+  .visit::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--jali);
+    background-size: 64px 64px;
+    opacity: 0.25;
+    mask-image: linear-gradient(90deg, transparent 40%, #000);
+  }
+  @media (min-width: 960px) {
+    .visit {
+      grid-template-columns: 1.4fr auto;
+    }
+  }
+  .visit h2 {
+    margin-top: 10px;
+    font-size: var(--step-3);
+  }
+  .visit p:not(.eyebrow) {
+    margin-top: 10px;
+    color: var(--ink-soft);
+    max-width: 60ch;
+  }
+</style>

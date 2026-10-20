@@ -1,0 +1,1013 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+import SectionHead from '../components/SectionHead.astro';
+import Photo from '../components/Photo.astro';
+import Icon from '../components/Icon.astro';
+import { school } from '../data/school';
+import { sortedAlbums, galleryCategories, videos, formatAlbumDate } from '../data/gallery';
+import { formatDate } from '../lib/format';
+import { url } from '../lib/url';
+
+const albums = sortedAlbums();
+/** Albums with few photos sit side by side; the class sets how many columns each one spans. */
+const sizeClass = (n: number) => `album--n${Math.min(n, 4)}`;
+const categories = galleryCategories.filter((c) => albums.some((a) => a.category === c));
+const albumCount = (category: string) => albums.filter((a) => a.category === category).length;
+const totalPhotos = albums.reduce((n, a) => n + a.photos.length, 0);
+const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
+/** Colour of each category's tag and filter dot. */
+const tone: Record<string, string> = {
+  Events: 'maroon',
+  Sports: 'green',
+  Celebrations: 'gold',
+  Academics: 'navy',
+  Campus: 'sky',
+};
+
+const photoUrl = (src: string) => url(src.startsWith('/') ? src : `/${src}`);
+
+const socials = [
+  { name: 'instagram', label: 'Instagram', href: school.social.instagram },
+  { name: 'youtube', label: 'YouTube', href: school.social.youtube },
+  { name: 'facebook', label: 'Facebook', href: school.social.facebook },
+].filter((s) => s.href);
+---
+
+<BaseLayout
+  title="Photo Gallery"
+  description={`Photos from celebrations, sports, competitions, trips and everyday campus life at ${school.name}.`}
+>
+  <PageHero
+    title="Photo Gallery"
+    eyebrow="Campus life"
+    lead={`Celebrations, competitions, trips and everyday moments of learning at ${school.name}. Choose a category, then tap any photo to view it larger.`}
+    crumbs={[{ label: 'Photo Gallery' }]}
+  />
+
+  <section class="gallery" aria-label="Photo albums">
+    <div class="toolbar">
+      <div class="container toolbar-inner">
+        <div class="filters" role="group" aria-label="Filter albums by category">
+          <button type="button" class="chip" aria-pressed="true" data-filter="all">
+            All <span class="chip-count">{albums.length}</span>
+          </button>
+          {
+            categories.map((c) => (
+              <button type="button" class="chip" aria-pressed="false" data-filter={c}>
+                <span class:list={['chip-dot', `dot-${tone[c]}`]} aria-hidden="true" />
+                {c} <span class="chip-count">{albumCount(c)}</span>
+              </button>
+            ))
+          }
+        </div>
+        <p class="summary" aria-live="polite" data-summary>
+          Showing {plural(albums.length, 'album')} · {plural(totalPhotos, 'photo')}
+        </p>
+      </div>
+    </div>
+
+    <div class="container albums" data-albums>
+      <div class="albums-grid">
+        {
+          albums.map((album) => (
+            <section
+              class:list={['album', sizeClass(album.photos.length), 'reveal']}
+              id={album.id}
+              aria-labelledby={`${album.id}-title`}
+              data-album
+              data-category={album.category}
+              data-count={album.photos.length}
+              data-title={album.title}
+              data-date-label={`${formatAlbumDate(album.date)} · ${album.category}`}
+            >
+              <header class="album-head">
+                <p class="album-meta">
+                  <span class:list={['tag', `tag--${tone[album.category]}`]}>{album.category}</span>
+                  <span class="meta-item">
+                    <Icon name="calendar-days" size={16} />
+                    <time datetime={album.date}>{formatAlbumDate(album.date)}</time>
+                  </span>
+                  <span class="meta-item">
+                    <Icon name="images" size={16} />
+                    {plural(album.photos.length, 'photo')}
+                  </span>
+                </p>
+                <h2 id={`${album.id}-title`}>{album.title}</h2>
+                {album.description && <p class="album-desc">{album.description}</p>}
+              </header>
+              <ul class="tiles" role="list">
+                {album.photos.map((p, i) => (
+                  <li>
+                    <button
+                      type="button"
+                      class="tile"
+                      aria-haspopup="dialog"
+                      aria-label={`View photo ${i + 1} of ${album.photos.length}: ${p.caption}`}
+                      style={p.focus ? `--focus: ${p.focus}` : undefined}
+                      data-tile
+                      data-caption={p.caption}
+                      data-alt={p.alt}
+                      data-src={p.src ? photoUrl(p.src) : undefined}
+                    >
+                      <Photo src={p.src} alt="" icon={p.icon ?? album.icon} tone={p.tone ?? album.tone} ratio="4 / 3" class="tile-photo" />
+                      <span class="tile-cap" aria-hidden="true">
+                        {p.caption}
+                      </span>
+                      <span class="tile-zoom" aria-hidden="true">
+                        <Icon name="zoom-in" size={18} />
+                      </span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          ))
+        }
+      </div>
+      <p class="empty" data-empty hidden>
+        <Icon name="images" size={28} />
+        No albums in this category yet. Please check back soon.
+      </p>
+    </div>
+  </section>
+
+  {
+    videos.length > 0 && (
+      <section class="section section--cream" aria-labelledby="videos-title">
+        <div class="container">
+          <SectionHead id="videos-title" eyebrow="Watch" title="Videos" />
+          <div class="grid grid-2">
+            {videos.map((v) => (
+              <figure class="video reveal">
+                <div class="video-frame">
+                  <iframe
+                    src={`https://www.youtube-nocookie.com/embed/${v.youtubeId}?rel=0`}
+                    title={v.title}
+                    loading="lazy"
+                    allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen
+                  />
+                </div>
+                <figcaption>
+                  <strong>{v.title}</strong>
+                  {v.date && <time datetime={v.date}>{formatDate(v.date)}</time>}
+                </figcaption>
+              </figure>
+            ))}
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section section--tight section--cream follow-band">
+    <div class="container">
+      <div class="follow reveal">
+        <div>
+          <h2>More moments, every week</h2>
+          <p>Follow the school for photos and videos from assemblies, competitions and events as they happen.</p>
+        </div>
+        {
+          socials.length > 0 && (
+            <div class="btn-row">
+              {socials.map((s) => (
+                <a href={s.href} class="btn btn--outline btn--sm" target="_blank" rel="noopener">
+                  <Icon name={s.name} /> {s.label}
+                </a>
+              ))}
+            </div>
+          )
+        }
+      </div>
+      <p class="consent">
+        <Icon name="shield-check" size={18} />
+        <span>
+          Photos are published with parents’ consent. If you would like a photo of your child removed, please write to
+          <a href={`mailto:${school.email}`}>{school.email}</a> and we will take it down promptly.
+        </span>
+      </p>
+    </div>
+  </section>
+
+  <!-- ========== LIGHTBOX ========== -->
+  <div
+    class="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="lb-title"
+    aria-describedby="lb-caption"
+    hidden
+    data-lightbox
+  >
+    <div class="lb-backdrop" data-lb-dismiss></div>
+    <div class="lb-dialog" tabindex="-1" data-lb-dismiss>
+      <div class="lb-bar" data-lb-dismiss>
+        <div class="lb-heading">
+          <h2 class="lb-title" id="lb-title" data-lb-title></h2>
+          <p class="lb-date" data-lb-date></p>
+        </div>
+        <p class="lb-count" data-lb-count>
+          <span data-lb-index>1</span> / <span data-lb-total>1</span>
+        </p>
+        <button type="button" class="lb-btn lb-close" aria-label="Close photo viewer" data-lb-close>
+          <Icon name="x" />
+        </button>
+      </div>
+      <button type="button" class="lb-btn lb-nav lb-prev" aria-label="Previous photo" data-lb-prev>
+        <Icon name="chevron-left" size={28} />
+      </button>
+      <div class="lb-media" data-lb-media data-lb-dismiss></div>
+      <button type="button" class="lb-btn lb-nav lb-next" aria-label="Next photo" data-lb-next>
+        <Icon name="chevron-right" size={28} />
+      </button>
+      <p class="lb-caption" id="lb-caption" data-lb-caption></p>
+      <p class="visually-hidden" aria-live="polite" data-lb-status></p>
+    </div>
+  </div>
+</BaseLayout>
+
+<script>
+  /* ---------- Category filter ---------- */
+  const chips = [...document.querySelectorAll<HTMLButtonElement>('[data-filter]')];
+  const albumEls = [...document.querySelectorAll<HTMLElement>('[data-album]')];
+  const summary = document.querySelector<HTMLElement>('[data-summary]');
+  const empty = document.querySelector<HTMLElement>('[data-empty]');
+  const albumsWrap = document.querySelector<HTMLElement>('[data-albums]');
+  const toolbar = document.querySelector<HTMLElement>('.toolbar');
+  const plural = (n: number, word: string) => `${n} ${word}${n === 1 ? '' : 's'}`;
+
+  function applyFilter(filter: string) {
+    let albums = 0;
+    let photos = 0;
+    for (const el of albumEls) {
+      const show = filter === 'all' || el.dataset.category === filter;
+      el.hidden = !show;
+      if (show) {
+        albums += 1;
+        photos += Number(el.dataset.count);
+        el.classList.add('is-visible');
+      }
+    }
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.filter === filter)));
+    if (summary) {
+      const where = filter === 'all' ? '' : ` in ${filter}`;
+      summary.textContent = `Showing ${plural(albums, 'album')} · ${plural(photos, 'photo')}${where}`;
+    }
+    if (empty) empty.hidden = albums > 0;
+
+    // If the albums have scrolled up under the sticky filter bar, bring their start back into view.
+    if (albumsWrap && toolbar) {
+      const barBottom = toolbar.getBoundingClientRect().bottom;
+      const top = albumsWrap.getBoundingClientRect().top;
+      if (top < barBottom) window.scrollTo({ top: window.scrollY + top - barBottom });
+    }
+  }
+
+  chips.forEach((chip) => chip.addEventListener('click', () => applyFilter(chip.dataset.filter ?? 'all')));
+
+  /* ---------- Lightbox ---------- */
+  const lb = document.querySelector<HTMLElement>('[data-lightbox]');
+
+  if (lb) {
+    // Move the dialog to the end of <body> so everything else can be made inert while it is open.
+    document.body.append(lb);
+
+    const $ = <T extends HTMLElement>(sel: string) => lb.querySelector<T>(sel)!;
+    const media = $('[data-lb-media]');
+    const caption = $('[data-lb-caption]');
+    const title = $('[data-lb-title]');
+    const date = $('[data-lb-date]');
+    const indexEl = $('[data-lb-index]');
+    const totalEl = $('[data-lb-total]');
+    const countEl = $('[data-lb-count]');
+    const status = $('[data-lb-status]');
+    const prevBtn = $<HTMLButtonElement>('[data-lb-prev]');
+    const nextBtn = $<HTMLButtonElement>('[data-lb-next]');
+    const closeBtn = $<HTMLButtonElement>('[data-lb-close]');
+
+    let tiles: HTMLElement[] = [];
+    let current = 0;
+    let opener: HTMLElement | null = null;
+    let madeInert: HTMLElement[] = [];
+
+    const preload = (tile?: HTMLElement) => {
+      if (tile?.dataset.src) new Image().src = tile.dataset.src;
+    };
+
+    function show(i: number, announce = false) {
+      current = (i + tiles.length) % tiles.length;
+      const tile = tiles[current];
+      const text = tile.dataset.caption ?? '';
+
+      if (tile.dataset.src) {
+        const img = document.createElement('img');
+        img.className = 'lb-img';
+        img.alt = tile.dataset.alt || text;
+        img.decoding = 'async';
+        img.src = tile.dataset.src;
+        media.replaceChildren(img);
+      } else {
+        // No real photo yet: show the tile's placeholder at a large size.
+        const ph = tile.querySelector('.photo--placeholder')?.cloneNode(true) as HTMLElement | undefined;
+        if (ph) {
+          ph.classList.remove('tile-photo');
+          ph.classList.add('lb-ph');
+          ph.setAttribute('aria-hidden', 'true');
+          media.replaceChildren(ph);
+        } else {
+          media.replaceChildren();
+        }
+      }
+
+      caption.textContent = text;
+      indexEl.textContent = String(current + 1);
+      totalEl.textContent = String(tiles.length);
+      if (announce) status.textContent = `Photo ${current + 1} of ${tiles.length}: ${text}`;
+      if (tiles.length > 1) {
+        preload(tiles[(current + 1) % tiles.length]);
+        preload(tiles[(current - 1 + tiles.length) % tiles.length]);
+      }
+    }
+
+    function open(tile: HTMLElement) {
+      const album = tile.closest<HTMLElement>('[data-album]');
+      if (!album) return;
+      tiles = [...album.querySelectorAll<HTMLElement>('[data-tile]')];
+      opener = tile;
+      title.textContent = album.dataset.title ?? '';
+      date.textContent = album.dataset.dateLabel ?? '';
+      const single = tiles.length < 2;
+      prevBtn.hidden = single;
+      nextBtn.hidden = single;
+      countEl.hidden = single;
+      status.textContent = '';
+      show(tiles.indexOf(tile));
+
+      madeInert = [...document.body.children].filter(
+        (el): el is HTMLElement => el instanceof HTMLElement && el !== lb && !el.inert,
+      );
+      madeInert.forEach((el) => (el.inert = true));
+      document.documentElement.classList.add('lb-lock');
+      lb!.hidden = false;
+      requestAnimationFrame(() => lb!.classList.add('is-open'));
+      closeBtn.focus();
+    }
+
+    function close() {
+      if (lb!.hidden) return;
+      lb!.classList.remove('is-open');
+      lb!.hidden = true;
+      madeInert.forEach((el) => (el.inert = false));
+      madeInert = [];
+      document.documentElement.classList.remove('lb-lock');
+      media.replaceChildren();
+      opener?.focus();
+    }
+
+    const step = (d: number) => {
+      if (tiles.length > 1) show(current + d, true);
+    };
+
+    document.querySelectorAll<HTMLElement>('[data-tile]').forEach((tile) => {
+      tile.addEventListener('click', () => open(tile));
+    });
+    prevBtn.addEventListener('click', () => step(-1));
+    nextBtn.addEventListener('click', () => step(1));
+    closeBtn.addEventListener('click', close);
+
+    // Clicking the dark area around the photo closes the viewer.
+    lb.addEventListener('click', (e) => {
+      if (e.target instanceof HTMLElement && e.target.hasAttribute('data-lb-dismiss')) close();
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (lb.hidden) return;
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        close();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        step(1);
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        step(-1);
+      } else if (e.key === 'Tab') {
+        // Keep focus inside the dialog.
+        const focusable = [...lb.querySelectorAll<HTMLButtonElement>('button:not([hidden])')];
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        const active = document.activeElement;
+        const outside = !focusable.includes(active as HTMLButtonElement);
+        if (e.shiftKey && (active === first || outside)) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && (active === last || outside)) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    });
+
+    // Swipe left / right on touch screens.
+    let startX = 0;
+    let startY = 0;
+    media.addEventListener(
+      'touchstart',
+      (e) => {
+        startX = e.touches[0].clientX;
+        startY = e.touches[0].clientY;
+      },
+      { passive: true },
+    );
+    media.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - startX;
+      const dy = e.changedTouches[0].clientY - startY;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) step(dx < 0 ? 1 : -1);
+    });
+  }
+</script>
+
+<style>
+  /* ---------- Filter toolbar ---------- */
+  .toolbar {
+    position: sticky;
+    top: var(--header-h);
+    z-index: 20;
+    background: rgb(255 255 255 / 0.94);
+    backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .toolbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-block: 14px;
+  }
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 6px 8px 6px 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 999px;
+    background: var(--paper);
+    color: var(--navy-900);
+    font-size: 0.9rem;
+    font-weight: 800;
+    white-space: nowrap;
+    transition:
+      background 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .chip:hover {
+    border-color: var(--navy-600);
+  }
+  .chip[aria-pressed='true'] {
+    background: var(--navy-900);
+    border-color: var(--navy-900);
+    color: #fff;
+  }
+  .chip-count {
+    display: inline-grid;
+    place-items: center;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--navy-50);
+    color: var(--navy-700);
+    font-size: 0.78rem;
+  }
+  .chip[aria-pressed='true'] .chip-count {
+    background: var(--gold-500);
+    color: var(--navy-950);
+  }
+  .chip-dot {
+    width: 8px;
+    height: 8px;
+    margin-left: -4px;
+    border-radius: 50%;
+  }
+  .dot-maroon {
+    background: var(--maroon-600);
+  }
+  .dot-green {
+    background: var(--green-600);
+  }
+  .dot-gold {
+    background: var(--gold-500);
+  }
+  .dot-navy {
+    background: var(--navy-600);
+  }
+  .dot-sky {
+    background: #3d7fc9;
+  }
+  .summary {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+  :global(.no-js) .toolbar {
+    display: none;
+  }
+  @media (max-width: 760px) {
+    .toolbar-inner {
+      padding-block: 10px;
+    }
+    /* One swipeable row of chips keeps the sticky bar short on phones. */
+    .filters {
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: none;
+      margin-inline: calc(var(--gutter) * -1);
+      padding-inline: var(--gutter);
+      padding-block: 2px;
+    }
+    .filters::-webkit-scrollbar {
+      display: none;
+    }
+    .summary {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip: rect(0 0 0 0);
+      white-space: nowrap;
+    }
+  }
+
+  /* ---------- Albums ---------- */
+  .albums {
+    --tile-gap: 10px;
+    padding-block: clamp(36px, 5vw, 64px) calc(var(--section-y) - clamp(36px, 5vw, 56px));
+  }
+  /*
+   * Albums are packed into a grid: an album spans as many columns as it has photos
+   * (up to 4), so small albums sit side by side. Each album uses two rows of the
+   * parent grid (heading, photos) via subgrid, so photos in the same row line up even
+   * when one heading wraps onto more lines than its neighbour's.
+   */
+  .albums-grid {
+    --cols: 1;
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    column-gap: var(--tile-gap);
+  }
+  .album {
+    --inner: 2;
+    grid-column: 1 / -1;
+    grid-row: span 2;
+    display: grid;
+    grid-template-rows: subgrid;
+    scroll-margin-top: calc(var(--header-h) + 90px);
+  }
+  .album--n1 {
+    --inner: 1;
+  }
+  @supports not (grid-template-rows: subgrid) {
+    .album {
+      display: block;
+      grid-row: auto;
+    }
+  }
+  @media (min-width: 640px) {
+    .albums {
+      --tile-gap: 14px;
+    }
+    .albums-grid {
+      --cols: 3;
+    }
+    .album--n1 {
+      grid-column: span 1;
+    }
+    .album--n2 {
+      grid-column: span 2;
+    }
+    .album--n3 {
+      --inner: 3;
+      grid-column: span 3;
+    }
+    .album--n4 {
+      --inner: 4;
+      grid-column: span 3;
+    }
+  }
+  @media (min-width: 1000px) {
+    .albums-grid {
+      --cols: 4;
+    }
+    .album--n4 {
+      grid-column: span 4;
+    }
+  }
+  .album[hidden] {
+    display: none;
+  }
+  .album-head {
+    padding-bottom: 16px;
+  }
+  .album-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 16px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--muted);
+  }
+  .meta-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .meta-item :global(.icon) {
+    color: var(--gold-600);
+  }
+  .album-head h2 {
+    margin-top: 10px;
+    font-size: var(--step-2);
+  }
+  .album-desc {
+    margin-top: 6px;
+    max-width: 70ch;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+  .tag--sky {
+    background: #e3effb;
+    color: #1d4f8f;
+  }
+
+  /* ---------- Tiles ---------- */
+  .tiles {
+    display: grid;
+    grid-template-columns: repeat(var(--inner), minmax(0, 1fr));
+    align-content: start;
+    gap: var(--tile-gap);
+    list-style: none;
+    padding: 0;
+    margin-bottom: clamp(36px, 5vw, 56px);
+  }
+  .tile {
+    position: relative;
+    display: block;
+    width: 100%;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    background: var(--navy-50);
+    overflow: hidden;
+    text-align: left;
+    cursor: zoom-in;
+    box-shadow: var(--shadow-sm);
+  }
+  .tile:focus-visible {
+    outline: 3px solid var(--gold-500);
+    outline-offset: 3px;
+  }
+  .tile :global(.tile-photo) {
+    border-radius: 0;
+    object-position: var(--focus, center 25%);
+    transition: transform 0.4s ease;
+  }
+  .tile:hover :global(.tile-photo),
+  .tile:focus-visible :global(.tile-photo) {
+    transform: scale(1.05);
+  }
+  .tile :global(.ph-icon) {
+    width: 64px;
+    height: 64px;
+    margin-bottom: 22px;
+  }
+  .tile :global(.ph-icon svg) {
+    width: 30px;
+    height: 30px;
+  }
+  @media (min-width: 1000px) {
+    .tile :global(.ph-icon) {
+      width: 80px;
+      height: 80px;
+    }
+    .tile :global(.ph-icon svg) {
+      width: 38px;
+      height: 38px;
+    }
+  }
+  .tile-cap {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 28px 12px 10px;
+    background: linear-gradient(transparent, rgb(6 20 48 / 0.78));
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    overflow: hidden;
+  }
+  @media (min-width: 640px) {
+    .tile-cap {
+      padding: 32px 14px 12px;
+      font-size: 0.86rem;
+      -webkit-line-clamp: 2;
+      line-clamp: 2;
+    }
+  }
+  .tile-zoom {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.92);
+    color: var(--navy-900);
+    opacity: 0;
+    transform: scale(0.85);
+    transition:
+      opacity 0.2s,
+      transform 0.2s;
+  }
+  .tile:hover .tile-zoom,
+  .tile:focus-visible .tile-zoom {
+    opacity: 1;
+    transform: none;
+  }
+  .empty {
+    display: grid;
+    justify-items: center;
+    gap: 10px;
+    padding: 48px 16px;
+    border: 1.5px dashed var(--line);
+    border-radius: var(--radius);
+    text-align: center;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .empty[hidden] {
+    display: none;
+  }
+
+  /* ---------- Videos ---------- */
+  .video-frame {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--navy-900);
+    box-shadow: var(--shadow);
+  }
+  .video-frame iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .video figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 4px 16px;
+    margin-top: 12px;
+  }
+  .video figcaption strong {
+    color: var(--navy-900);
+  }
+  .video time {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* ---------- Follow / consent ---------- */
+  .follow {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px 32px;
+  }
+  .follow h2 {
+    font-size: var(--step-3);
+  }
+  .follow p {
+    margin-top: 8px;
+    color: var(--ink-soft);
+    max-width: 56ch;
+  }
+  .consent {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .consent :global(.icon) {
+    flex: none;
+    margin-top: 3px;
+    color: var(--green-600);
+  }
+  .consent a {
+    overflow-wrap: anywhere;
+  }
+
+  /* ---------- Lightbox ---------- */
+  :global(html.lb-lock) {
+    overflow: hidden;
+  }
+  .lightbox {
+    --lb-chrome: 200px;
+    position: fixed;
+    inset: 0;
+    z-index: 150;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .lightbox.is-open {
+    opacity: 1;
+  }
+  .lightbox[hidden] {
+    display: none;
+  }
+  .lb-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgb(6 20 48 / 0.95);
+  }
+  .lb-dialog {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto minmax(0, 1fr) auto;
+    grid-template-areas:
+      'bar bar bar'
+      'prev media next'
+      'cap cap cap';
+    align-items: center;
+    gap: 12px 20px;
+    width: 100%;
+    max-width: 1320px;
+    height: 100%;
+    margin-inline: auto;
+    padding: 16px clamp(16px, 3vw, 32px) 20px;
+    color: #fff;
+  }
+  .lb-dialog:focus {
+    outline: none;
+  }
+  .lb-bar {
+    grid-area: bar;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .lb-heading {
+    flex: 1;
+    min-width: 0;
+  }
+  .lb-title {
+    color: #fff;
+    font-size: var(--step-1);
+    line-height: 1.25;
+  }
+  .lb-date {
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--gold-400);
+  }
+  .lb-count {
+    flex: none;
+    padding: 4px 12px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.1);
+    font-size: 0.88rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .lb-count[hidden] {
+    display: none;
+  }
+  .lb-btn {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 48px;
+    height: 48px;
+    padding: 0;
+    border: 1px solid rgb(255 255 255 / 0.25);
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.08);
+    color: #fff;
+    transition:
+      background 0.2s,
+      border-color 0.2s,
+      color 0.2s;
+  }
+  .lb-btn:hover {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    color: var(--navy-950);
+  }
+  .lb-btn:focus-visible {
+    outline: 3px solid var(--gold-400);
+    outline-offset: 3px;
+    border-radius: 50%;
+  }
+  .lb-btn[hidden] {
+    display: none;
+  }
+  .lb-nav {
+    width: 56px;
+    height: 56px;
+  }
+  .lb-prev {
+    grid-area: prev;
+  }
+  .lb-next {
+    grid-area: next;
+  }
+  .lb-media {
+    grid-area: media;
+    display: grid;
+    place-items: center;
+    min-height: 0;
+    height: 100%;
+    touch-action: pan-y;
+  }
+  .lb-media :global(.lb-img) {
+    max-width: 100%;
+    max-height: calc(100vh - var(--lb-chrome));
+    max-height: calc(100dvh - var(--lb-chrome));
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: var(--radius);
+    box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.6);
+  }
+  .lb-media :global(.lb-ph) {
+    width: min(100%, calc((100vh - var(--lb-chrome)) * 4 / 3));
+    width: min(100%, calc((100dvh - var(--lb-chrome)) * 4 / 3));
+    height: auto;
+    aspect-ratio: 4 / 3;
+    box-shadow: 0 30px 80px -20px rgb(0 0 0 / 0.6);
+  }
+  .lb-media :global(.lb-ph .ph-icon) {
+    width: clamp(96px, 16vw, 168px);
+    height: clamp(96px, 16vw, 168px);
+  }
+  .lb-media :global(.lb-ph .ph-icon svg) {
+    width: 45%;
+    height: 45%;
+  }
+  .lb-caption {
+    grid-area: cap;
+    text-align: center;
+    font-weight: 700;
+    color: #e6ecf7;
+    min-height: 1.6em;
+  }
+  @media (max-width: 700px) {
+    .lightbox {
+      --lb-chrome: 250px;
+    }
+    .lb-dialog {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto minmax(0, 1fr) auto auto;
+      grid-template-areas:
+        'bar bar'
+        'media media'
+        'cap cap'
+        'prev next';
+      padding: 12px 16px 20px;
+    }
+    .lb-prev {
+      justify-self: start;
+    }
+    .lb-next {
+      justify-self: end;
+    }
+  }
+</style>
