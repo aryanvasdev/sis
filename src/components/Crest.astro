@@ -1,67 +1,27 @@
 ---
 /**
- * The school crest (placeholder). To use the school's real logo, put it at
- * /public/images/logo.png (or .svg) and set `logoSrc` below.
+ * The school logo.
+ *  - variant="emblem" (default): the shield, cap and laurels only, for small sizes.
+ *  - variant="full": the complete logo with the "Sahib International School, Saha – Ambala" ribbon.
+ * `size` is the rendered height in pixels.
  */
+import { url } from '../lib/url';
+
 interface Props {
   size?: number;
+  variant?: 'emblem' | 'full';
   class?: string;
+  alt?: string;
 }
-const { size = 56, class: className } = Astro.props;
 
-/** e.g. 'images/logo.png'. Leave empty to use the drawn crest. */
-const logoSrc = '';
-const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const { size = 56, variant = 'emblem', class: className, alt = '' } = Astro.props;
+
+const logos = {
+  emblem: { src: '/images/emblem.webp', width: 343, height: 260 },
+  full: { src: '/images/logo.webp', width: 560, height: 502 },
+};
+const logo = logos[variant];
+const width = Math.round((size * logo.width) / logo.height);
 ---
 
-{
-  logoSrc ? (
-    <img src={`${base}/${logoSrc}`} alt="" width={size} height={size} class={className} />
-  ) : (
-    <svg
-      class={className}
-      width={size}
-      height={size * 1.15}
-      viewBox="0 0 100 115"
-      aria-hidden="true"
-      focusable="false"
-    >
-      <defs>
-        <linearGradient id="crest-fill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#173a78" />
-          <stop offset="1" stop-color="#0a1f44" />
-        </linearGradient>
-        <linearGradient id="crest-gold" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#f0cd6e" />
-          <stop offset="1" stop-color="#b8861b" />
-        </linearGradient>
-      </defs>
-      <path
-        d="M50 3 92 16v38c0 31-19 48-42 58C27 102 8 85 8 54V16Z"
-        fill="url(#crest-fill)"
-        stroke="url(#crest-gold)"
-        stroke-width="4"
-        stroke-linejoin="round"
-      />
-      <path
-        d="M50 11 85 22v32c0 26-16 41-35 50-19-9-35-24-35-50V22Z"
-        fill="none"
-        stroke="#d4a12a"
-        stroke-opacity=".45"
-        stroke-width="1.2"
-      />
-      <g stroke="#e4b94c" stroke-width="2" stroke-linecap="round" opacity=".9">
-        <path d="M50 18v5M33 25l3 4M67 25l-3 4M26 38h5M74 38h-5" />
-      </g>
-      <path d="M50 24c8 10 10 18 0 28-10-10-8-18 0-28Z" fill="url(#crest-gold)" />
-      <path d="M50 34c3.5 4.5 4 8 0 12-4-4-3.5-7.5 0-12Z" fill="#fff6dc" />
-      <path d="M38 54h24l-3 5H41Z" fill="url(#crest-gold)" />
-      <path d="M20 66c11-5 22-4 30 3v24c-8-6-19-7-30-2Z" fill="#fbf8f1" />
-      <path d="M80 66c-11-5-22-4-30 3v24c8-6 19-7 30-2Z" fill="#ffffff" />
-      <path d="M50 69v24" stroke="#b8861b" stroke-width="1.5" />
-      <g stroke="#173a78" stroke-opacity=".35" stroke-width="1.2" stroke-linecap="round">
-        <path d="M26 72c6-2 12-2 18 1M26 78c6-2 12-2 18 1M26 84c6-2 12-2 18 1M56 73c6-3 12-3 18-1M56 79c6-3 12-3 18-1M56 85c6-3 12-3 18-1" />
-      </g>
-    </svg>
-  )
-}
+<img src={url(logo.src)} alt={alt} width={width} height={size} class={className} decoding="async" />

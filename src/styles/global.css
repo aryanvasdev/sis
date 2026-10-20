@@ -84,6 +84,7 @@ body {
   overflow-x: hidden;
 }
 img, svg, video { display: block; max-width: 100%; }
+.icon { flex: none; }
 img { height: auto; }
 input, button, textarea, select { font: inherit; color: inherit; }
 button { cursor: pointer; }

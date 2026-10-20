@@ -20,10 +20,8 @@ export const mainNav: NavLink[] = [
     label: 'Academics',
     href: '/academics/',
     children: [
-      { label: 'Curriculum', href: '/academics/', description: 'CBSE, Nursery to Class XII' },
-      { label: 'Streams (XI–XII)', href: '/academics/#streams' },
+      { label: 'Curriculum', href: '/academics/', description: 'CBSE curriculum, Nursery to Class VIII' },
       { label: 'Academic Calendar', href: '/academics/#calendar' },
-      { label: 'Board Results', href: '/achievements/#results' },
       { label: 'Book List & Uniform', href: '/academics/#booklist' },
     ],
   },
@@ -53,15 +51,12 @@ export const mainNav: NavLink[] = [
 
 /** Shown in the slim bar above the header, and in the footer. */
 export const utilityLinks = [
-  { label: 'Mandatory Disclosure', href: '/mandatory-disclosure/', icon: 'file-check' },
   { label: 'TC Verification', href: '/tc-verification/', icon: 'badge-check' },
   { label: 'Careers', href: '/careers/', icon: 'briefcase' },
 ];
 
 export const importantLinks = [
-  { label: 'CBSE', href: 'https://www.cbse.gov.in/' },
-  { label: 'CBSE Academic', href: 'https://cbseacademic.nic.in/' },
-  { label: 'NCERT', href: 'https://ncert.nic.in/' },
+  { label: 'NCERT Textbooks', href: 'https://ncert.nic.in/textbook.php' },
   { label: 'DigiLocker', href: 'https://www.digilocker.gov.in/' },
   { label: 'DIKSHA', href: 'https://diksha.gov.in/' },
 ];

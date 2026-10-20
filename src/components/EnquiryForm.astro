@@ -16,7 +16,7 @@ interface Props {
 
 const { variant = 'admission', id = `form-${variant}` } = Astro.props;
 
-const classes = ['Nursery', 'LKG', 'UKG', ...['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'].map((c) => `Class ${c}`)];
+const classes = ['Nursery', 'LKG', 'UKG', ...['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII'].map((c) => `Class ${c}`)];
 const subjects = ['Admissions', 'Fees', 'Transport', 'Academics', 'Transfer Certificate', 'Other'];
 const usesEndpoint = Boolean(school.formEndpoint);
 ---

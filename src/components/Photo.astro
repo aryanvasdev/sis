@@ -18,6 +18,8 @@ interface Props {
   ratio?: string;
   class?: string;
   loading?: 'lazy' | 'eager';
+  /** CSS object-position for real photos, e.g. 'center 25%' to keep faces in portrait shots. */
+  position?: string;
 }
 
 const {
@@ -29,6 +31,7 @@ const {
   ratio = '4 / 3',
   class: className,
   loading = 'lazy',
+  position,
 } = Astro.props;
 ---
 
@@ -40,7 +43,7 @@ const {
       loading={loading}
       decoding="async"
       class:list={['photo', className]}
-      style={`aspect-ratio:${ratio}`}
+      style={`aspect-ratio:${ratio}${position ? `;object-position:${position}` : ''}`}
     />
   ) : (
     <div

@@ -6,54 +6,49 @@ import SectionHead from '../components/SectionHead.astro';
 import CampusIllustration from '../components/CampusIllustration.astro';
 import { school, telLink, whatsappLink } from '../data/school';
 import { sortedNotices, upcomingEvents } from '../data/notices';
-import { boardResults, toppers, passPercent, latestYear } from '../data/results';
 import { testimonials } from '../data/testimonials';
 import { formatDate, dateParts } from '../lib/format';
 import { url } from '../lib/url';
 
-/** Put a campus photo in /public/images/ and set its path here, e.g. 'images/campus.jpg'. */
-const heroImage = '';
-const welcomeImage = '';
+/** Photos in /public/images/. Set heroImage to '' to show the campus illustration instead. */
+const heroImage = 'images/campus/classroom.jpg';
+const welcomeImage = 'images/campus/school-gate.jpg';
+const teachersImage = 'images/people/our-teachers.jpg';
 
 const quickLinks = [
   { label: 'Admissions', note: `Session ${school.admissionSession}`, href: '/admissions/', icon: 'graduation-cap' },
   { label: 'Fee Structure', note: 'Class-wise fees', href: '/admissions/#fees', icon: 'indian-rupee' },
-  { label: 'Mandatory Disclosure', note: 'As per CBSE norms', href: '/mandatory-disclosure/', icon: 'file-check' },
-  { label: 'TC Verification', note: 'Verify a certificate', href: '/tc-verification/', icon: 'badge-check' },
   { label: 'Notices & Circulars', note: 'Latest updates', href: '/notices/', icon: 'bell' },
   { label: 'Academic Calendar', note: `Session ${school.currentSession}`, href: '/academics/#calendar', icon: 'calendar-days' },
+  { label: 'Photo Gallery', note: 'Life at school', href: '/gallery/', icon: 'images' },
+  { label: 'TC Verification', note: 'Verify a certificate', href: '/tc-verification/', icon: 'badge-check' },
 ];
 
 const highlights = [
-  { icon: 'users', title: 'Caring, qualified teachers', text: 'Trained, CBSE-experienced faculty and a healthy student–teacher ratio, so every child is seen and heard.', tone: '' },
-  { icon: 'monitor-smartphone', title: 'Smart classrooms', text: 'Interactive panels in every classroom, a modern computer lab and an Atal Tinkering-style innovation space.', tone: 'navy' },
-  { icon: 'shield-check', title: 'Safe & secure campus', text: 'CCTV coverage, trained guards, a visitor log, a medical room and GPS-tracked school buses with female attendants.', tone: 'green' },
-  { icon: 'trophy', title: 'Sports & co-curriculars', text: 'Cricket, football, basketball, athletics, yoga, music, dance, art and theatre, for every child, every week.', tone: 'maroon' },
-  { icon: 'heart-handshake', title: 'Values & discipline', text: 'Morning assembly, the house system, community service and respect for every culture and faith.', tone: '' },
-  { icon: 'microscope', title: 'Well-equipped labs', text: 'Physics, chemistry, biology, mathematics and computer labs that turn textbook concepts into experiments.', tone: 'navy' },
+  { icon: 'users', title: 'Caring, trained teachers', text: 'A close-knit team of dedicated teachers who know every child by name, and give each one personal attention.', tone: '' },
+  { icon: 'book-open-check', title: 'CBSE curriculum', text: 'NCERT textbooks and the CBSE pattern from Nursery to Class VIII, taught the NEP 2020 way: activity first, concepts before rote.', tone: 'navy' },
+  { icon: 'shield-check', title: 'Safe & secure campus', text: 'A gated campus with CCTV, a visitor log, a first-aid room and safe school transport.', tone: 'green' },
+  { icon: 'drama', title: 'Festivals, dance & stage', text: 'From Teeyan da Mela to Janmashtami and Gandhi Jayanti, children perform, celebrate and grow in confidence.', tone: 'maroon' },
+  { icon: 'heart-handshake', title: 'Values & discipline', text: 'Morning assembly, good manners, cleanliness drives and respect for every culture and faith: “Come to learn, go to serve.”', tone: '' },
+  { icon: 'monitor-smartphone', title: 'Smart, hands-on learning', text: 'Smart-board lessons, a computer lab, and art, craft and activity corners that make concepts come alive.', tone: 'navy' },
 ];
 
 const stages = [
-  { title: 'Pre-Primary', classes: 'Nursery – UKG', text: 'Play-based learning, phonics, number sense and joyful routines.', icon: 'baby', tone: 'gold' },
-  { title: 'Primary', classes: 'Classes I – V', text: 'Strong foundations in language, numeracy and environmental studies.', icon: 'pencil', tone: 'sky' },
-  { title: 'Middle', classes: 'Classes VI – VIII', text: 'Subject depth, projects, coding, and a third language.', icon: 'book-open', tone: 'green' },
-  { title: 'Secondary', classes: 'Classes IX – X', text: 'Focused CBSE board preparation with regular practice tests.', icon: 'notebook-pen', tone: 'maroon' },
-  { title: 'Senior Secondary', classes: 'Classes XI – XII', text: 'Science (PCM / PCB), Commerce and Humanities streams.', icon: 'graduation-cap', tone: 'navy' },
+  { title: 'Pre-Primary', classes: 'Nursery · LKG · UKG', text: 'Play-way learning, phonics, rhymes, number sense, colours and joyful theme days in a caring, colourful wing.', icon: 'baby', tone: 'gold' },
+  { title: 'Primary', classes: 'Classes I – V', text: 'Strong foundations in English, Hindi, mathematics and EVS, with reading, handwriting and activity-based projects.', icon: 'pencil', tone: 'sky' },
+  { title: 'Middle', classes: 'Classes VI – VIII', text: 'Science, social science and computers in depth, a third language, projects, quizzes and preparation for Class IX.', icon: 'book-open', tone: 'green' },
 ];
 
 const latestNotices = sortedNotices().slice(0, 5);
 const events = upcomingEvents().slice(0, 4);
-const latestResults = boardResults.filter((r) => r.year === latestYear);
-const topToppers = toppers.filter((t) => t.year === latestYear).sort((a, b) => b.percent - a.percent).slice(0, 3);
-
 const galleryTiles = [
-  { label: 'Annual Day', icon: 'drama', tone: 'maroon' },
-  { label: 'Sports Meet', icon: 'trophy', tone: 'green' },
-  { label: 'Science Exhibition', icon: 'flask-conical', tone: 'sky' },
-  { label: 'Morning Assembly', icon: 'sun', tone: 'gold' },
-  { label: 'Art & Craft', icon: 'palette', tone: 'plum' },
-  { label: 'Independence Day', icon: 'flag', tone: 'navy' },
-] as const;
+  { src: 'images/gallery/gandhi-jayanti-2026/01.jpg', label: 'Gandhi Jayanti & Swachh Bharat', position: 'center 40%' },
+  { src: 'images/gallery/cultural-dance/01.jpg', label: 'Cultural programme', position: 'center 30%' },
+  { src: 'images/gallery/teeyan-da-mela-2026/01.jpg', label: 'Teeyan da Mela', position: 'center 55%' },
+  { src: 'images/gallery/janmashtami-2026/01.jpg', label: 'Janmashtami', position: 'center 30%' },
+  { src: 'images/gallery/independence-day-2026/01.jpg', label: 'Independence Day', position: 'center 30%' },
+  { src: 'images/gallery/cultural-dance/02.jpg', label: 'Dance performance', position: 'center 35%' },
+];
 ---
 
 <BaseLayout ticker>
@@ -63,12 +58,12 @@ const galleryTiles = [
       <div class="hero-copy">
         <p class="hero-kicker">
           <span class="dot" aria-hidden="true"></span>
-          Affiliated to CBSE, New Delhi · {school.classes}
+          {school.classes} · {school.address.city}, {school.address.district}
         </p>
         <h1>{school.tagline}</h1>
         <p class="hero-lead">
-          Welcome to {school.name}, where children learn to think clearly, speak confidently and act with
-          kindness, in a safe, happy campus that feels like a second home.
+          Welcome to {school.name}, {school.address.city}. Here children learn to think clearly, speak confidently
+          and act with kindness, in a safe, happy campus that feels like a second home.
         </p>
         <div class="btn-row">
           <a href={url('/admissions/')} class="btn btn--gold">
@@ -77,8 +72,8 @@ const galleryTiles = [
           <a href={url('/about/')} class="btn btn--light">Discover our school</a>
         </div>
         <dl class="hero-facts">
-          <div><dt>Established</dt><dd>{school.established}</dd></div>
-          <div><dt>Board</dt><dd>{school.board}</dd></div>
+          <div><dt>Classes</dt><dd>{school.classesShort}</dd></div>
+          <div><dt>Curriculum</dt><dd>CBSE · NCERT</dd></div>
           <div><dt>Medium</dt><dd>{school.medium}</dd></div>
           <div><dt>Type</dt><dd>Co-educational</dd></div>
         </dl>
@@ -88,7 +83,7 @@ const galleryTiles = [
         <div class="hero-frame">
           {
             heroImage ? (
-              <Photo src={heroImage} alt={`${school.name} campus`} ratio="4 / 3" loading="eager" />
+              <Photo src={heroImage} alt={`Students of ${school.name} with their class teacher`} ratio="4 / 3" loading="eager" class="hero-photo" position="center 30%" />
             ) : (
               <CampusIllustration class="hero-illustration" />
             )
@@ -99,18 +94,18 @@ const galleryTiles = [
             <a href={url('/admissions/#enquiry')} class="hero-card hero-card--admission">
               <span class="tag tag--maroon">Now open</span>
               <strong>Admissions {school.admissionSession}</strong>
-              <span>Nursery to Class IX &amp; XI</span>
+              <span>Nursery to Class VIII</span>
               <span class="link-arrow">
                 Enquire now <Icon name="arrow-right" />
               </span>
             </a>
           )
         }
-        <div class="hero-card hero-card--motto" aria-hidden="true">
-          <Icon name="sparkles" size={20} />
+        <div class="hero-card hero-card--motto">
+          <Icon name="badge-check" size={20} />
           <span>
-            <em>{school.motto}</em>
-            <small>{school.mottoMeaning}</small>
+            <em>{school.recognition}</em>
+            <small>{school.curriculum}</small>
           </span>
         </div>
       </div>
@@ -144,7 +139,7 @@ const galleryTiles = [
   <section class="section">
     <div class="container split">
       <div class="welcome-media reveal">
-        <Photo src={welcomeImage} label="Our campus" icon="school" tone="navy" ratio="5 / 4" alt="" />
+        <Photo src={welcomeImage} alt={`The gate of ${school.name}, with “Come to Learn” and “Go to Serve” on its pillars`} ratio="3 / 2" position="center 20%" />
         <div class="welcome-badge">
           <span class="welcome-years">{new Date().getFullYear() - school.established}+</span>
           <span>years of nurturing young minds</span>
@@ -154,18 +149,19 @@ const galleryTiles = [
         <SectionHead eyebrow="Welcome" title={`A place to grow, belong and shine`} />
         <div class="stack">
           <p>
-            Since {school.established}, {school.name} has been helping children discover what they are capable of.
-            We follow the CBSE curriculum in the spirit of the National Education Policy (NEP 2020): concepts before
-            rote learning, activity before lecture, and character alongside marks.
+            Painted on our gate are four words that sum up everything we do: <strong>Come to Learn · Go to Serve</strong>.
+            {school.name} in {school.address.city}, {school.address.district} teaches children from Nursery to Class
+            VIII, following the CBSE curriculum with NCERT textbooks in the spirit of the National Education Policy
+            (NEP 2020): concepts before rote learning, activity before lecture, and character alongside marks.
           </p>
           <p>
-            Our classrooms are bright and digital-ready, our teachers are mentors, and our campus is designed around
-            one promise to parents: your child will be safe, known and encouraged every single day.
+            Our classrooms are bright and cheerful, our teachers are mentors, and our campus is built around one promise
+            to parents: your child will be safe, known and encouraged every single day.
           </p>
           <ul class="check-list">
-            <li>CBSE curriculum from Nursery to Class XII</li>
-            <li>Science, Commerce and Humanities in Classes XI–XII</li>
-            <li>Sports, arts, clubs and community service for all</li>
+            <li>CBSE curriculum and NCERT textbooks, Nursery to Class VIII</li>
+            <li>Festivals, dance, stage programmes and sports for every child</li>
+            <li>Personal attention from caring, trained teachers</li>
           </ul>
           <div class="btn-row" style="margin-top:24px">
             <a href={url('/about/')} class="btn btn--navy">About the school</a>
@@ -247,8 +243,8 @@ const galleryTiles = [
     <div class="container">
       <SectionHead
         eyebrow="Academics"
-        title="One journey, Nursery to Class XII"
-        lead="A CBSE curriculum that grows with your child: from joyful early years to focused board preparation and career-ready streams."
+        title="One journey, Nursery to Class VIII"
+        lead="A CBSE curriculum that grows with your child: from joyful early years to confident, curious middle-schoolers ready for Class IX."
       />
       <ol class="stages">
         {
@@ -267,7 +263,7 @@ const galleryTiles = [
       </ol>
       <div class="btn-row" style="margin-top:36px">
         <a href={url('/academics/')} class="btn btn--gold">Explore academics</a>
-        <a href={url('/academics/#streams')} class="btn btn--light">Streams in XI–XII</a>
+        <a href={url('/academics/#calendar')} class="btn btn--light">Academic calendar</a>
       </div>
     </div>
   </section>
@@ -328,51 +324,22 @@ const galleryTiles = [
     </div>
   </section>
 
-  <!-- ========== RESULTS ========== -->
+  <!-- ========== TEACHERS ========== -->
   <section class="section section--cream">
     <div class="container">
       <SectionHead
         center
-        eyebrow={`CBSE Board Results ${latestYear}`}
-        title="Results we are proud of"
-        lead="Year after year, our students achieve outstanding results in the Class X and XII board examinations."
+        eyebrow="Our teachers"
+        title="The people who make it a second home"
+        lead="A dedicated team of 25+ teachers who plan every lesson, celebrate every festival and cheer every small step."
       />
-      <div class="results-grid">
-        {
-          latestResults.map((r) => (
-            <div class="result-card reveal">
-              <p class="result-class">Class {r.cls}</p>
-              <p class="result-big">{passPercent(r)}%</p>
-              <p class="result-label">pass result</p>
-              <dl>
-                <div><dt>Highest</dt><dd>{r.highest}%</dd></div>
-                <div><dt>90% & above</dt><dd>{r.above90}</dd></div>
-                <div><dt>Appeared</dt><dd>{r.registered}</dd></div>
-              </dl>
-            </div>
-          ))
-        }
-        <div class="toppers reveal">
-          <h3>Our toppers</h3>
-          <ul>
-            {
-              topToppers.map((t) => (
-                <li>
-                  <span class="topper-avatar">
-                    <Icon name="award" size={22} />
-                  </span>
-                  <span>
-                    <strong>{t.name}</strong>
-                    <small>Class {t.cls}{t.stream && ` · ${t.stream}`}</small>
-                  </span>
-                  <span class="topper-score">{t.percent}%</span>
-                </li>
-              ))
-            }
-          </ul>
-          <a href={url('/achievements/')} class="link-arrow">All results &amp; achievements <Icon name="arrow-right" /></a>
-        </div>
-      </div>
+      <figure class="teachers reveal">
+        <Photo src={teachersImage} alt={`The teaching staff of ${school.name}`} ratio="1800 / 831" />
+        <figcaption>
+          <span><Icon name="users" /> Our teaching team, Session {school.currentSession}</span>
+          <a href={url('/about/')} class="link-arrow">Meet the school <Icon name="arrow-right" /></a>
+        </figcaption>
+      </figure>
     </div>
   </section>
 
@@ -386,8 +353,9 @@ const galleryTiles = [
       <div class="mosaic">
         {
           galleryTiles.map((g, i) => (
-            <a href={url('/gallery/')} class:list={['mosaic-item', `m${i + 1}`, 'reveal']} aria-label={`${g.label} photos`}>
-              <Photo label={g.label} icon={g.icon} tone={g.tone} ratio="auto" class="mosaic-photo" />
+            <a href={url('/gallery/')} class:list={['mosaic-item', `m${i + 1}`, 'reveal']}>
+              <Photo src={g.src} alt="" ratio="auto" position={g.position} class="mosaic-photo" />
+              <span class="mosaic-label">{g.label}</span>
             </a>
           ))
         }
@@ -423,8 +391,8 @@ const galleryTiles = [
         <p class="eyebrow">Admissions {school.admissionSession}</p>
         <h2>Give your child the right start.</h2>
         <p class="lead">
-          Registrations are open for Nursery to Class IX and XI. Visit the campus, meet our teachers and see the school
-          for yourself.
+          Registrations are open for Nursery to Class VIII. Visit the campus, meet our teachers and see the school for
+          yourself.
         </p>
       </div>
       <div class="cta-actions">
@@ -539,6 +507,9 @@ const galleryTiles = [
     background: linear-gradient(140deg, rgb(255 255 255 / 0.18), rgb(255 255 255 / 0.04));
     border: 1px solid rgb(255 255 255 / 0.16);
     box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.6);
+  }
+  .hero-frame :global(.hero-photo) {
+    border-radius: 18px;
   }
   .hero-frame :global(.hero-illustration) {
     width: 100%;
@@ -1032,123 +1003,33 @@ const galleryTiles = [
     margin-top: 2px;
   }
 
-  /* ---------- Results ---------- */
-  .results-grid {
-    display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
-  }
-  @media (min-width: 1000px) {
-    .results-grid {
-      grid-template-columns: 1fr 1fr 1.4fr;
-    }
-  }
-  .result-card {
-    position: relative;
-    overflow: hidden;
-    padding: 28px;
-    border-radius: var(--radius-lg);
-    background: var(--navy-900);
-    color: #c7d2e6;
-  }
-  .result-card::after {
-    content: '';
-    position: absolute;
-    right: -40px;
-    top: -40px;
-    width: 160px;
-    height: 160px;
-    border-radius: 50%;
-    border: 24px solid rgb(228 185 76 / 0.12);
-  }
-  .result-class {
-    font-weight: 800;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    font-size: 0.8rem;
-    color: var(--gold-400);
-  }
-  .result-big {
-    font-family: var(--font-display);
-    font-size: clamp(3rem, 2.4rem + 2.4vw, 4.2rem);
-    font-weight: 600;
-    line-height: 1;
-    color: #fff;
-    margin-top: 10px;
-  }
-  .result-label {
-    font-size: 0.9rem;
-  }
-  .result-card dl {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid rgb(255 255 255 / 0.12);
-  }
-  .result-card dt {
-    font-size: 0.7rem;
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: #8597b9;
-  }
-  .result-card dd {
-    margin: 0;
-    font-weight: 800;
-    font-size: 1.15rem;
-    color: #fff;
-  }
-  .toppers {
-    padding: 26px;
-    border-radius: var(--radius-lg);
+  /* ---------- Teachers ---------- */
+  .teachers {
+    max-width: 1080px;
+    margin-inline: auto;
+    padding: 10px;
+    border-radius: calc(var(--radius) + 10px);
     background: #fff;
     border: 1px solid var(--line);
+    box-shadow: var(--shadow);
   }
-  .toppers h3 {
-    font-size: var(--step-1);
-    margin-bottom: 10px;
-  }
-  .toppers ul {
-    list-style: none;
-    padding: 0;
-    margin-bottom: 16px;
-  }
-  .toppers li {
+  .teachers figcaption {
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
-    gap: 12px;
-    padding: 10px 0;
-  }
-  .toppers li + li {
-    border-top: 1px dashed var(--line);
-  }
-  .topper-avatar {
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    flex: none;
-    border-radius: 50%;
-    background: var(--gold-100);
-    color: var(--gold-600);
-  }
-  .toppers li strong {
-    display: block;
+    justify-content: space-between;
+    gap: 8px 20px;
+    padding: 14px 10px 6px;
+    font-weight: 700;
     color: var(--navy-900);
-    line-height: 1.3;
   }
-  .toppers li small {
-    color: var(--muted);
-    font-size: 0.82rem;
+  .teachers figcaption span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
-  .topper-score {
-    margin-left: auto;
-    font-family: var(--font-display);
-    font-size: 1.35rem;
-    font-weight: 600;
-    color: var(--maroon-600);
+  .teachers figcaption :global(.icon) {
+    color: var(--gold-600);
   }
 
   /* ---------- Gallery mosaic ---------- */
@@ -1166,33 +1047,55 @@ const galleryTiles = [
     display: grid;
     gap: 14px;
     grid-template-columns: repeat(4, 1fr);
-    grid-auto-rows: clamp(120px, 14vw, 190px);
+    grid-auto-rows: clamp(130px, 15vw, 210px);
+    grid-template-areas:
+      'a a b c'
+      'a a d e'
+      'f f d e';
   }
   .mosaic-item {
+    position: relative;
     display: block;
     border-radius: var(--radius);
     overflow: hidden;
+    background: var(--navy-50);
   }
   .mosaic-item :global(.mosaic-photo) {
     height: 100%;
-    transition: transform 0.4s ease;
+    border-radius: 0;
+    transition: transform 0.5s ease;
   }
   .mosaic-item:hover :global(.mosaic-photo) {
-    transform: scale(1.04);
+    transform: scale(1.05);
   }
-  .m1 {
-    grid-column: span 2;
-    grid-row: span 2;
+  .mosaic-label {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 28px 14px 12px;
+    background: linear-gradient(transparent, rgb(6 20 48 / 0.78));
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 800;
+    line-height: 1.3;
   }
-  .m4 {
-    grid-row: span 2;
-  }
+  .m1 { grid-area: a; }
+  .m2 { grid-area: b; }
+  .m3 { grid-area: c; }
+  .m4 { grid-area: d; }
+  .m5 { grid-area: e; }
+  .m6 { grid-area: f; }
   @media (max-width: 720px) {
     .mosaic {
       grid-template-columns: repeat(2, 1fr);
-    }
-    .m4 {
-      grid-row: span 1;
+      grid-auto-rows: 150px;
+      grid-template-areas:
+        'a a'
+        'b c'
+        'd e'
+        'd e'
+        'f f';
     }
   }
 

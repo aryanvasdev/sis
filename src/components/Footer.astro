@@ -25,19 +25,20 @@ const year = new Date().getFullYear();
   <div class="container footer-grid">
     <div class="footer-about">
       <a href={url('/')} class="footer-brand">
-        <Crest size={54} />
+        <Crest size={58} />
         <span>
           <span class="footer-name">{school.name}</span>
           <span class="footer-motto">“{school.motto}”</span>
         </span>
       </a>
       <p>
-        A {school.type.toLowerCase()} affiliated to the {school.boardFull}, offering {school.classes}
-        since {school.established}.
+        A {school.type.toLowerCase()} in {school.address.city}, {school.address.district}, teaching {school.classes}.
+        We follow the {school.curriculum}.
       </p>
       <dl class="codes">
-        <div><dt>Affiliation No.</dt><dd>{school.affiliationNo}</dd></div>
-        <div><dt>School Code</dt><dd>{school.schoolCode}</dd></div>
+        <div><dt>Classes</dt><dd>{school.classesShort}</dd></div>
+        <div><dt>Medium</dt><dd>{school.medium}</dd></div>
+        <div><dt>Status</dt><dd>{school.recognition}</dd></div>
       </dl>
       {
         socials.length > 0 && (
@@ -111,8 +112,8 @@ const year = new Date().getFullYear();
     <div class="container footer-bottom-inner">
       <p>© {year} {school.name}. All rights reserved.</p>
       <p>
-        Affiliated to CBSE, New Delhi · Affiliation No. {school.affiliationNo} ·
-        <a href={url('/mandatory-disclosure/')}>Mandatory Public Disclosure</a>
+        {school.address.city}, {school.address.district}, {school.address.state} ·
+        <a href={url('/contact/')}>Contact us</a>
       </p>
     </div>
   </div>

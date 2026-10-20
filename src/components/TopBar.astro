@@ -13,13 +13,20 @@ const socials = Object.entries(school.social).filter(([, href]) => href);
       <a href={telLink(school.phones[0])}><Icon name="phone" size={14} /> {school.phones[0]}</a>
       <a href={`mailto:${school.email}`} class="hide-sm"><Icon name="mail" size={14} /> {school.email}</a>
       <span class="hide-md affil">
-        Affiliated to CBSE, New Delhi · Affiliation No. <strong>{school.affiliationNo}</strong>
+        <strong>{school.address.city}, {school.address.district}</strong> · CBSE curriculum · {school.classes}
       </span>
     </div>
     <div class="topbar-links">
       {
+        school.admissionsOpen && (
+          <a href={url('/admissions/')} class="admit">
+            Admissions {school.admissionSession}
+          </a>
+        )
+      }
+      {
         utilityLinks.map((link) => (
-          <a href={url(link.href)} class:list={[{ 'hide-sm': link.href !== '/mandatory-disclosure/' }]}>
+          <a href={url(link.href)} class="hide-sm">
             {link.label}
           </a>
         ))
@@ -89,8 +96,8 @@ const socials = Object.entries(school.social).filter(([, href]) => href);
     background: rgb(255 255 255 / 0.18);
     transform: translateY(-50%);
   }
-  .topbar-links a:first-child {
-    color: var(--gold-400);
+  .admit {
+    color: var(--gold-400) !important;
     font-weight: 700;
   }
   .affil strong {
@@ -106,7 +113,7 @@ const socials = Object.entries(school.social).filter(([, href]) => href);
     gap: 12px;
     padding-left: 6px;
   }
-  @media (max-width: 1100px) {
+  @media (max-width: 1240px) {
     .hide-md {
       display: none !important;
     }

@@ -11,10 +11,10 @@ const path = Astro.url.pathname;
 <header class="site-header" data-header>
   <div class="container header-inner">
     <a href={url('/')} class="brand" aria-label={`${school.name}, home`}>
-      <Crest size={48} class="brand-crest" />
+      <Crest size={50} class="brand-crest" />
       <span class="brand-text">
         <span class="brand-name">{school.name}</span>
-        <span class="brand-sub">CBSE Affiliated · {school.classes}</span>
+        <span class="brand-sub">{school.address.city}, {school.address.district} · {school.classes}</span>
       </span>
     </a>
 
@@ -50,7 +50,7 @@ const path = Astro.url.pathname;
         school.admissionsOpen && (
           <a href={url('/admissions/')} class="btn btn--gold btn--sm cta">
             <span class="pulse" aria-hidden="true" />
-            Admissions {school.admissionSession}
+            Apply Now
           </a>
         )
       }
@@ -197,7 +197,7 @@ const path = Astro.url.pathname;
   .brand-name {
     font-family: var(--font-display);
     font-weight: 650;
-    font-size: clamp(1.05rem, 0.9rem + 0.7vw, 1.35rem);
+    font-size: clamp(1.05rem, 0.9rem + 0.6vw, 1.3rem);
     line-height: 1.15;
     color: var(--navy-900);
     letter-spacing: -0.01em;
@@ -226,8 +226,8 @@ const path = Astro.url.pathname;
   .nav-desktop > ul > li > a {
     display: inline-flex;
     align-items: center;
-    gap: 4px;
-    padding: 10px 11px;
+    gap: 3px;
+    padding: 10px 9px;
     border-radius: 8px;
     font-weight: 750;
     font-size: 0.93rem;
@@ -444,7 +444,12 @@ const path = Astro.url.pathname;
     flex: 1;
   }
 
-  @media (max-width: 1180px) {
+  @media (min-width: 1241px) {
+    .brand-name {
+      white-space: nowrap;
+    }
+  }
+  @media (max-width: 1240px) {
     .nav-desktop {
       display: none;
     }

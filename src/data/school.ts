@@ -3,8 +3,7 @@
  *  SCHOOL DETAILS: edit this file first.
  *
  *  Almost every page reads from here: the header, the footer, the contact page,
- *  the Mandatory Public Disclosure page, and more. Change a value once and the
- *  whole site updates.
+ *  the admissions page, and more. Change a value once and the whole site updates.
  *
  *  Anything marked  ⚠ PLACEHOLDER  must be replaced with the school's real
  *  details before the site goes live. When everything is filled in, set
@@ -21,20 +20,17 @@ export const school = {
 
   name: 'Sahib International School',
   shortName: 'SIS',
-  tagline: 'Rooted in values. Ready for the world.',
-  /** ⚠ PLACEHOLDER: replace with the school's own motto. */
-  motto: 'Tamaso Ma Jyotirgamaya',
-  mottoMeaning: 'Lead us from darkness to light',
+  tagline: 'Come to learn. Go to serve.',
+  /** Painted on the pillars of the school gate. */
+  motto: 'Come to Learn · Go to Serve',
+  mottoMeaning: 'We come to school to learn, and go out into the world to serve.',
 
   established,
-  board: 'CBSE',
-  boardFull: 'Central Board of Secondary Education, New Delhi',
-  /** ⚠ PLACEHOLDER: CBSE affiliation number, school code and UDISE+ code. */
-  affiliationNo: 'XXXXXXX',
-  schoolCode: 'XXXXX',
-  udiseCode: 'XXXXXXXXXXX',
-  affiliationStatus: 'Senior Secondary (Provisional / Regular)',
-  classes: 'Nursery to Class XII',
+  /** The site deliberately names no board; it only says which curriculum is followed. */
+  curriculum: 'CBSE curriculum with NCERT textbooks',
+  recognition: 'Permanently recognised & registered',
+  classes: 'Nursery to Class VIII',
+  classesShort: 'Nursery – VIII',
   medium: 'English',
   type: 'Co-educational Day School',
 
@@ -42,21 +38,21 @@ export const school = {
   admissionSession: '2027–28',
   admissionsOpen: true,
 
-  /** ⚠ PLACEHOLDER: address and map. */
+  /** ⚠ PLACEHOLDER: add the road / landmark in line1. */
   address: {
-    line1: 'Main Road, Near City Centre',
+    line1: '',
     line2: '',
-    city: 'Your City',
-    district: 'Your District',
-    state: 'Punjab',
-    pincode: '000000',
+    city: 'Saha',
+    district: 'Ambala',
+    state: 'Haryana',
+    pincode: '133104',
   },
   /** Google Maps → Share → Embed a map → copy only the src="…" URL. Leave empty to hide the map. */
   mapEmbedUrl: '',
   /** Google Maps → Share → Copy link */
-  mapLink: 'https://maps.google.com/?q=Sahib+International+School',
+  mapLink: 'https://www.google.com/maps/search/?api=1&query=Sahib+International+School+Saha+Ambala',
 
-  /** ⚠ PLACEHOLDER: contact details. */
+  /** ⚠ PLACEHOLDER: contact details (phone numbers and email domain are made up). */
   phones: ['+91 98765 43210', '+91 12345 67890'],
   /** WhatsApp number in international format, digits only (no +, spaces or dashes). */
   whatsapp: '919876543210',
@@ -82,7 +78,7 @@ export const school = {
     title: 'Chairperson, [Name of Trust / Society]',
     photo: '',
   },
-  /** The registered trust or society that runs the school (needed for Mandatory Disclosure). */
+  /** ⚠ PLACEHOLDER: the registered trust or society that runs the school. */
   trustName: '[Name of Educational Trust / Society]',
 
   /** Leave a link empty to hide that icon. */
@@ -103,12 +99,12 @@ export const school = {
    */
   formEndpoint: '',
 
-  /** ⚠ PLACEHOLDER: headline numbers shown on the home page. */
+  /** ⚠ PLACEHOLDER: headline numbers shown on the home page (student count is a guess). */
   stats: [
-    { value: '1,800+', label: 'Students' },
-    { value: '110+', label: 'Qualified teachers' },
-    { value: `${new Date().getFullYear() - established}+`, label: 'Years of excellence' },
-    { value: '100%', label: 'Board pass results' },
+    { value: '500+', label: 'Happy students' },
+    { value: '25+', label: 'Dedicated teachers' },
+    { value: '11', label: 'Classes, Nursery to VIII' },
+    { value: `${new Date().getFullYear() - established}+`, label: 'Years of trust' },
   ],
 } as const;
 
@@ -117,7 +113,9 @@ export type School = typeof school;
 export const fullAddress = [
   school.address.line1,
   school.address.line2,
-  `${school.address.city}, ${school.address.district}`,
+  school.address.city === school.address.district
+    ? school.address.city
+    : `${school.address.city}, ${school.address.district}`,
   `${school.address.state} – ${school.address.pincode}`,
 ]
   .filter(Boolean)

@@ -19,11 +19,14 @@ interface Props {
 
 const {
   title,
-  description = `${school.name}: a CBSE-affiliated ${school.type.toLowerCase()} (${school.classes}) in ${school.address.city}, ${school.address.state}. ${school.tagline}`,
+  description = `${school.name}, ${school.address.city} (${school.address.district}): a ${school.type.toLowerCase()} for ${school.classes}, following the ${school.curriculum}. ${school.tagline}`,
   ticker = false,
 } = Astro.props;
 
-const pageTitle = title ? `${title} | ${school.name}` : `${school.name} | CBSE School in ${school.address.city}`;
+const pageTitle = title
+  ? `${title} | ${school.name}`
+  : `${school.name} | School in ${school.address.city}, ${school.address.district}`;
+const ogImage = new URL(url('/images/og-image.jpg'), Astro.site);
 const pathname = /\/$|\.[a-z]+$/i.test(Astro.url.pathname) ? Astro.url.pathname : `${Astro.url.pathname}/`;
 const canonical = new URL(pathname, Astro.site);
 const isHome = !title;
@@ -33,6 +36,7 @@ const jsonLd = {
   '@type': 'School',
   name: school.name,
   url: new URL(url('/'), Astro.site).href,
+  logo: new URL(url('/images/logo.webp'), Astro.site).href,
   foundingDate: String(school.established),
   telephone: school.phones[0],
   email: school.email,
@@ -56,7 +60,9 @@ const jsonLd = {
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
-    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <link rel="icon" type="image/png" sizes="64x64" href={url('/favicon-64.png')} />
+    <link rel="icon" type="image/png" sizes="32x32" href={url('/favicon-32.png')} />
+    <link rel="apple-touch-icon" href={url('/apple-touch-icon.png')} />
     <meta name="theme-color" content="#0a1f44" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={school.name} />
@@ -64,6 +70,10 @@ const jsonLd = {
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:locale" content="en_IN" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
     <meta name="generator" content={Astro.generator} />
     <script is:inline>
       document.documentElement.classList.replace('no-js', 'js');

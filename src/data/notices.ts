@@ -23,11 +23,11 @@ export interface Notice {
 
 export const notices: Notice[] = [
   {
-    title: 'Admissions open for Session 2027–28 (Nursery to Class IX & XI)',
+    title: 'Admissions open for Session 2027–28 (Nursery to Class VIII)',
     date: '2026-10-15',
     category: 'Admissions',
     summary:
-      'Registration forms are available at the school office and online. Interaction schedule for Nursery – KG will be shared after registration.',
+      'Registration forms are available at the school office. Parents may also send an enquiry online or on WhatsApp.',
     link: '/admissions/',
     ticker: true,
   },
@@ -39,7 +39,7 @@ export const notices: Notice[] = [
     ticker: true,
   },
   {
-    title: 'Parent–Teacher Meeting for Classes I–XII on Saturday, 31 October 2026',
+    title: 'Parent–Teacher Meeting for all classes on Saturday, 31 October 2026',
     date: '2026-10-16',
     category: 'Circular',
     summary: 'Half-yearly progress reports will be shared. Timing: 9:00 AM – 12:30 PM.',
@@ -51,32 +51,35 @@ export const notices: Notice[] = [
     category: 'Circular',
   },
   {
-    title: 'CBSE Board Examinations 2027: submission of LOC details for Classes X & XII',
-    date: '2026-09-28',
-    category: 'Examination',
-    summary: 'Parents must verify spellings of names, date of birth and subject codes and sign the verification slip by 10 October.',
+    title: 'Gandhi Jayanti celebrated with a Swachh Bharat rally and pledge',
+    date: '2026-10-02',
+    category: 'News',
+    summary: 'Our little ones dressed as Gandhi ji and carried messages of cleanliness and truth.',
+    link: '/gallery/',
+    ticker: true,
   },
   {
-    title: 'Half-Yearly Examination date sheet: Classes VI to XII',
+    title: 'Half-Yearly Examination date sheet: Classes I to VIII',
     date: '2026-09-08',
     category: 'Examination',
   },
   {
-    title: 'Our students win 1st position in the District Science Exhibition',
-    date: '2026-09-02',
+    title: 'Janmashtami celebrations: Radha–Krishna dress-up and matki decoration',
+    date: '2026-09-04',
     category: 'News',
-    summary: 'The Class IX team’s working model on rainwater harvesting was selected for the state level.',
-    ticker: true,
+    link: '/gallery/',
   },
   {
-    title: 'Independence Day celebrated with a march past and cultural programme',
+    title: 'Raksha Bandhan and Teeyan da Mela celebrated in the pre-primary wing',
+    date: '2026-08-28',
+    category: 'News',
+    link: '/gallery/',
+  },
+  {
+    title: 'Independence Day: students recite as freedom fighters',
     date: '2026-08-15',
     category: 'News',
-  },
-  {
-    title: 'Inter-House Debate Competition (Classes VI–XII)',
-    date: '2026-08-05',
-    category: 'Event',
+    link: '/gallery/',
   },
   {
     title: 'Revised school timings for the summer schedule',
@@ -95,12 +98,12 @@ export interface SchoolEvent {
 }
 
 export const events: SchoolEvent[] = [
-  { title: 'Parent–Teacher Meeting (I–XII)', date: '2026-10-31', time: '9:00 AM – 12:30 PM', venue: 'Respective classrooms' },
-  { title: "Children's Day celebrations", date: '2026-11-14', venue: 'School auditorium' },
-  { title: 'Inter-House Science Exhibition', date: '2026-11-21', venue: 'Science block' },
+  { title: 'Parent–Teacher Meeting (all classes)', date: '2026-10-31', time: '9:00 AM – 12:30 PM', venue: 'Respective classrooms' },
+  { title: "Children's Day celebrations", date: '2026-11-14', venue: 'School premises' },
+  { title: 'Inter-House Science Exhibition', date: '2026-11-21', venue: 'School premises' },
   { title: 'Annual Sports Meet', date: '2026-12-05', endDate: '2026-12-06', venue: 'School sports ground' },
-  { title: 'Annual Day: “Sanskriti”', date: '2026-12-19', time: '4:00 PM onwards', venue: 'School auditorium' },
-  { title: 'Pre-Board Examinations (X & XII)', date: '2027-01-04', endDate: '2027-01-16' },
+  { title: 'Annual Day: “Sanskriti”', date: '2026-12-19', time: '4:00 PM onwards', venue: 'School premises' },
+  { title: 'Winter break (as per state government orders)', date: '2027-01-01', endDate: '2027-01-15' },
 ];
 
 export const sortedNotices = () => [...notices].sort((a, b) => b.date.localeCompare(a.date));
