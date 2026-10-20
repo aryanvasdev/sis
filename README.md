@@ -88,16 +88,21 @@ npm run preview   # preview the built site
 
 Colours, fonts and shared styles are in `src/styles/global.css`. The header, footer and other shared pieces are in `src/components/`, and each page is a file in `src/pages/`.
 
-## Publishing (Netlify)
+## Publishing
 
-The site is hosted on **Netlify**, connected to this GitHub repository. Every push to the production branch builds and publishes the site automatically; the build settings are in `netlify.toml` (`npm run build`, publish folder `dist`, Node 22).
+### GitHub Pages (free, set up)
 
-- Netlify's `URL` setting is used as the site's address for links, the sitemap and WhatsApp/Facebook previews, so nothing needs changing when a custom domain is added.
-- Past events disappear from the "Upcoming events" lists automatically in the visitor's browser, so the site stays correct between updates.
+`.github/workflows/deploy.yml` builds and publishes the site on every push. It skips quietly until Pages is switched on:
 
-### Custom domain
+1. On GitHub, open the repository → **Settings → Pages**.
+2. Under **Build and deployment**, set **Source** to **GitHub Actions**.
 
-1. Buy the domain (see the domain notes shared with the school).
-2. In Netlify, open the site → **Domain management** → **Add a domain**, and enter it.
-3. Either switch the domain's name servers to the ones Netlify shows (simplest), or add the DNS records Netlify lists at your registrar.
-4. Netlify issues the free HTTPS certificate automatically once DNS is working.
+The site then goes live at `https://aryanvasdev.github.io/sis/` after the next push (or run the workflow from the **Actions** tab).
+
+**Custom domain:** in **Settings → Pages → Custom domain**, enter the domain (e.g. `www.sahibinternationalschool.in`). At the domain registrar, add four `A` records for the bare domain pointing to `185.199.108.153`, `185.199.109.153`, `185.199.110.153` and `185.199.111.153`, and a `CNAME` record for `www` pointing to `aryanvasdev.github.io`. When GitHub shows the domain as verified, tick **Enforce HTTPS**. The workflow picks up the new address automatically for links, the sitemap and sharing previews.
+
+### Netlify (alternative)
+
+`netlify.toml` holds the Netlify build settings (`npm run build`, publish folder `dist`, Node 22). Netlify's `URL` setting is used as the site's address. Use one host for the custom domain, not both.
+
+Past events disappear from the "Upcoming events" lists automatically in the visitor's browser, so the site stays correct between updates.
