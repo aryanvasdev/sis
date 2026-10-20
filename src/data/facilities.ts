@@ -67,8 +67,8 @@ export const featureFacilities: Facility[] = [
     ],
     icon: 'presentation',
     tone: 'navy',
-    photo: 'images/campus/classroom.jpg',
-    photoAlt: 'A class of students in school uniform smiling with their class teacher in their classroom.',
+    photo: school.classroomPhoto || undefined,
+    photoAlt: 'Students with their class teacher in their classroom.',
   },
   {
     id: 'science-lab',

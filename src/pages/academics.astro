@@ -143,8 +143,11 @@ const docs = documents.map((d) => ({ ...d, ready: hasPublicFile(d.file) }));
         </div>
         <figure class="class-photo reveal">
           <Photo
-            src="images/campus/classroom.jpg"
-            alt="Girls in school uniform with their class teacher in a classroom"
+            src={school.classroomPhoto || undefined}
+            alt={school.classroomPhoto ? 'Students with their class teacher in a classroom' : ''}
+            label="Our classrooms"
+            icon="school"
+            tone="navy"
             ratio="4 / 3"
           />
           <figcaption>Every class has a class teacher who knows each child well.</figcaption>

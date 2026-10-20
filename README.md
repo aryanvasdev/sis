@@ -38,10 +38,11 @@ Everything the school needs to change lives in **`src/data/`**. Values marked `â
 
 ### Photos
 
-The school's logo and its first photos (the gate, a classroom, the teaching staff and festival albums) are already in `public/images/`. Anywhere a real photo is still missing, the site shows a decorative placeholder. To add more:
+The school's logo and its photos (the gate, the teaching staff and the event albums) are already in `public/images/`. Anywhere a real photo is still missing, the site shows a decorative placeholder. To add more:
 
 - **Home page photos:** set `heroImage` / `welcomeImage` / `teachersImage` at the top of `src/pages/index.astro`.
-- **Principal / chairperson:** put the photo in `public/images/people/` and set `photo` in `school.ts`.
+- **Classroom photo:** put it in `public/images/campus/` and set `classroomPhoto` in `school.ts`; it appears on the Academics and Facilities pages.
+- **Principal:** the principal's photo is intentionally not shown anywhere on the site.
 - **Gallery:** put photos in `public/images/gallery/<album-name>/` and add them to `src/data/gallery.ts`.
 - **Logo:** `public/images/logo.webp` (full crest) and `public/images/emblem.webp` (header), used by `src/components/Crest.astro`.
 

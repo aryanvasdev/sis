@@ -346,11 +346,6 @@ export const albums: Album[] = [
     tone: 'navy',
     photos: [
       {
-        src: 'images/gallery/school-life/01.jpg',
-        caption: 'Students with their class teacher',
-        alt: 'A class of students in school uniform smiling with their class teacher in their classroom.',
-      },
-      {
         src: 'images/gallery/school-life/02.jpg',
         caption: 'Our teaching staff',
         alt: 'The school’s teaching staff standing together in front of the main entrance.',

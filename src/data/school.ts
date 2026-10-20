@@ -57,7 +57,8 @@ export const school = {
   email: 'sahib.acadamy@gmail.com',
   admissionsEmail: 'sahib.acadamy@gmail.com',
   careersEmail: 'sahib.acadamy@gmail.com',
-  officeHours: 'Mon – Sat, during school hours',
+  /** Visiting hours for parents and visitors. */
+  officeHours: 'Mon – Sat · 8:00 AM – 3:00 PM',
   /** School hours for Classes I–VIII (from the school diary). */
   schoolHours: {
     summer: '8:00 AM – 2:00 PM',
@@ -71,14 +72,13 @@ export const school = {
   principalHours: '10:00 AM – 2:00 PM',
   holidayNote: 'Every second Saturday is a holiday.',
 
-  /** Photos go in /public/images/people/ */
+  /** The principal's photo is deliberately not published on the site. */
   principal: {
     name: 'Mrs. Shivi Gulati',
     qualification: 'M.A., M.Ed.',
     /** Optional line under the principal's name, e.g. '15 years in school education'. */
     experience: '',
     email: 'sahib.acadamy@gmail.com',
-    photo: '',
   },
   /** ⚠ PLACEHOLDER: chairperson / manager of the school. */
   chairperson: {
@@ -95,6 +95,12 @@ export const school = {
     instagram: '',
     youtube: '',
   },
+
+  /**
+   * Classroom photo for the Academics and Facilities pages (a path inside /public, e.g.
+   * 'images/campus/classroom.jpg'). Leave empty to show a placeholder until it is added.
+   */
+  classroomPhoto: '',
 
   /** Online fee payment / parent ERP portal. Leave empty to hide the buttons. */
   feePaymentUrl: '',

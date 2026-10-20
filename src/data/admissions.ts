@@ -4,7 +4,7 @@
  * The age table is worked out automatically from `school.admissionSession` in
  * src/data/school.ts, so it updates itself when the session changes.
  *
- * ⚠ SAMPLE CONTENT — replace the dates, visiting hours and prospectus with the
+ * ⚠ SAMPLE CONTENT — replace the dates and prospectus with the
  *   school's real details. Items marked ⚠ PLACEHOLDER must be checked before launch.
  */
 import { school } from './school';
@@ -34,10 +34,10 @@ export const keyDates: KeyDate[] = [
   { label: 'New session begins', date: `${admissionYear}-04-01` },
 ];
 
-/** ⚠ PLACEHOLDER: admission office visiting hours and prospectus PDF (place the file in /public/documents/). */
+/** Admission office visiting hours and the prospectus PDF (place the file in /public/documents/). */
 export const admissionOffice = {
-  visitingHours: 'Mon – Sat · 9:00 AM – 1:00 PM',
-  campusTours: 'Saturdays, 10:00 AM – 12:00 noon (please call to book)',
+  visitingHours: school.officeHours,
+  campusTours: 'Any time during visiting hours (please call ahead)',
   prospectus: `/documents/prospectus-${school.admissionSession.replace('–', '-')}.pdf`,
 };
 

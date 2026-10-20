@@ -12,7 +12,7 @@ import { formatDate, dateParts } from '../lib/format';
 import { url } from '../lib/url';
 
 /** Photos in /public/images/. Set heroImage to '' to show the campus illustration instead. */
-const heroImage = 'images/campus/classroom.jpg';
+const heroImage = 'images/gallery/gandhi-jayanti-2026/01.jpg';
 const welcomeImage = 'images/campus/school-gate.jpg';
 const teachersImage = 'images/people/our-teachers.jpg';
 
@@ -31,7 +31,7 @@ const highlights = [
   { icon: 'shield-check', title: 'Safe & secure campus', text: 'A gated campus with CCTV, a visitor log, a first-aid room and safe school transport.', tone: 'green' },
   { icon: 'drama', title: 'Festivals, dance & stage', text: 'From Teeyan da Mela to Janmashtami and Gandhi Jayanti, children perform, celebrate and grow in confidence.', tone: 'maroon' },
   { icon: 'heart-handshake', title: 'Values & discipline', text: 'Morning assembly, good manners, cleanliness drives and respect for every culture and faith: “Come to learn, go to serve.”', tone: '' },
-  { icon: 'monitor-smartphone', title: 'Smart, hands-on learning', text: 'Smart-board lessons, a science lab, and art, craft and activity corners that make concepts come alive.', tone: 'navy' },
+  { icon: 'notebook-pen', title: 'A diary that links home and school', text: 'A word and a sentence of the day, homework and teachers’ remarks in every child’s diary, signed by parents each evening.', tone: 'navy' },
 ];
 
 const stages = [
@@ -43,7 +43,7 @@ const stages = [
 const latestNotices = sortedNotices().slice(0, 5);
 const events = upcomingEvents().slice(0, 4);
 const galleryTiles = [
-  { album: 'gandhi-jayanti-2026', src: 'images/gallery/gandhi-jayanti-2026/01.jpg', label: 'Gandhi Jayanti & Swachh Bharat', position: 'center 40%' },
+  { album: 'class-outing', src: 'images/gallery/class-outing/02.jpg', label: 'Class outing', position: 'center 40%' },
   { album: 'cultural-dance', src: 'images/gallery/cultural-dance/01.jpg', label: 'Cultural programme', position: 'center 30%' },
   { album: 'teeyan-da-mela-2026', src: 'images/gallery/teeyan-da-mela-2026/01.jpg', label: 'Teeyan da Mela', position: 'center 55%' },
   { album: 'janmashtami-2026', src: 'images/gallery/janmashtami-2026/01.jpg', label: 'Janmashtami', position: 'center 30%' },
@@ -84,7 +84,7 @@ const galleryTiles = [
         <div class="hero-frame">
           {
             heroImage ? (
-              <Photo src={heroImage} alt={`Students of ${school.name} with their class teacher`} ratio="4 / 3" loading="eager" class="hero-photo" position="center 30%" />
+              <Photo src={heroImage} alt={`Young students of ${school.name} with Swachh Bharat placards at the school entrance`} ratio="4 / 3" loading="eager" class="hero-photo" position="center 40%" />
             ) : (
               <CampusIllustration class="hero-illustration" />
             )
@@ -192,10 +192,7 @@ const galleryTiles = [
   <!-- ========== PRINCIPAL ========== -->
   <section class="section section--cream">
     <div class="container principal">
-      <div class="principal-photo reveal">
-        <Photo src={school.principal.photo || undefined} label="Principal" icon="user-round" tone="gold" ratio="4 / 5" alt={school.principal.name} />
-      </div>
-      <div class="principal-copy reveal">
+      <div class="principal-copy center reveal">
         <p class="eyebrow">From the Principal’s desk</p>
         <blockquote>
           <Icon name="quote" size={40} class="q-mark" />
@@ -773,29 +770,7 @@ const galleryTiles = [
 
   /* ---------- Principal ---------- */
   .principal {
-    display: grid;
-    gap: clamp(28px, 5vw, 64px);
-    align-items: center;
-  }
-  @media (min-width: 860px) {
-    .principal {
-      grid-template-columns: minmax(260px, 0.7fr) 1.3fr;
-    }
-  }
-  .principal-photo {
-    max-width: min(380px, calc(100% - 18px));
-    position: relative;
-  }
-  .principal-photo::after {
-    content: '';
-    position: absolute;
-    inset: 18px -18px -18px 18px;
-    z-index: -1;
-    border: 2px solid var(--gold-500);
-    border-radius: var(--radius);
-  }
-  .principal-photo {
-    isolation: isolate;
+    max-width: 900px;
   }
   .principal-copy blockquote {
     position: relative;
@@ -807,6 +782,7 @@ const galleryTiles = [
     font-weight: 450;
   }
   .principal-copy :global(.q-mark) {
+    margin-inline: auto;
     color: var(--gold-500);
     margin-bottom: 8px;
   }
