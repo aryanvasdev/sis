@@ -38,9 +38,8 @@ export const school = {
   admissionSession: '2027–28',
   admissionsOpen: true,
 
-  /** ⚠ PLACEHOLDER: add the road / landmark in line1. */
   address: {
-    line1: '',
+    line1: 'Old Anaj Mandi – Kalpi Link Road',
     line2: '',
     city: 'Saha',
     district: 'Ambala',
@@ -50,42 +49,43 @@ export const school = {
   /** Google Maps → Share → Embed a map → copy only the src="…" URL. Leave empty to hide the map. */
   mapEmbedUrl: '',
   /** Google Maps → Share → Copy link */
-  mapLink: 'https://www.google.com/maps/search/?api=1&query=Sahib+International+School+Saha+Ambala',
+  mapLink: 'https://www.google.com/maps/search/?api=1&query=Sahib+International+School+Kalpi+Link+Road+Saha+Ambala',
 
-  /** ⚠ PLACEHOLDER: contact details (phone numbers and email domain are made up). */
-  phones: ['+91 98765 43210', '+91 12345 67890'],
+  phones: ['+91 82950 53047', '+91 74978 86980'],
   /** WhatsApp number in international format, digits only (no +, spaces or dashes). */
-  whatsapp: '919876543210',
-  email: 'info@sahibinternationalschool.in',
-  admissionsEmail: 'admissions@sahibinternationalschool.in',
-  careersEmail: 'careers@sahibinternationalschool.in',
+  whatsapp: '918295053047',
+  email: 'sahib.acadamy@gmail.com',
+  admissionsEmail: 'sahib.acadamy@gmail.com',
+  careersEmail: 'sahib.acadamy@gmail.com',
   officeHours: 'Mon – Sat · 8:00 AM – 2:30 PM',
   schoolHours: {
     summer: '7:30 AM – 1:30 PM (April – September)',
     winter: '8:30 AM – 2:30 PM (October – March)',
   },
 
-  /** ⚠ PLACEHOLDER: names and qualifications. Photos go in /public/images/people/ */
+  /** Photos go in /public/images/people/ */
   principal: {
-    name: 'Dr. [Principal Name]',
-    qualification: 'M.A., M.Ed., Ph.D.',
-    experience: '25+ years in school education',
-    email: 'principal@sahibinternationalschool.in',
+    name: 'Mrs. Shivi Gulati',
+    qualification: 'M.A., M.Ed.',
+    /** Optional line under the principal's name, e.g. '15 years in school education'. */
+    experience: '',
+    email: 'sahib.acadamy@gmail.com',
     photo: '',
   },
+  /** ⚠ PLACEHOLDER: chairperson / manager of the school. */
   chairperson: {
-    name: 'S. [Chairperson Name]',
+    name: '[Chairperson Name]',
     title: 'Chairperson, [Name of Trust / Society]',
     photo: '',
   },
   /** ⚠ PLACEHOLDER: the registered trust or society that runs the school. */
   trustName: '[Name of Educational Trust / Society]',
 
-  /** Leave a link empty to hide that icon. */
+  /** Paste the school's page links here; an empty link hides that icon. */
   social: {
-    facebook: 'https://facebook.com/',
-    instagram: 'https://instagram.com/',
-    youtube: 'https://youtube.com/',
+    facebook: '',
+    instagram: '',
+    youtube: '',
   },
 
   /** Online fee payment / parent ERP portal. Leave empty to hide the buttons. */
@@ -99,7 +99,7 @@ export const school = {
    */
   formEndpoint: '',
 
-  /** ⚠ PLACEHOLDER: headline numbers shown on the home page (student count is a guess). */
+  /** Headline numbers shown on the home page. */
   stats: [
     { value: '500+', label: 'Happy students' },
     { value: '25+', label: 'Dedicated teachers' },

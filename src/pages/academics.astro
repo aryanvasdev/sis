@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Icon from '../components/Icon.astro';
 import Photo from '../components/Photo.astro';
-import { school } from '../data/school';
+import { school, whatsappLink } from '../data/school';
 import {
   stages,
   languages,
@@ -15,6 +15,7 @@ import {
   uniform,
 } from '../data/academics';
 import { url } from '../lib/url';
+import { hasPublicFile } from '../lib/files';
 
 const jumpLinks = [
   { label: 'Curriculum', href: '#curriculum' },
@@ -89,6 +90,9 @@ const monthName = (ym: string) => {
     year: String(d.getFullYear()),
   };
 };
+
+// Until a PDF is uploaded to /public/documents/, its card asks the office on WhatsApp instead.
+const docs = documents.map((d) => ({ ...d, ready: hasPublicFile(d.file) }));
 ---
 
 <BaseLayout
@@ -447,32 +451,40 @@ const monthName = (ym: string) => {
       />
       <div class="grid grid-2">
         {
-          documents.map((d) => (
-            <a href={url(d.file)} class="doc reveal" target="_blank" rel="noopener">
+          docs.map((d) => (
+            <a
+              href={d.ready ? url(d.file) : whatsappLink(`Hello, please share the ${d.title}.`)}
+              class="doc reveal"
+              target="_blank"
+              rel="noopener"
+            >
               <span class="doc-icon">
                 <Icon name={d.icon} size={28} />
               </span>
               <span class="doc-body">
                 <strong>{d.title}</strong>
                 <span>{d.text}</span>
-                <span class="doc-meta">PDF</span>
+                <span class="doc-meta">{d.ready ? 'PDF' : 'Ask on WhatsApp'}</span>
               </span>
               <span class="doc-cta">
-                <Icon name="download" size={20} />
-                <span class="visually-hidden">Download</span>
+                <Icon name={d.ready ? 'download' : 'whatsapp'} size={20} />
+                <span class="visually-hidden">{d.ready ? 'Download' : 'Request on WhatsApp'}</span>
               </span>
             </a>
           ))
         }
       </div>
-      {/* ⚠ PLACEHOLDER: remove this note once the real PDFs are in /public/documents/. */}
-      <p class="callout callout--navy doc-note reveal">
-        <Icon name="info" />
-        <span>
-          The documents for Session {calendarSession} are being updated and will be available here shortly. Until then,
-          please collect a copy from the school office or ask your child’s class teacher.
-        </span>
-      </p>
+      {
+        docs.some((d) => !d.ready) && (
+          <p class="callout callout--navy doc-note reveal">
+            <Icon name="info" />
+            <span>
+              The documents for Session {calendarSession} are being updated and will be available here shortly. Until
+              then, please collect a copy from the school office or ask your child’s class teacher.
+            </span>
+          </p>
+        )
+      }
 
       <h3 class="uniform-h">School uniform</h3>
       <div class="grid grid-2">
@@ -857,6 +869,7 @@ const monthName = (ym: string) => {
   .lang h3 {
     font-size: var(--step-2);
     margin-bottom: 10px;
+    padding-right: 76px;
   }
   .lang p {
     margin-top: 14px;
@@ -1022,6 +1035,7 @@ const monthName = (ym: string) => {
   }
   .cal-now {
     margin-top: 6px;
+    white-space: nowrap;
   }
   .cal-now[hidden] {
     display: none;
@@ -1056,7 +1070,12 @@ const monthName = (ym: string) => {
       padding: 12px 12px;
     }
     .cal-table tbody th {
-      width: 86px;
+      width: 96px;
+    }
+    .cal-now {
+      padding: 2px 7px;
+      font-size: 0.62rem;
+      letter-spacing: 0.02em;
     }
     .cal-m {
       font-size: 1rem;
@@ -1228,6 +1247,15 @@ const monthName = (ym: string) => {
   .doc:hover .doc-cta {
     background: var(--gold-500);
     color: var(--navy-950);
+  }
+  @media (max-width: 480px) {
+    .doc {
+      gap: 14px;
+      padding: 18px;
+    }
+    .doc-icon {
+      display: none;
+    }
   }
   .doc-note {
     margin-top: 18px;

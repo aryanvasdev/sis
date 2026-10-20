@@ -263,4 +263,4 @@ export interface GalleryVideo {
   date?: string;
 }
 
-export const videos: GalleryVideo[] = [{ title: 'Test video', youtubeId: 'abcdefghijk', date: '2026-10-02' }];
+export const videos: GalleryVideo[] = [];

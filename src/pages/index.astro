@@ -42,12 +42,12 @@ const stages = [
 const latestNotices = sortedNotices().slice(0, 5);
 const events = upcomingEvents().slice(0, 4);
 const galleryTiles = [
-  { src: 'images/gallery/gandhi-jayanti-2026/01.jpg', label: 'Gandhi Jayanti & Swachh Bharat', position: 'center 40%' },
-  { src: 'images/gallery/cultural-dance/01.jpg', label: 'Cultural programme', position: 'center 30%' },
-  { src: 'images/gallery/teeyan-da-mela-2026/01.jpg', label: 'Teeyan da Mela', position: 'center 55%' },
-  { src: 'images/gallery/janmashtami-2026/01.jpg', label: 'Janmashtami', position: 'center 30%' },
-  { src: 'images/gallery/independence-day-2026/01.jpg', label: 'Independence Day', position: 'center 30%' },
-  { src: 'images/gallery/cultural-dance/02.jpg', label: 'Dance performance', position: 'center 35%' },
+  { album: 'gandhi-jayanti-2026', src: 'images/gallery/gandhi-jayanti-2026/01.jpg', label: 'Gandhi Jayanti & Swachh Bharat', position: 'center 40%' },
+  { album: 'cultural-dance', src: 'images/gallery/cultural-dance/01.jpg', label: 'Cultural programme', position: 'center 30%' },
+  { album: 'teeyan-da-mela-2026', src: 'images/gallery/teeyan-da-mela-2026/01.jpg', label: 'Teeyan da Mela', position: 'center 55%' },
+  { album: 'janmashtami-2026', src: 'images/gallery/janmashtami-2026/01.jpg', label: 'Janmashtami', position: 'center 30%' },
+  { album: 'independence-day-2026', src: 'images/gallery/independence-day-2026/01.jpg', label: 'Independence Day', position: 'center 30%' },
+  { album: 'cultural-dance', src: 'images/gallery/cultural-dance/02.jpg', label: 'Dance performance', position: 'center 35%' },
 ];
 ---
 
@@ -353,7 +353,7 @@ const galleryTiles = [
       <div class="mosaic">
         {
           galleryTiles.map((g, i) => (
-            <a href={url('/gallery/')} class:list={['mosaic-item', `m${i + 1}`, 'reveal']}>
+            <a href={url(`/gallery/#${g.album}`)} class:list={['mosaic-item', `m${i + 1}`, 'reveal']}>
               <Photo src={g.src} alt="" ratio="auto" position={g.position} class="mosaic-photo" />
               <span class="mosaic-label">{g.label}</span>
             </a>

@@ -30,6 +30,7 @@ import {
 } from '../data/fees';
 import { formatDate, formatDateLong, formatINR, dateParts } from '../lib/format';
 import { url } from '../lib/url';
+import { hasPublicFile } from '../lib/files';
 
 const steps = [
   {
@@ -75,6 +76,13 @@ const emailParts = (email: string) => {
 };
 
 const enquiryMessage = `Hello, I would like to know about admissions for Session ${school.admissionSession}.`;
+
+// Until the prospectus PDF is uploaded to /public/documents/, parents can request it on WhatsApp.
+const prospectusReady = hasPublicFile(admissionOffice.prospectus);
+const prospectusHref = prospectusReady
+  ? url(admissionOffice.prospectus)
+  : whatsappLink(`Hello, please send me the prospectus for Session ${school.admissionSession}.`);
+const prospectusAttrs = prospectusReady ? { download: true } : { target: '_blank', rel: 'noopener' };
 ---
 
 <BaseLayout
@@ -119,8 +127,8 @@ const enquiryMessage = `Hello, I would like to know about admissions for Session
                 <li>Clear, published fees with a sibling concession</li>
               </ul>
               <div class="btn-row" style="margin-top:24px">
-                <a href={url(admissionOffice.prospectus)} class="btn btn--navy" download>
-                  <Icon name="download" /> Prospectus {school.admissionSession}
+                <a href={prospectusHref} class="btn btn--navy" {...prospectusAttrs}>
+                  <Icon name={prospectusReady ? 'download' : 'whatsapp'} /> Prospectus {school.admissionSession}
                 </a>
                 <a href={telLink(school.phones[0])} class="btn btn--outline">
                   <Icon name="phone" /> {school.phones[0]}
@@ -503,13 +511,13 @@ const enquiryMessage = `Hello, I would like to know about admissions for Session
             </span>
           </li>
         </ul>
-        <a href={url(admissionOffice.prospectus)} class="prospectus" download>
+        <a href={prospectusHref} class="prospectus" {...prospectusAttrs}>
           <span class="prospectus-icon">
-            <Icon name="download" />
+            <Icon name={prospectusReady ? 'download' : 'whatsapp'} />
           </span>
           <span>
-            <strong>Download the prospectus</strong>
-            <small>Session {school.admissionSession} · PDF</small>
+            <strong>{prospectusReady ? 'Download the prospectus' : 'Request the prospectus'}</strong>
+            <small>Session {school.admissionSession} · {prospectusReady ? 'PDF' : 'on WhatsApp'}</small>
           </span>
         </a>
         <a href={url('/contact/')} class="link-arrow">Directions &amp; all contacts <Icon name="arrow-right" /></a>

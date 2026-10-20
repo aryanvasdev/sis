@@ -9,7 +9,6 @@ import { benefits, currentOpenings, type Opening } from '../data/careers';
 import { formatDate } from '../lib/format';
 
 const openings = currentOpenings();
-const emailDomain = school.careersEmail.split('@')[1];
 
 const mailto = (subject: string, body: string) =>
   `mailto:${school.careersEmail}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -276,8 +275,8 @@ const steps = [
           <h2 id="fraud-title">We never charge a fee for recruitment</h2>
           <p>
             {school.name} does not ask for any money at any stage of recruitment: not for application forms, tests,
-            interviews, training or appointment letters. All official communication comes only from an
-            <strong>@{emailDomain}</strong> email address or the school’s published phone numbers. If anyone asks you for
+            interviews, training or appointment letters. All official communication comes only from
+            <strong>{school.careersEmail}</strong> or the school’s published phone numbers. If anyone asks you for
             payment in the school’s name, please do not pay, and inform the school office at once on {school.phones[0]}.
           </p>
         </div>

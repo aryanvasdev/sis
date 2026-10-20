@@ -4,7 +4,7 @@ import PageHero from '../components/PageHero.astro';
 import SectionHead from '../components/SectionHead.astro';
 import Photo from '../components/Photo.astro';
 import Icon from '../components/Icon.astro';
-import { school } from '../data/school';
+import { school, whatsappLink } from '../data/school';
 import { sortedAlbums, galleryCategories, videos, formatAlbumDate } from '../data/gallery';
 import { formatDate } from '../lib/format';
 import { url } from '../lib/url';
@@ -168,19 +168,29 @@ const socials = [
       <div class="follow reveal">
         <div>
           <h2>More moments, every week</h2>
-          <p>Follow the school for photos and videos from assemblies, competitions and events as they happen.</p>
+          <p>
+            {
+              socials.length > 0
+                ? 'Follow the school for photos and videos from assemblies, competitions and events as they happen.'
+                : 'New albums are added after every celebration and event. Ask the school office on WhatsApp for the latest photos.'
+            }
+          </p>
         </div>
-        {
-          socials.length > 0 && (
-            <div class="btn-row">
-              {socials.map((s) => (
+        <div class="btn-row">
+          {
+            socials.length > 0 ? (
+              socials.map((s) => (
                 <a href={s.href} class="btn btn--outline btn--sm" target="_blank" rel="noopener">
                   <Icon name={s.name} /> {s.label}
                 </a>
-              ))}
-            </div>
-          )
-        }
+              ))
+            ) : (
+              <a href={whatsappLink('Hello, could you share the latest school event photos?')} class="btn btn--whatsapp btn--sm" target="_blank" rel="noopener">
+                <Icon name="whatsapp" /> WhatsApp the school
+              </a>
+            )
+          }
+        </div>
       </div>
       <p class="consent">
         <Icon name="shield-check" size={18} />

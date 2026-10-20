@@ -9,11 +9,12 @@ import { school, fullAddress, telLink, whatsappLink } from '../data/school';
 import { departments, landmarks, busRoutes } from '../data/contacts';
 import { url } from '../lib/url';
 
+// One entry per distinct address, since several offices may share one inbox.
 const emails = [
   { label: 'General', address: school.email },
   { label: 'Admissions', address: school.admissionsEmail },
   { label: 'Careers', address: school.careersEmail },
-];
+].filter((e, i, all) => all.findIndex((x) => x.address === e.address) === i);
 
 const timings = [
   { icon: 'sun', label: 'Summer', value: school.schoolHours.summer },
@@ -270,9 +271,7 @@ const splitHours = (s: string) => {
                 </span>
                 <div>
                   <h3>{d.name}</h3>
-                  <p class="dept-person">
-                    {d.person} · {d.role}
-                  </p>
+                  <p class="dept-person">{d.person ? `${d.person} · ${d.role}` : d.role}</p>
                 </div>
               </div>
               <p class="dept-handles">{d.handles}</p>
@@ -282,7 +281,6 @@ const splitHours = (s: string) => {
                     <Icon name="phone" size={16} />
                     <span>
                       <a href={telLink(d.phone)}>{d.phone}</a>
-                      {d.ext && <span class="ext"> · Ext. {d.ext}</span>}
                     </span>
                   </li>
                 )}
@@ -729,8 +727,5 @@ const splitHours = (s: string) => {
   }
   .dept-list a:hover {
     text-decoration: underline;
-  }
-  .ext {
-    color: var(--muted);
   }
 </style>

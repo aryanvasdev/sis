@@ -281,4 +281,9 @@ export const committees: { name: string; basis?: string; text: string }[] = [
     name: 'Grievance Redressal Committee',
     text: 'Gives parents, students and staff a fair, time-bound way to raise and resolve concerns.',
   },
+  {
+    name: 'Internal Complaints Committee',
+    basis: 'Sexual Harassment of Women at Workplace (Prevention, Prohibition and Redressal) Act, 2013',
+    text: 'Ensures a safe and respectful workplace for every staff member and inquires into any complaint fairly and in confidence.',
+  },
 ];

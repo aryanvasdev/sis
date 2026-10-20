@@ -83,6 +83,13 @@ export const signatureEvents = [
     text: 'Our little ones dress up in traditional clothes for the festival of Teej, with folk songs, the dholak, swings and phulkari.',
   },
   {
+    title: 'Annual Sports Meet',
+    when: 'December',
+    icon: 'trophy',
+    tone: 'sky',
+    text: 'March past, races, fun games for the little ones and the race for the inter-house trophy.',
+  },
+  {
     title: 'Independence & Republic Day',
     when: 'August & January',
     icon: 'flag',
@@ -103,6 +110,13 @@ export const signatureEvents = [
     text: 'A cleanliness rally and pledge, with placards made by the children and a little “Gandhi ji” leading the way.',
   },
   {
+    title: 'Investiture Ceremony',
+    when: 'July',
+    icon: 'badge-check',
+    tone: 'navy',
+    text: 'The new Student Council takes its oath and receives badges and sashes in front of parents.',
+  },
+  {
     title: 'Festivals of all faiths',
     when: 'Through the year',
     icon: 'sparkles',
@@ -121,20 +135,6 @@ export const signatureEvents = [
     alt: 'Collage of pre-primary children dressed in green for Green Day',
     ratio: '1 / 1',
     text: 'The pre-primary wing dresses in green, and every class plants and looks after saplings on campus.',
-  },
-  {
-    title: 'Annual Sports Meet',
-    when: 'December',
-    icon: 'trophy',
-    tone: 'sky',
-    text: 'March past, races, fun games for the little ones and the race for the inter-house trophy.',
-  },
-  {
-    title: 'Investiture Ceremony',
-    when: 'July',
-    icon: 'badge-check',
-    tone: 'navy',
-    text: 'The new Student Council takes its oath and receives badges and sashes in front of parents.',
   },
   {
     title: 'Science Exhibition',

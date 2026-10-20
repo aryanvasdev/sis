@@ -117,13 +117,15 @@ export const managementCommittee: CommitteeMember[] = [
 
 /* ---------- Milestones ---------- */
 
-/** ⚠ SAMPLE CONTENT: replace the years and events with the school's real history. */
+/**
+ * ⚠ SAMPLE CONTENT: replace the years and events with the school's real history.
+ * Every year must be the founding year or later.
+ */
 export const milestones = [
-  { year: String(school.established), title: 'The school opens its doors', text: 'Classes begin from Nursery to Class V with a small, dedicated team of teachers.' },
-  { year: '2008', title: 'Middle classes added', text: 'The school grows to Class VIII, and a science corner and library are set up.' },
-  { year: '2011', title: 'Permanent recognition', text: 'The school is permanently recognised and registered, as proudly written on our gate.' },
-  { year: '2015', title: 'Computer room', text: 'A computer room opens, and computer studies begin from Class I.' },
-  { year: '2019', title: 'Smart classrooms', text: 'Interactive smart boards are installed in the classrooms.' },
-  { year: '2023', title: 'New pre-primary wing', text: 'Bright, colourful rooms and a play area for our youngest learners.' },
-  { year: '2026', title: 'NEP 2020 foundational stage', text: 'A play-based programme is launched for Nursery to Class II.' },
+  { year: String(school.established), title: 'The school opens its doors', text: 'Classes begin for pre-primary and primary children, with a small, dedicated team of teachers.' },
+  { year: '2021', title: 'Growing to Class VIII', text: 'Middle classes are added step by step, and the school now runs from Nursery to Class VIII.' },
+  { year: '2023', title: 'Computer room & smart boards', text: 'A computer room opens and smart boards come to the classrooms.' },
+  { year: '2024', title: 'Play-based early years', text: 'A play-based programme in the spirit of NEP 2020 for Nursery to Class II.' },
+  { year: '2025', title: 'Applause on stage', text: 'Our dance troupe wins praise and prizes at inter-school cultural events.' },
+  { year: '2026', title: `Admissions for ${school.admissionSession}`, text: 'A growing school family opens its doors to new children for the coming session.' },
 ];

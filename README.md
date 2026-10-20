@@ -31,7 +31,7 @@ Everything Indian parents look for is included: fee structure, admission process
 
 Everything the school needs to change lives in **`src/data/`**. Values marked `⚠ PLACEHOLDER` or `⚠ SAMPLE CONTENT` are made up and **must be replaced**.
 
-1. **`src/data/school.ts`**: start here. Year founded, street address, phone numbers, WhatsApp number, emails, principal and chairperson, social media links, headline numbers. Most pages read from this file.
+1. **`src/data/school.ts`**: start here. The address, phone numbers, WhatsApp, email, principal, founding year and student count are already filled in. Still to add: the chairperson and trust name, social media links and the Google Map embed. Most pages read from this file.
 2. **`src/data/notices.ts`**: notices, circulars and upcoming events.
 3. The other files in `src/data/` (fees, admissions, academics, facilities, gallery, achievements, careers, contacts, and so on) hold the content for each page.
 5. When everything is real, set **`preview: false`** in `school.ts` to remove the yellow "sample content" banner.
@@ -52,7 +52,7 @@ Resize photos to about 1600 px on the long side and save them as JPG or WebP (un
 Put PDFs in `public/documents/`:
 
 - `public/documents/circulars/`: circular PDFs, linked from `notices.ts` with `file: 'circulars/<name>.pdf'`.
-- Book list, uniform guidelines and prospectus, using the file names referenced on the Academics and Admissions pages.
+- `public/documents/booklist-2026-27.pdf`, `public/documents/uniform-guidelines.pdf` and `public/documents/prospectus-2027-28.pdf`. Until each file is added, its button asks the school office for it on WhatsApp instead, so there are no broken links.
 
 ### Transfer Certificates (TC verification)
 

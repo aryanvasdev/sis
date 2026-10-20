@@ -2,22 +2,20 @@
  * CONTACT PAGE: department directory and directions.
  * The main address, phone numbers, emails and timings come from src/data/school.ts.
  *
- * ⚠ SAMPLE CONTENT — replace the names, extensions, emails, landmarks and bus
- *   routes below with the school's real details. People's names are placeholders.
+ * ⚠ SAMPLE CONTENT — check the office hours, and replace the landmarks and bus
+ *   routes below with the school's real details.
  */
 import { school } from './school';
 
 export interface Department {
   name: string;
   icon: string;
-  /** ⚠ PLACEHOLDER: person in charge. */
-  person: string;
+  /** Person in charge (optional). */
+  person?: string;
   role: string;
   /** What parents can contact this office about. */
   handles: string;
   phone?: string;
-  /** Desk extension on the main school number. */
-  ext?: string;
   email?: string;
   hours?: string;
 }
@@ -26,34 +24,27 @@ export const departments: Department[] = [
   {
     name: 'Admissions',
     icon: 'graduation-cap',
-    person: 'Mrs. [Name]',
-    role: 'Admission Coordinator',
+    role: 'Admission office',
     handles: 'Registration, campus visits, interactions and admission forms',
     phone: school.phones[0],
-    ext: '201',
-    email: school.admissionsEmail,
+    email: school.email,
     hours: 'Mon – Sat · 9:00 AM – 1:00 PM',
   },
   {
-    name: 'Accounts / Fees',
+    name: 'Fees & Accounts',
     icon: 'indian-rupee',
-    person: 'Mr. [Name]',
-    role: 'Accounts Officer',
+    role: 'Accounts office',
     handles: 'Fee payments, receipts, concessions and refunds',
     phone: school.phones[1],
-    ext: '204',
-    email: 'accounts@sahibinternationalschool.in',
+    email: school.email,
     hours: 'Mon – Sat · 8:30 AM – 1:30 PM',
   },
   {
     name: 'Transport',
     icon: 'bus',
-    person: 'Mr. [Name]',
-    role: 'Transport In-charge',
+    role: 'Transport desk',
     handles: 'Bus routes, stops, pick-up timings and transport fee',
-    phone: '+91 90000 00000',
-    ext: '207',
-    email: 'transport@sahibinternationalschool.in',
+    phone: school.phones[1],
     hours: 'Mon – Sat · 7:00 AM – 3:00 PM',
   },
   {
@@ -63,39 +54,31 @@ export const departments: Department[] = [
     role: 'Principal',
     handles: 'Appointments with the Principal (please book through the front office)',
     phone: school.phones[0],
-    ext: '200',
     email: school.principal.email,
     hours: 'By appointment · Mon – Fri · 11:00 AM – 12:30 PM',
   },
   {
-    name: 'Examination Cell',
+    name: 'Academics & Exams',
     icon: 'clipboard-check',
-    person: 'Mrs. [Name]',
-    role: 'Examination In-charge',
-    handles: 'Date sheets, periodic tests, report cards and result queries',
-    phone: school.phones[1],
-    ext: '210',
-    email: 'exams@sahibinternationalschool.in',
+    role: 'Class teachers & exam coordinator',
+    handles: 'Date sheets, periodic tests, report cards and PTMs',
+    phone: school.phones[0],
     hours: 'Mon – Sat · 9:00 AM – 1:00 PM',
   },
   {
     name: 'Front Office',
     icon: 'building-2',
-    person: 'Ms. [Name]',
-    role: 'Receptionist',
+    role: 'Reception',
     handles: 'General enquiries, Transfer Certificates, bonafide and character certificates',
     phone: school.phones[0],
-    ext: '100',
     email: school.email,
     hours: school.officeHours,
   },
 ];
 
-/** ⚠ PLACEHOLDER: landmarks and travel directions. */
+/** Directions shown beside the map. Add a nearby bus stop or landmark if helpful. */
 export const landmarks: { icon: string; label: string; text: string }[] = [
-  { icon: 'map-pin', label: 'Landmark', text: 'Near [Landmark], Saha, Ambala' },
-  { icon: 'bus-front', label: 'Nearest bus stop', text: '[Bus Stop Name]: about [X] km' },
-  { icon: 'train-front', label: 'Nearest railway station', text: '[Station Name]: about [X] km' },
+  { icon: 'map-pin', label: 'Location', text: 'On the Old Anaj Mandi – Kalpi Link Road, Saha, Ambala' },
   { icon: 'car-front', label: 'Parking', text: 'Visitor parking inside the main gate. Please sign the visitor register at the gate.' },
 ];
 
