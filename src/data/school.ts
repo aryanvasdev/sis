@@ -97,7 +97,7 @@ export const school = {
   },
 
   /**
-   * Classroom photo for the Academics and Facilities pages (a path inside /public, e.g.
+   * Classroom photo for the Facilities page (a path inside /public, e.g.
    * 'images/campus/classroom.jpg'). Leave empty to show a placeholder until it is added.
    */
   classroomPhoto: '',

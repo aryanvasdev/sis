@@ -309,6 +309,12 @@ export const albums: Album[] = [
     tone: 'gold',
     photos: [
       {
+        src: 'images/gallery/diwali-rangoli/02.jpg',
+        caption: 'Rangoli and diyas at the school reception',
+        alt: 'Teachers and students in Red House T-shirts kneeling around a rangoli of a lotus and a hand holding a kalash, with lit diyas, at the school reception.',
+        focus: 'center 45%',
+      },
+      {
         src: 'images/gallery/diwali-rangoli/01.jpg',
         caption: '“Happy Diwali” rangoli',
         alt: 'Students in school uniform sitting in a circle around a colourful rangoli that reads “Happy Diwali”.',

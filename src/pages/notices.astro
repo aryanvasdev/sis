@@ -130,34 +130,31 @@ const eventWhen = (e: (typeof events)[number]) =>
       <aside class="side">
         <section id="events" class="events reveal" aria-labelledby="events-h">
           <h2 id="events-h"><Icon name="calendar-days" /> Upcoming events</h2>
-          {
-            events.length ? (
-              <ul class="event-list">
-                {events.map((e) => {
-                  const d = dateParts(e.date);
-                  return (
-                    <li>
-                      <time class="event-date" datetime={e.date}>
-                        <span class="d">{d.day}</span>
-                        <span class="m">{d.month}</span>
-                      </time>
-                      <div>
-                        <h3>{e.title}</h3>
-                        <p class="event-info">{eventWhen(e)}</p>
-                        {e.venue && (
-                          <p class="event-info">
-                            <Icon name="map-pin" size={14} /> {e.venue}
-                          </p>
-                        )}
-                      </div>
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p class="muted">New events will be announced here soon.</p>
-            )
-          }
+          <ul class="event-list" data-events>
+            {
+              events.map((e) => {
+                const d = dateParts(e.date);
+                return (
+                  <li data-ends={e.endDate ?? e.date}>
+                    <time class="event-date" datetime={e.date}>
+                      <span class="d">{d.day}</span>
+                      <span class="m">{d.month}</span>
+                    </time>
+                    <div>
+                      <h3>{e.title}</h3>
+                      <p class="event-info">{eventWhen(e)}</p>
+                      {e.venue && (
+                        <p class="event-info">
+                          <Icon name="map-pin" size={14} /> {e.venue}
+                        </p>
+                      )}
+                    </div>
+                  </li>
+                );
+              })
+            }
+          </ul>
+          <p class="muted" data-events-empty hidden={events.length > 0}>New events will be announced here soon.</p>
           <a href={url('/academics/#calendar')} class="link-arrow">
             Full academic calendar <Icon name="arrow-right" />
           </a>

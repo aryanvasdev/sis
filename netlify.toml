@@ -1,0 +1,25 @@
+# Netlify builds the site from GitHub on every push.
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Fonts, styles and scripts have hashed file names, so they can be cached for a year.
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Transfer Certificates must never appear in search results.
+[[headers]]
+  for = "/tc/*"
+  [headers.values]
+    X-Robots-Tag = "noindex, nofollow"

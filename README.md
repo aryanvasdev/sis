@@ -88,22 +88,16 @@ npm run preview   # preview the built site
 
 Colours, fonts and shared styles are in `src/styles/global.css`. The header, footer and other shared pieces are in `src/components/`, and each page is a file in `src/pages/`.
 
-## Publishing
+## Publishing (Netlify)
 
-### GitHub Pages (free, already set up)
+The site is hosted on **Netlify**, connected to this GitHub repository. Every push to the production branch builds and publishes the site automatically; the build settings are in `netlify.toml` (`npm run build`, publish folder `dist`, Node 22).
 
-1. Push to the `main` branch.
-2. In the repository on GitHub, open **Settings → Pages** and set **Source** to **GitHub Actions**.
-3. The workflow in `.github/workflows/deploy.yml` builds and publishes the site on every push to `main`. It also rebuilds every Monday so the "upcoming events" list stays current.
+- Netlify's `URL` setting is used as the site's address for links, the sitemap and WhatsApp/Facebook previews, so nothing needs changing when a custom domain is added.
+- Past events disappear from the "Upcoming events" lists automatically in the visitor's browser, so the site stays correct between updates.
 
-The site will be available at `https://<github-username>.github.io/<repository-name>/`.
+### Custom domain
 
-### Custom domain (e.g. `www.sahibschoolsaha.in`)
-
-1. Buy the domain from any registrar.
-2. In **Settings → Pages → Custom domain**, enter it and follow GitHub's DNS instructions.
-3. The workflow picks up the new address automatically.
-
-### Netlify or Cloudflare Pages
-
-Connect the repository, set the build command to `npm run build` and the output folder to `dist`. No other settings are needed.
+1. Buy the domain (see the domain notes shared with the school).
+2. In Netlify, open the site → **Domain management** → **Add a domain**, and enter it.
+3. Either switch the domain's name servers to the ones Netlify shows (simplest), or add the DNS records Netlify lists at your registrar.
+4. Netlify issues the free HTTPS certificate automatically once DNS is working.

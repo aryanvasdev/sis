@@ -12,7 +12,7 @@ import { formatDate, dateParts } from '../lib/format';
 import { url } from '../lib/url';
 
 /** Photos in /public/images/. Set heroImage to '' to show the campus illustration instead. */
-const heroImage = 'images/gallery/gandhi-jayanti-2026/01.jpg';
+const heroImage = 'images/gallery/diwali-rangoli/02.jpg';
 const welcomeImage = 'images/campus/school-gate.jpg';
 const teachersImage = 'images/people/our-teachers.jpg';
 
@@ -41,9 +41,10 @@ const stages = [
 ];
 
 const latestNotices = sortedNotices().slice(0, 5);
-const events = upcomingEvents().slice(0, 4);
+// A few extra are rendered so the list stays full after past events are hidden in the browser.
+const events = upcomingEvents().slice(0, 8);
 const galleryTiles = [
-  { album: 'class-outing', src: 'images/gallery/class-outing/02.jpg', label: 'Class outing', position: 'center 40%' },
+  { album: 'gandhi-jayanti-2026', src: 'images/gallery/gandhi-jayanti-2026/01.jpg', label: 'Gandhi Jayanti & Swachh Bharat', position: 'center 40%' },
   { album: 'cultural-dance', src: 'images/gallery/cultural-dance/01.jpg', label: 'Cultural programme', position: 'center 30%' },
   { album: 'teeyan-da-mela-2026', src: 'images/gallery/teeyan-da-mela-2026/01.jpg', label: 'Teeyan da Mela', position: 'center 55%' },
   { album: 'janmashtami-2026', src: 'images/gallery/janmashtami-2026/01.jpg', label: 'Janmashtami', position: 'center 30%' },
@@ -84,7 +85,7 @@ const galleryTiles = [
         <div class="hero-frame">
           {
             heroImage ? (
-              <Photo src={heroImage} alt={`Young students of ${school.name} with Swachh Bharat placards at the school entrance`} ratio="4 / 3" loading="eager" class="hero-photo" position="center 40%" />
+              <Photo src={heroImage} alt="Teachers and students in Red House T-shirts around a Diwali rangoli with lit diyas at the school reception" ratio="4 / 3" loading="eager" class="hero-photo" />
             ) : (
               <CampusIllustration class="hero-illustration" />
             )
@@ -295,12 +296,12 @@ const galleryTiles = [
           <h2><Icon name="calendar-days" /> Upcoming Events</h2>
           <a href={url('/notices/#events')} class="link-arrow">Calendar <Icon name="arrow-right" /></a>
         </div>
-        <ul class="event-list">
+        <ul class="event-list" data-events data-max="4">
           {
             events.map((e) => {
               const d = dateParts(e.date);
               return (
-                <li>
+                <li data-ends={e.endDate ?? e.date}>
                   <time class="event-date" datetime={e.date}>
                     <span class="d">{d.day}</span>
                     <span class="m">{d.month}</span>
@@ -318,6 +319,7 @@ const galleryTiles = [
             })
           }
         </ul>
+        <p class="muted" data-events-empty hidden={events.length > 0}>New events will be announced here soon.</p>
       </div>
     </div>
   </section>
