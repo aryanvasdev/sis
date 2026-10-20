@@ -246,9 +246,7 @@ export const sortedAlbums = () => [...albums].sort((a, b) => b.date.localeCompar
 /** '2026-10-02' → '2 Oct 2026', '2026-08' → 'Aug 2026', '2026' → '2026' */
 export const formatAlbumDate = (date: string) => {
   if (/^\d{4}-\d{2}-\d{2}$/.test(date)) return formatDate(date);
-  if (/^\d{4}-\d{2}$/.test(date)) {
-    return new Date(`${date}-01T00:00:00`).toLocaleDateString('en-IN', { month: 'short', year: 'numeric' });
-  }
+  if (/^\d{4}-\d{2}$/.test(date)) return formatDate(`${date}-01`).replace(/^\d+ /, '');
   return date;
 };
 
@@ -265,4 +263,4 @@ export interface GalleryVideo {
   date?: string;
 }
 
-export const videos: GalleryVideo[] = [];
+export const videos: GalleryVideo[] = [{ title: 'Test video', youtubeId: 'abcdefghijk', date: '2026-10-02' }];

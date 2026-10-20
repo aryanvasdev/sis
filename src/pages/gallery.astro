@@ -42,7 +42,7 @@ const socials = [
   <PageHero
     title="Photo Gallery"
     eyebrow="Campus life"
-    lead={`Celebrations, competitions, trips and everyday moments of learning at ${school.name}. Choose a category, then tap any photo to view it larger.`}
+    lead={`Festivals, celebrations, cultural programmes and everyday moments at ${school.name}. Choose a category, then tap any photo to see it in full.`}
     crumbs={[{ label: 'Photo Gallery' }]}
   />
 
@@ -113,7 +113,7 @@ const socials = [
                     >
                       <Photo src={p.src} alt="" icon={p.icon ?? album.icon} tone={p.tone ?? album.tone} ratio="4 / 3" class="tile-photo" />
                       <span class="tile-cap" aria-hidden="true">
-                        {p.caption}
+                        <span>{p.caption}</span>
                       </span>
                       <span class="tile-zoom" aria-hidden="true">
                         <Icon name="zoom-in" size={18} />
@@ -717,6 +717,8 @@ const socials = [
     font-size: 0.8rem;
     font-weight: 700;
     line-height: 1.35;
+  }
+  .tile-cap span {
     display: -webkit-box;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 1;
@@ -727,6 +729,8 @@ const socials = [
     .tile-cap {
       padding: 32px 14px 12px;
       font-size: 0.86rem;
+    }
+    .tile-cap span {
       -webkit-line-clamp: 2;
       line-clamp: 2;
     }
@@ -855,7 +859,8 @@ const socials = [
   .lb-backdrop {
     position: absolute;
     inset: 0;
-    background: rgb(6 20 48 / 0.95);
+    background: rgb(6 20 48 / 0.96);
+    backdrop-filter: blur(6px);
   }
   .lb-dialog {
     position: relative;

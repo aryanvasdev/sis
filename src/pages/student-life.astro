@@ -18,9 +18,9 @@ import {
 } from '../data/student-life';
 import { url } from '../lib/url';
 
-/** Put photos in /public/images/ and set their paths here, e.g. 'images/life/assembly.jpg'. */
-const introImages = { main: '', second: '', third: '' };
-const outreachImage = '';
+/** Photos live in /public/images/. Leave a path empty to show a placeholder. */
+const introImage = 'images/gallery/cultural-dance/02.jpg';
+const outreachImage = 'images/gallery/gandhi-jayanti-2026/03.jpg';
 const excursionImage = '';
 
 const jumpLinks = [
@@ -45,8 +45,6 @@ const glyphs: Record<string, string> = {
     '<path d="M17.5 3.5 6 15l3 3 11.5-11.5a2.12 2.12 0 0 0-3-3Z"/><path d="m7.5 16.5-4 4"/><circle cx="17.5" cy="17.5" r="2.5"/>',
   football:
     '<circle cx="12" cy="12" r="10"/><path d="m12 7 4.76 3.46-1.82 5.6H9.06l-1.82-5.6Z"/><path d="M12 7V2M16.76 10.46l4.75-1.54M14.94 16.06l2.94 4.04M9.06 16.06l-2.94 4.04M7.24 10.46 2.49 8.92"/>',
-  basketball:
-    '<circle cx="12" cy="12" r="10"/><path d="M12 2v20M2 12h20"/><path d="M4.93 4.93c4.08 4.08 4.08 10.06 0 14.14M19.07 4.93c-4.08 4.08-4.08 10.06 0 14.14"/>',
   badminton:
     '<path d="M9 16h6v1.5a3 3 0 0 1-6 0Z"/><path d="M9 16 6 3h12l-3 13"/><path d="M10.5 16 10 3M13.5 16 14 3M7.15 8h9.7"/>',
   'table-tennis':
@@ -60,26 +58,25 @@ const houseWork = [
 ];
 
 const outreach = [
-  'Cleanliness drives on campus and in the neighbourhood under Swachh Bharat',
-  'Tree plantation and water conservation campaigns with the Eco Club',
+  'Swachh Bharat cleanliness rallies on campus and in the neighbourhood',
+  'Tree plantation and water-saving campaigns with the Eco Club',
   'Joy of Giving week: books, clothes and food collected for those in need',
-  'Visits to old-age homes and special schools to share time and talents',
-  'Road safety, health and anti-plastic awareness rallies',
-  'Each One Teach One: senior students help younger children with reading',
+  'Visits to an old-age home to share songs, cards and time',
+  'Road safety, health and anti-plastic awareness drives',
+  'Reading buddies: older students read with the little ones',
 ];
 
 const excursions = [
-  { stage: 'Pre-primary', text: 'Park, farm and post-office visits, and nature walks.' },
-  { stage: 'Classes I – V', text: 'Zoo, museum, science centre and a local market or bakery.' },
-  { stage: 'Classes VI – VIII', text: 'Heritage sites, planetarium, water treatment plant and local industries.' },
-  { stage: 'Classes IX – XII', text: 'Educational tours, university and industry visits, and adventure camps.' },
+  { stage: 'Pre-primary', text: 'Nature walks, a park picnic, and visits to a farm and a post office.' },
+  { stage: 'Classes I – V', text: 'Zoo, museum, science centre, a fire station and a local bakery.' },
+  { stage: 'Classes VI – VIII', text: 'Heritage sites, a planetarium and a science centre, and visits to local industries.' },
 ];
 
 const wellbeing = [
   {
     icon: 'message-circle-heart',
     title: 'School counsellor',
-    text: `${counsellor.name} (${counsellor.qualification}) meets students individually and in groups, and supports parents with guidance on study habits, stress and career choices.`,
+    text: `${counsellor.name} (${counsellor.qualification}) visits on fixed days to meet children individually and in small groups, and to guide parents on study habits, behaviour and worries.`,
     extra: `Available ${counsellor.hours}`,
     tone: 'maroon',
   },
@@ -164,10 +161,12 @@ const wellbeing = [
           }
         </dl>
       </div>
-      <div class="collage reveal">
-        <Photo src={introImages.main} label="Morning assembly" icon="sun" tone="gold" ratio="auto" class="c1" />
-        <Photo src={introImages.second} label="Club time" icon="palette" tone="plum" ratio="auto" class="c2" />
-        <Photo src={introImages.third} label="Sports period" icon="trophy" tone="green" ratio="auto" class="c3" />
+      <div class="intro-media reveal">
+        <Photo src={introImage} alt="Girls in orange lehengas after a dance performance" ratio="16 / 9" />
+        <div class="intro-badge">
+          <Icon name="party-popper" size={22} />
+          <span>Celebrations, performances and outings all year round</span>
+        </div>
       </div>
     </div>
   </section>
@@ -266,13 +265,13 @@ const wellbeing = [
           eyebrow="Sports & games"
           title="Play hard, play fair"
           id="sports"
-          lead="Every class has regular PE periods with trained coaches. Students represent the school at zonal, district, state and CBSE cluster competitions."
+          lead="Every class has regular PE periods, and the little ones have daily outdoor play. Our teams take part in inter-school, zonal and district competitions."
         />
         <ul class="check-list sports-points">
-          <li>Large playground, basketball court and athletics track</li>
-          <li>Indoor games room for chess, table tennis and carrom</li>
-          <li>After-school coaching for school teams</li>
-          <li>Annual Sports Meet and inter-house leagues</li>
+          <li>Playground for cricket, football, kho-kho and races</li>
+          <li>Indoor games: chess, table tennis and carrom</li>
+          <li>Yoga and drill in PE periods and assembly</li>
+          <li>Annual Sports Meet and inter-house matches</li>
         </ul>
       </div>
       <ul class="sports-grid reveal" aria-label="Sports offered">
@@ -316,11 +315,18 @@ const wellbeing = [
         id="events"
         lead="The days our students look forward to, and remember long after they leave school."
       />
-      <div class="grid grid-4">
+      <div class="events">
         {
           signatureEvents.map((e) => (
             <article class="event reveal">
-              <Photo icon={e.icon} tone={e.tone} ratio="16 / 10" class="event-photo" />
+              <Photo
+                src={e.photo}
+                alt={e.alt}
+                icon={e.icon}
+                tone={e.tone}
+                ratio={e.ratio ?? '4 / 3'}
+                class="event-photo"
+              />
               <div class="event-body">
                 <span class="tag tag--gold">{e.when}</span>
                 <h3>{e.title}</h3>
@@ -386,7 +392,9 @@ const wellbeing = [
           prefects.map((p) => (
             <li>
               <span>{p.role}</span>
-              <strong>{p.name}</strong>
+              <strong>
+                {p.name} <small>Class {p.cls}</small>
+              </strong>
             </li>
           ))
         }
@@ -398,7 +406,11 @@ const wellbeing = [
   <section class="section">
     <div class="container out-grid">
       <div class="out-col reveal">
-        <Photo src={outreachImage} label="Community outreach" icon="hand-heart" tone="maroon" ratio="16 / 9" />
+        <Photo
+          src={outreachImage}
+          alt="Children in white kurtas with Swachh Bharat placards at the school entrance"
+          ratio="16 / 9"
+        />
         <SectionHead
           eyebrow="Giving back"
           title="Community outreach"
@@ -531,17 +543,39 @@ const wellbeing = [
     color: var(--muted);
     line-height: 1.3;
   }
-  .collage {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    grid-template-rows: repeat(2, clamp(130px, 16vw, 210px));
-    gap: 14px;
+  .intro-media {
+    position: relative;
+    padding-bottom: 36px;
   }
-  .collage :global(.photo) {
-    height: 100%;
+  .intro-media :global(.photo) {
+    box-shadow: var(--shadow-lg);
   }
-  .collage :global(.c1) {
-    grid-row: span 2;
+  .intro-badge {
+    position: absolute;
+    left: -8px;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: 300px;
+    padding: 14px 18px;
+    border-radius: 16px;
+    background: var(--gold-500);
+    color: var(--navy-950);
+    font-weight: 800;
+    font-size: 0.9rem;
+    line-height: 1.3;
+    box-shadow: var(--shadow-lg);
+  }
+  .intro-badge :global(.icon) {
+    flex: none;
+  }
+  @media (max-width: 600px) {
+    .intro-badge {
+      left: 12px;
+      right: 12px;
+      max-width: none;
+    }
   }
 
   /* ---------- Houses ---------- */
@@ -744,9 +778,15 @@ const wellbeing = [
   }
 
   /* ---------- Events ---------- */
+  .events {
+    columns: 3 300px;
+    column-gap: clamp(16px, 2.4vw, 28px);
+  }
   .event {
     display: flex;
     flex-direction: column;
+    break-inside: avoid;
+    margin-bottom: clamp(16px, 2.4vw, 28px);
     overflow: hidden;
     border-radius: var(--radius);
     background: #fff;
@@ -890,6 +930,10 @@ const wellbeing = [
   }
   .prefects strong {
     color: var(--navy-900);
+  }
+  .prefects small {
+    font-weight: 700;
+    color: var(--muted);
   }
 
   /* ---------- Outreach & excursions ---------- */

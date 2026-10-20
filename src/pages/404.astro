@@ -27,7 +27,7 @@ const popular = [
     <div class="container nf-inner">
       <p class="nf-code" aria-hidden="true">
         <span>4</span>
-        <Crest size={92} class="nf-crest" />
+        <Crest size={112} class="nf-crest" />
         <span>4</span>
       </p>
       <p class="eyebrow">Error 404</p>
@@ -108,8 +108,8 @@ const popular = [
     margin-bottom: 22px;
   }
   .nf-code :global(.nf-crest) {
-    width: clamp(72px, 9vw, 104px);
-    height: auto;
+    width: auto;
+    height: clamp(72px, 3.4rem + 4vw, 112px);
     filter: drop-shadow(0 12px 18px rgb(10 31 68 / 0.25));
   }
   .eyebrow::after {

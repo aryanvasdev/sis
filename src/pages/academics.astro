@@ -952,6 +952,9 @@ const monthName = (ym: string) => {
     gap: clamp(24px, 3vw, 40px);
     align-items: start;
   }
+  .cal-layout > * {
+    min-width: 0;
+  }
   @media (min-width: 1000px) {
     .cal-layout {
       grid-template-columns: 1fr 340px;

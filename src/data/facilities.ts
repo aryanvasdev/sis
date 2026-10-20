@@ -11,6 +11,8 @@
  * ⚠ PLACEHOLDER are guesses and must be confirmed before the site goes live.
  */
 
+import { school } from './school';
+
 export type Tone = 'navy' | 'gold' | 'maroon' | 'green' | 'sky' | 'plum';
 /** Colour of the small icon square on cards ('' = gold). */
 export type BadgeTone = '' | 'navy' | 'maroon' | 'green';
@@ -23,7 +25,7 @@ const cctvCount = '40+';
 
 /** Headline numbers shown at the top of the page. The first one is shown larger. */
 export const campusStats = [
-  { value: 'Nursery – VIII', label: 'Co-educational, English medium', icon: 'school' },
+  { value: school.classesShort, label: `Co-educational, ${school.medium} medium`, icon: 'school' },
   // ⚠ PLACEHOLDER: the four numbers below
   { value: '25', label: 'Teachers', icon: 'users' },
   { value: '16', label: 'Smart classrooms', icon: 'presentation' },
@@ -201,7 +203,7 @@ export const transportFeatures = [
   {
     icon: 'shield-check',
     title: 'Safe school-vehicle norms',
-    text: 'Speed governor, first-aid box, fire extinguisher and window grills, as required by the state’s safe school-vehicle norms.',
+    text: 'Speed governor, first-aid box, fire extinguisher and window grills on every vehicle, as the state’s rules require.',
   },
   { icon: 'phone', title: 'Parents kept informed', text: 'A call or WhatsApp message for any delay or change of route.' },
 ];

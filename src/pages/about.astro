@@ -25,10 +25,10 @@ const [salutation, ...letter] = principalMessage;
 const facts = [
   { label: 'Established', value: String(school.established) },
   { label: 'Managed by', value: school.trustName },
-  { label: 'Recognition', value: 'Permanently recognised (Regd.)' },
-  { label: 'Curriculum', value: 'CBSE curriculum, NCERT textbooks' },
+  { label: 'Recognition', value: school.recognition },
+  { label: 'Curriculum', value: school.curriculum },
   { label: 'Classes', value: school.classes },
-  { label: 'Medium', value: `${school.medium} · ${school.type}` },
+  { label: 'Location', value: `${school.address.city}, ${school.address.district} (${school.address.state})` },
 ];
 
 const glance = [
@@ -49,12 +49,12 @@ const jumpLinks = [
 
 <BaseLayout
   title="About the School"
-  description={`The story, vision and values of ${school.name}, a permanently recognised school (${school.classes}) following the CBSE curriculum with NCERT textbooks. Read the Principal’s message and meet our teachers.`}
+  description={`The story, vision and values of ${school.name}, ${school.address.city}, ${school.address.district}: a permanently recognised school (${school.classes}) following the ${school.curriculum}. Read the Principal’s message and meet our teachers.`}
 >
   <PageHero
     title="About the School"
     eyebrow={`Established ${school.established}`}
-    lead="Come to Learn · Go to Serve. Since our first day, we have helped children grow into confident, caring and capable young people."
+    lead={`${school.motto}. Since ${school.established}, we have helped the children of ${school.address.city} and the villages around it grow into confident, caring and capable young people.`}
     crumbs={[{ label: 'About' }]}
   >
     <nav class="btn-row jump" aria-label="On this page">
@@ -88,13 +88,13 @@ const jumpLinks = [
         <div class="stack reveal">
           <p>
             {school.name} was founded in {school.established} by {school.trustName} with one clear aim: to give the
-            children of our area a school where sound learning goes hand in hand with good values, at a fee that
-            families can afford.
+            children of {school.address.city}, {school.address.district} and the nearby villages a school where sound
+            learning goes hand in hand with good values, at a fee that families can afford.
           </p>
           <p>
             What began with a few classrooms and a small team of dedicated teachers has grown into a permanently
-            recognised, registered {school.type.toLowerCase()} from {school.classes}. We follow the CBSE curriculum with
-            NCERT textbooks, teach in {school.medium} medium, and make sure that every child is known by name.
+            recognised, registered {school.type.toLowerCase()} from {school.classes}. We follow the {school.curriculum},
+            teach in {school.medium} medium, and make sure that every child is known by name.
           </p>
           <p>
             Many of our former students have gone on to do well in senior schools, colleges and careers, and some now
@@ -188,9 +188,8 @@ const jumpLinks = [
       <div class="center motto-head">
         <p class="eyebrow">Our motto</p>
         <h2 id="motto-h" class="motto">
-          {mottoParts[0].words}
-          <span class="motto-dot" aria-hidden="true">·</span>
-          {mottoParts[1].words}
+          <span class="nw">{mottoParts[0].words}<span class="motto-dot" aria-hidden="true"> ·</span></span>
+          <span class="nw">{mottoParts[1].words}</span>
         </h2>
         <p class="lead">{mottoNote}</p>
       </div>
@@ -632,7 +631,7 @@ const jumpLinks = [
 
   /* ---------- Motto ---------- */
   .motto-head {
-    max-width: 820px;
+    max-width: 1000px;
     margin-inline: auto;
   }
   .motto {
@@ -643,9 +642,14 @@ const jumpLinks = [
     color: #fff;
     font-variation-settings: 'opsz' 144, 'SOFT' 60;
   }
+  .motto .nw {
+    display: inline-block;
+  }
   .motto-dot {
     color: var(--gold-400);
-    padding-inline: 0.15em;
+  }
+  .motto-head .lead {
+    max-width: 60ch;
   }
   .motto-grid {
     display: grid;
@@ -712,6 +716,11 @@ const jumpLinks = [
     isolation: isolate;
     max-width: min(360px, calc(100% - 18px));
   }
+  @media (max-width: 899px) {
+    .principal-photo {
+      max-width: 280px;
+    }
+  }
   .principal-photo::after {
     content: '';
     position: absolute;
@@ -746,15 +755,6 @@ const jumpLinks = [
   .letter-body {
     margin-top: 24px;
     color: var(--ink-soft);
-  }
-  .letter-body p:nth-of-type(2)::first-letter {
-    float: left;
-    margin: 6px 10px 0 0;
-    font-family: var(--font-display);
-    font-size: 3.6rem;
-    line-height: 0.8;
-    font-weight: 600;
-    color: var(--gold-600);
   }
   .salutation {
     font-weight: 800;
@@ -887,6 +887,9 @@ const jumpLinks = [
     .mgmt {
       grid-template-columns: 1.7fr 1fr;
     }
+  }
+  .mgmt > * {
+    min-width: 0;
   }
   .mgmt td strong {
     color: var(--navy-900);
