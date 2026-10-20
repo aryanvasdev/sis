@@ -1,0 +1,142 @@
+---
+import Icon from './Icon.astro';
+import { sortedNotices } from '../data/notices';
+import { formatDate } from '../lib/format';
+import { url } from '../lib/url';
+
+const items = sortedNotices().filter((n) => n.ticker);
+---
+
+{
+  items.length > 0 && (
+    <section class="ticker" aria-label="Latest updates">
+      <div class="container ticker-inner">
+        <a href={url('/notices/')} class="ticker-label">
+          <Icon name="megaphone" size={16} />
+          <span>Latest</span>
+        </a>
+        <div class="ticker-viewport">
+          <ul class="ticker-track">
+            {[0, 1].map((copy) =>
+              items.map((n) => (
+                <li aria-hidden={copy === 1 ? 'true' : undefined}>
+                  <a href={url(n.link ?? '/notices/')} tabindex={copy === 1 ? -1 : undefined}>
+                    <span class="ticker-date">{formatDate(n.date)}</span>
+                    {n.title}
+                  </a>
+                </li>
+              )),
+            )}
+          </ul>
+        </div>
+        <a href={url('/notices/')} class="ticker-all">
+          View all <Icon name="arrow-right" size={14} />
+        </a>
+      </div>
+    </section>
+  )
+}
+
+<style>
+  .ticker {
+    background: var(--gold-100);
+    border-bottom: 1px solid var(--gold-200);
+    font-size: 0.9rem;
+  }
+  .ticker-inner {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    min-height: 46px;
+  }
+  .ticker-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: var(--maroon-600);
+    color: #fff;
+    font-weight: 800;
+    font-size: 0.75rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+  .ticker-label:hover {
+    color: #fff;
+    background: var(--maroon-700);
+  }
+  .ticker-viewport {
+    flex: 1;
+    overflow: hidden;
+    mask-image: linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent);
+  }
+  .ticker-track {
+    display: flex;
+    width: max-content;
+    list-style: none;
+    padding: 0;
+    animation: scroll 55s linear infinite;
+  }
+  .ticker-viewport:hover .ticker-track,
+  .ticker-viewport:focus-within .ticker-track {
+    animation-play-state: paused;
+  }
+  @keyframes scroll {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  .ticker-track li {
+    padding-right: 48px;
+    white-space: nowrap;
+    position: relative;
+  }
+  .ticker-track li::after {
+    content: '◆';
+    position: absolute;
+    right: 18px;
+    color: var(--gold-500);
+    font-size: 0.6rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .ticker-track a {
+    color: var(--navy-900);
+    text-decoration: none;
+    font-weight: 650;
+  }
+  .ticker-track a:hover {
+    text-decoration: underline;
+  }
+  .ticker-date {
+    color: var(--maroon-700);
+    font-weight: 800;
+    margin-right: 8px;
+  }
+  .ticker-all {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-weight: 800;
+    font-size: 0.82rem;
+    text-decoration: none;
+    color: var(--navy-700);
+  }
+  @media (max-width: 640px) {
+    .ticker-all {
+      display: none;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+      animation: none;
+    }
+    .ticker-viewport {
+      overflow-x: auto;
+    }
+  }
+</style>

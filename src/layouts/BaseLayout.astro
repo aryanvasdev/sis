@@ -1,0 +1,105 @@
+---
+import '../styles/global.css';
+import PreviewBanner from '../components/PreviewBanner.astro';
+import TopBar from '../components/TopBar.astro';
+import Header from '../components/Header.astro';
+import NewsTicker from '../components/NewsTicker.astro';
+import Footer from '../components/Footer.astro';
+import WhatsAppFloat from '../components/WhatsAppFloat.astro';
+import { school } from '../data/school';
+import { url } from '../lib/url';
+
+interface Props {
+  /** Page title. Leave empty on the home page. */
+  title?: string;
+  description?: string;
+  /** Show the scrolling "Latest updates" bar under the header. */
+  ticker?: boolean;
+}
+
+const {
+  title,
+  description = `${school.name}: a CBSE-affiliated ${school.type.toLowerCase()} (${school.classes}) in ${school.address.city}, ${school.address.state}. ${school.tagline}`,
+  ticker = false,
+} = Astro.props;
+
+const pageTitle = title ? `${title} | ${school.name}` : `${school.name} | CBSE School in ${school.address.city}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const isHome = !title;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'School',
+  name: school.name,
+  url: new URL(url('/'), Astro.site).href,
+  foundingDate: String(school.established),
+  telephone: school.phones[0],
+  email: school.email,
+  address: {
+    '@type': 'PostalAddress',
+    streetAddress: [school.address.line1, school.address.line2].filter(Boolean).join(', '),
+    addressLocality: school.address.city,
+    addressRegion: school.address.state,
+    postalCode: school.address.pincode,
+    addressCountry: 'IN',
+  },
+  sameAs: Object.values(school.social).filter(Boolean),
+};
+---
+
+<!doctype html>
+<html lang="en-IN" class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <meta name="theme-color" content="#0a1f44" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={school.name} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="en_IN" />
+    <meta name="generator" content={Astro.generator} />
+    <script is:inline>
+      document.documentElement.classList.replace('no-js', 'js');
+    </script>
+    {isHome && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />}
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <PreviewBanner />
+    <TopBar />
+    <Header />
+    {ticker && <NewsTicker />}
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <WhatsAppFloat />
+
+    <script>
+      // Fade sections in as they scroll into view.
+      const els = document.querySelectorAll('.reveal');
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            }
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

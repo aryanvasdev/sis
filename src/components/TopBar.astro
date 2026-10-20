@@ -1,0 +1,119 @@
+---
+import Icon from './Icon.astro';
+import { school, telLink } from '../data/school';
+import { utilityLinks } from '../data/navigation';
+import { url } from '../lib/url';
+
+const socials = Object.entries(school.social).filter(([, href]) => href);
+---
+
+<div class="topbar">
+  <div class="container topbar-inner">
+    <div class="topbar-contact">
+      <a href={telLink(school.phones[0])}><Icon name="phone" size={14} /> {school.phones[0]}</a>
+      <a href={`mailto:${school.email}`} class="hide-sm"><Icon name="mail" size={14} /> {school.email}</a>
+      <span class="hide-md affil">
+        Affiliated to CBSE, New Delhi · Affiliation No. <strong>{school.affiliationNo}</strong>
+      </span>
+    </div>
+    <div class="topbar-links">
+      {
+        utilityLinks.map((link) => (
+          <a href={url(link.href)} class:list={[{ 'hide-sm': link.href !== '/mandatory-disclosure/' }]}>
+            {link.label}
+          </a>
+        ))
+      }
+      {
+        school.feePaymentUrl && (
+          <a href={school.feePaymentUrl} class="pay hide-sm" target="_blank" rel="noopener">
+            Pay Fees Online
+          </a>
+        )
+      }
+      {
+        socials.length > 0 && (
+          <span class="socials hide-sm">
+            {socials.map(([name, href]) => (
+              <a href={href} target="_blank" rel="noopener" aria-label={`${school.name} on ${name}`}>
+                <Icon name={name} size={15} />
+              </a>
+            ))}
+          </span>
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .topbar {
+    background: var(--navy-950);
+    color: #b9c6df;
+    font-size: 0.8rem;
+  }
+  .topbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    min-height: 38px;
+  }
+  .topbar a {
+    color: #dfe6f3;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .topbar a:hover {
+    color: var(--gold-400);
+  }
+  .topbar-contact,
+  .topbar-links {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .topbar-links > a + a {
+    position: relative;
+  }
+  .topbar-links > a + a::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    width: 1px;
+    height: 12px;
+    background: rgb(255 255 255 / 0.18);
+    transform: translateY(-50%);
+  }
+  .topbar-links a:first-child {
+    color: var(--gold-400);
+    font-weight: 700;
+  }
+  .affil strong {
+    color: #fff;
+    font-weight: 700;
+  }
+  .pay {
+    color: var(--gold-400) !important;
+    font-weight: 700;
+  }
+  .socials {
+    display: inline-flex;
+    gap: 12px;
+    padding-left: 6px;
+  }
+  @media (max-width: 1100px) {
+    .hide-md {
+      display: none !important;
+    }
+  }
+  @media (max-width: 720px) {
+    .hide-sm {
+      display: none !important;
+    }
+  }
+</style>

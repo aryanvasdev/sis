@@ -1,0 +1,126 @@
+---
+/** Decorative drawing of a school campus, used until a real campus photo is added. */
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<svg class={className} viewBox="0 0 560 420" role="img" aria-label="Illustration of the school campus">
+  <defs>
+    <linearGradient id="ci-sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dbe6f6" />
+      <stop offset="0.7" stop-color="#f7efdc" />
+    </linearGradient>
+    <linearGradient id="ci-lawn" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#8cc08f" />
+      <stop offset="1" stop-color="#5c9c6a" />
+    </linearGradient>
+    <linearGradient id="ci-wall" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#fffdf7" />
+      <stop offset="1" stop-color="#f1e8d4" />
+    </linearGradient>
+    <linearGradient id="ci-roof" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#9b2c3c" />
+      <stop offset="1" stop-color="#7a1a28" />
+    </linearGradient>
+    <clipPath id="ci-clip"><rect width="560" height="420" rx="22" /></clipPath>
+  </defs>
+
+  <g clip-path="url(#ci-clip)">
+    <rect width="560" height="420" fill="url(#ci-sky)" />
+    <circle cx="452" cy="86" r="40" fill="#f3d27a" opacity=".9" />
+    <circle cx="452" cy="86" r="62" fill="#f3d27a" opacity=".22" />
+    <g fill="#fff" opacity=".85">
+      <ellipse cx="110" cy="80" rx="46" ry="14" />
+      <ellipse cx="140" cy="70" rx="30" ry="14" />
+      <ellipse cx="330" cy="54" rx="38" ry="11" />
+      <ellipse cx="352" cy="46" rx="22" ry="10" />
+    </g>
+    <g fill="none" stroke="#0f2a5c" stroke-width="2" stroke-linecap="round" opacity=".5">
+      <path d="M220 96q6-6 12 0q6-6 12 0" />
+      <path d="M256 78q5-5 10 0q5-5 10 0" />
+    </g>
+
+    <!-- distant hills -->
+    <path d="M0 290 Q120 230 240 268 T560 252 V420 H0Z" fill="#b9d3b4" opacity=".7" />
+
+    <!-- lawn -->
+    <path d="M0 318 Q280 290 560 318 V420 H0Z" fill="url(#ci-lawn)" />
+
+    <!-- flag -->
+    <line x1="88" y1="160" x2="88" y2="318" stroke="#5d6678" stroke-width="3" />
+    <rect x="89" y="162" width="46" height="10" fill="#f39433" />
+    <rect x="89" y="172" width="46" height="10" fill="#ffffff" />
+    <rect x="89" y="182" width="46" height="10" fill="#138808" />
+    <circle cx="112" cy="177" r="3.4" fill="none" stroke="#000080" stroke-width="1.2" />
+
+    <!-- wings -->
+    <g>
+      <rect x="150" y="214" width="96" height="98" fill="url(#ci-wall)" stroke="#d9cdb0" />
+      <rect x="314" y="214" width="96" height="98" fill="url(#ci-wall)" stroke="#d9cdb0" />
+      <rect x="144" y="204" width="108" height="12" rx="2" fill="url(#ci-roof)" />
+      <rect x="308" y="204" width="108" height="12" rx="2" fill="url(#ci-roof)" />
+      <g fill="#24509a">
+        <rect x="162" y="228" width="16" height="22" rx="2" /><rect x="190" y="228" width="16" height="22" rx="2" /><rect x="218" y="228" width="16" height="22" rx="2" />
+        <rect x="162" y="266" width="16" height="22" rx="2" /><rect x="190" y="266" width="16" height="22" rx="2" /><rect x="218" y="266" width="16" height="22" rx="2" />
+        <rect x="326" y="228" width="16" height="22" rx="2" /><rect x="354" y="228" width="16" height="22" rx="2" /><rect x="382" y="228" width="16" height="22" rx="2" />
+        <rect x="326" y="266" width="16" height="22" rx="2" /><rect x="354" y="266" width="16" height="22" rx="2" /><rect x="382" y="266" width="16" height="22" rx="2" />
+      </g>
+      <g fill="#fff" opacity=".35">
+        <rect x="162" y="228" width="6" height="22" /><rect x="190" y="228" width="6" height="22" /><rect x="218" y="228" width="6" height="22" />
+        <rect x="326" y="228" width="6" height="22" /><rect x="354" y="228" width="6" height="22" /><rect x="382" y="228" width="6" height="22" />
+      </g>
+    </g>
+
+    <!-- central block -->
+    <rect x="240" y="176" width="80" height="136" fill="#fffdf7" stroke="#d9cdb0" />
+    <path d="M230 178 280 140 330 178Z" fill="url(#ci-roof)" />
+    <path d="M246 174 280 148 314 174Z" fill="none" stroke="#e4b94c" stroke-width="2" />
+    <!-- clock tower -->
+    <rect x="264" y="96" width="32" height="48" fill="#fffdf7" stroke="#d9cdb0" />
+    <path d="M258 98 280 70 302 98Z" fill="#0f2a5c" />
+    <circle cx="280" cy="118" r="10" fill="#fff" stroke="#b8861b" stroke-width="2.5" />
+    <path d="M280 118v-6M280 118l4 3" stroke="#0f2a5c" stroke-width="1.8" stroke-linecap="round" />
+    <line x1="280" y1="70" x2="280" y2="58" stroke="#b8861b" stroke-width="2" />
+    <circle cx="280" cy="56" r="3" fill="#d4a12a" />
+
+    <!-- crest on pediment -->
+    <path d="M280 186l10 3v8c0 6-4 10-10 12-6-2-10-6-10-12v-8Z" fill="#0f2a5c" stroke="#d4a12a" stroke-width="1.5" />
+    <path d="M280 190c2 2.5 2.5 4.5 0 7-2.5-2.5-2-4.5 0-7Z" fill="#e4b94c" />
+
+    <!-- columns & door -->
+    <g fill="#efe5cf" stroke="#d9cdb0">
+      <rect x="248" y="222" width="8" height="84" /><rect x="304" y="222" width="8" height="84" />
+    </g>
+    <path d="M266 312v-50a14 14 0 0 1 28 0v50Z" fill="#173a78" />
+    <path d="M280 248v64" stroke="#0a1f44" stroke-width="1.5" />
+    <rect x="234" y="304" width="92" height="8" fill="#e6dcc4" />
+    <rect x="226" y="310" width="108" height="8" fill="#dcd0b4" />
+
+    <!-- path -->
+    <path d="M262 318h36l46 102H216Z" fill="#efe3c6" opacity=".9" />
+
+    <!-- trees -->
+    <g>
+      <rect x="40" y="276" width="6" height="40" fill="#6b4b2e" />
+      <circle cx="43" cy="264" r="26" fill="#3f8a57" />
+      <circle cx="30" cy="276" r="16" fill="#4c9a63" />
+      <rect x="480" y="268" width="7" height="48" fill="#6b4b2e" />
+      <circle cx="484" cy="252" r="32" fill="#3f8a57" />
+      <circle cx="504" cy="270" r="18" fill="#4c9a63" />
+      <circle cx="446" cy="300" r="14" fill="#4c9a63" />
+      <circle cx="132" cy="306" r="12" fill="#4c9a63" />
+    </g>
+
+    <!-- flowers -->
+    <g fill="#f39433">
+      <circle cx="180" cy="330" r="3" /><circle cx="196" cy="334" r="3" /><circle cx="212" cy="330" r="3" />
+      <circle cx="348" cy="330" r="3" /><circle cx="364" cy="334" r="3" /><circle cx="380" cy="330" r="3" />
+    </g>
+    <g fill="#e4b94c">
+      <circle cx="188" cy="338" r="2.5" /><circle cx="204" cy="338" r="2.5" />
+      <circle cx="356" cy="338" r="2.5" /><circle cx="372" cy="338" r="2.5" />
+    </g>
+  </g>
+</svg>

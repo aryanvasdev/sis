@@ -1,0 +1,274 @@
+---
+import Crest from './Crest.astro';
+import Icon from './Icon.astro';
+import { school, fullAddress, telLink } from '../data/school';
+import { utilityLinks, importantLinks } from '../data/navigation';
+import { url } from '../lib/url';
+
+const quickLinks = [
+  { label: 'About the School', href: '/about/' },
+  { label: 'Academics', href: '/academics/' },
+  { label: 'Admissions', href: '/admissions/' },
+  { label: 'Fee Structure', href: '/admissions/#fees' },
+  { label: 'Facilities', href: '/facilities/' },
+  { label: 'Student Life', href: '/student-life/' },
+  { label: 'Achievements', href: '/achievements/' },
+  { label: 'Photo Gallery', href: '/gallery/' },
+  { label: 'Notices & Circulars', href: '/notices/' },
+  { label: 'Contact Us', href: '/contact/' },
+];
+const socials = Object.entries(school.social).filter(([, href]) => href);
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div class="footer-about">
+      <a href={url('/')} class="footer-brand">
+        <Crest size={54} />
+        <span>
+          <span class="footer-name">{school.name}</span>
+          <span class="footer-motto">“{school.motto}”</span>
+        </span>
+      </a>
+      <p>
+        A {school.type.toLowerCase()} affiliated to the {school.boardFull}, offering {school.classes}
+        since {school.established}.
+      </p>
+      <dl class="codes">
+        <div><dt>Affiliation No.</dt><dd>{school.affiliationNo}</dd></div>
+        <div><dt>School Code</dt><dd>{school.schoolCode}</dd></div>
+      </dl>
+      {
+        socials.length > 0 && (
+          <div class="footer-social">
+            {socials.map(([name, href]) => (
+              <a href={href} target="_blank" rel="noopener" aria-label={`${school.name} on ${name}`}>
+                <Icon name={name} size={18} />
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+
+    <nav aria-label="Quick links">
+      <h2 class="footer-h">Quick Links</h2>
+      <ul class="footer-links two-col">
+        {quickLinks.map((l) => <li><a href={url(l.href)}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <nav aria-label="Important links">
+      <h2 class="footer-h">Important</h2>
+      <ul class="footer-links">
+        {utilityLinks.map((l) => <li><a href={url(l.href)}>{l.label}</a></li>)}
+        {
+          importantLinks.map((l) => (
+            <li>
+              <a href={l.href} target="_blank" rel="noopener">
+                {l.label} <Icon name="external-link" size={12} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="footer-h">Reach Us</h2>
+      <ul class="footer-contact">
+        <li>
+          <Icon name="map-pin" size={18} />
+          <a href={school.mapLink} target="_blank" rel="noopener">{fullAddress}</a>
+        </li>
+        <li>
+          <Icon name="phone" size={18} />
+          <span>
+            {
+              school.phones.map((p, i) => (
+                <>
+                  {i > 0 && <br />}
+                  <a href={telLink(p)}>{p}</a>
+                </>
+              ))
+            }
+          </span>
+        </li>
+        <li>
+          <Icon name="mail" size={18} />
+          <a href={`mailto:${school.email}`}>{school.email}</a>
+        </li>
+        <li>
+          <Icon name="clock" size={18} />
+          <span>Office: {school.officeHours}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="footer-bottom">
+    <div class="container footer-bottom-inner">
+      <p>© {year} {school.name}. All rights reserved.</p>
+      <p>
+        Affiliated to CBSE, New Delhi · Affiliation No. {school.affiliationNo} ·
+        <a href={url('/mandatory-disclosure/')}>Mandatory Public Disclosure</a>
+      </p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    position: relative;
+    background: var(--navy-950);
+    color: #a9b6cf;
+    font-size: 0.93rem;
+    isolation: isolate;
+  }
+  .site-footer::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--jali);
+    background-size: 64px 64px;
+    opacity: 0.045;
+  }
+  .site-footer a {
+    color: #dfe6f3;
+    text-decoration: none;
+  }
+  .site-footer a:hover {
+    color: var(--gold-400);
+  }
+  .footer-grid {
+    display: grid;
+    gap: 40px;
+    padding-block: clamp(56px, 7vw, 88px) 48px;
+  }
+  @media (min-width: 720px) {
+    .footer-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (min-width: 1100px) {
+    .footer-grid {
+      grid-template-columns: 1.35fr 1.1fr 0.85fr 1.2fr;
+    }
+  }
+  .footer-brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+  }
+  .footer-name {
+    display: block;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #fff;
+    line-height: 1.2;
+  }
+  .footer-motto {
+    display: block;
+    font-family: var(--font-display);
+    font-style: italic;
+    color: var(--gold-400);
+    font-size: 0.95rem;
+  }
+  .footer-about p {
+    max-width: 42ch;
+  }
+  .codes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 24px;
+    margin-top: 18px;
+  }
+  .codes dt {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    font-weight: 800;
+    color: #7f8fae;
+  }
+  .codes dd {
+    margin: 0;
+    color: #fff;
+    font-weight: 700;
+  }
+  .footer-social {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .footer-social a {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 1px solid rgb(255 255 255 / 0.18);
+  }
+  .footer-social a:hover {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+    color: var(--navy-950);
+  }
+  .footer-h {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-400);
+    margin-bottom: 18px;
+  }
+  .footer-links {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 9px;
+  }
+  .footer-links.two-col {
+    grid-template-columns: 1fr 1fr;
+    column-gap: 20px;
+  }
+  .footer-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .footer-contact {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 14px;
+  }
+  .footer-contact li {
+    display: grid;
+    grid-template-columns: 18px 1fr;
+    gap: 12px;
+    align-items: start;
+  }
+  .footer-contact :global(.icon) {
+    color: var(--gold-400);
+    margin-top: 3px;
+  }
+  .footer-bottom {
+    border-top: 1px solid rgb(255 255 255 / 0.08);
+    font-size: 0.82rem;
+  }
+  .footer-bottom-inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 8px 24px;
+    padding-block: 20px;
+  }
+  .footer-bottom a {
+    color: var(--gold-400);
+  }
+</style>

@@ -1,0 +1,21 @@
+---
+/**
+ * <SectionHead eyebrow="Why choose us" title="A school that feels like family" lead="…" center />
+ */
+interface Props {
+  eyebrow?: string;
+  title: string;
+  lead?: string;
+  center?: boolean;
+  id?: string;
+  as?: 'h2' | 'h3';
+}
+const { eyebrow, title, lead, center = false, id, as: Tag = 'h2' } = Astro.props;
+---
+
+<div class:list={['section-head', { center }]}>
+  {eyebrow && <p class="eyebrow">{eyebrow}</p>}
+  <Tag id={id}>{title}</Tag>
+  {lead && <p class="lead">{lead}</p>}
+  <slot />
+</div>

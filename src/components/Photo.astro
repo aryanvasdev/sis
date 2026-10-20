@@ -1,0 +1,140 @@
+---
+/**
+ * A photo slot. Pass `src` (a path inside /public, e.g. 'images/campus/front.jpg')
+ * to show a real photograph. Without `src`, a decorative placeholder is drawn with
+ * the given icon and label, so the layout looks finished until real photos arrive.
+ */
+import Icon from './Icon.astro';
+import { url } from '../lib/url';
+
+type Tone = 'navy' | 'gold' | 'maroon' | 'green' | 'sky' | 'plum';
+
+interface Props {
+  src?: string;
+  alt?: string;
+  label?: string;
+  icon?: string;
+  tone?: Tone;
+  ratio?: string;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+}
+
+const {
+  src,
+  alt = '',
+  label,
+  icon = 'image',
+  tone = 'navy',
+  ratio = '4 / 3',
+  class: className,
+  loading = 'lazy',
+} = Astro.props;
+---
+
+{
+  src ? (
+    <img
+      src={url(src.startsWith('/') ? src : `/${src}`)}
+      alt={alt}
+      loading={loading}
+      decoding="async"
+      class:list={['photo', className]}
+      style={`aspect-ratio:${ratio}`}
+    />
+  ) : (
+    <div
+      class:list={['photo', 'photo--placeholder', `tone-${tone}`, className]}
+      style={`aspect-ratio:${ratio}`}
+      role={alt ? 'img' : undefined}
+      aria-label={alt || undefined}
+    >
+      <span class="ph-icon">
+        <Icon name={icon} size={44} strokeWidth={1.5} />
+      </span>
+      {label && <span class="ph-label">{label}</span>}
+    </div>
+  )
+}
+
+<style>
+  .photo {
+    width: 100%;
+    object-fit: cover;
+    border-radius: var(--radius);
+    background: var(--navy-50);
+  }
+  .photo--placeholder {
+    --c1: var(--navy-800);
+    --c2: var(--navy-600);
+    --ink: rgb(255 255 255 / 0.9);
+    position: relative;
+    display: grid;
+    place-items: center;
+    overflow: hidden;
+    isolation: isolate;
+    background:
+      radial-gradient(120% 90% at 100% 0%, rgb(255 255 255 / 0.18), transparent 55%),
+      linear-gradient(140deg, var(--c1), var(--c2));
+    color: var(--ink);
+  }
+  .photo--placeholder::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--jali);
+    background-size: 56px 56px;
+    opacity: 0.16;
+    filter: brightness(2);
+  }
+  .photo--placeholder::after {
+    content: '';
+    position: absolute;
+    inset: auto -10% -35% -10%;
+    height: 70%;
+    z-index: -1;
+    background: radial-gradient(closest-side, rgb(255 255 255 / 0.14), transparent);
+  }
+  .ph-icon {
+    display: grid;
+    place-items: center;
+    width: 92px;
+    height: 92px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.12);
+    border: 1px solid rgb(255 255 255 / 0.25);
+    backdrop-filter: blur(2px);
+  }
+  .ph-label {
+    position: absolute;
+    left: 16px;
+    bottom: 14px;
+    right: 16px;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    opacity: 0.92;
+  }
+  .tone-gold {
+    --c1: #a87512;
+    --c2: #e0b445;
+  }
+  .tone-maroon {
+    --c1: #5e1220;
+    --c2: #a3324a;
+  }
+  .tone-green {
+    --c1: #155c3a;
+    --c2: #2f9a66;
+  }
+  .tone-sky {
+    --c1: #1d4f8f;
+    --c2: #4c8fd6;
+  }
+  .tone-plum {
+    --c1: #3f2363;
+    --c2: #7a4fa8;
+  }
+</style>

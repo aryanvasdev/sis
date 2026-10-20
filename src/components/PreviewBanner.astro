@@ -1,0 +1,24 @@
+---
+import { school } from '../data/school';
+---
+
+{
+  school.preview && (
+    <div class="preview-banner" role="note">
+      Preview site: names, numbers, dates and documents shown are sample placeholders until the school
+      updates them.
+    </div>
+  )
+}
+
+<style>
+  .preview-banner {
+    background: repeating-linear-gradient(135deg, #fff4cf 0 14px, #fdecb5 14px 28px);
+    color: #5f4510;
+    text-align: center;
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-bottom: 1px solid var(--gold-200);
+  }
+</style>

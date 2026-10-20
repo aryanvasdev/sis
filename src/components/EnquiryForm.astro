@@ -1,0 +1,174 @@
+---
+/**
+ * Enquiry form used on the Admissions and Contact pages.
+ *
+ * If `school.formEndpoint` is set (Formspree, Web3Forms, …) the form is posted there.
+ * Otherwise submitting opens WhatsApp with the details typed in, so it works with
+ * no server at all.
+ */
+import Icon from './Icon.astro';
+import { school } from '../data/school';
+
+interface Props {
+  variant?: 'admission' | 'contact';
+  id?: string;
+}
+
+const { variant = 'admission', id = `form-${variant}` } = Astro.props;
+
+const classes = ['Nursery', 'LKG', 'UKG', ...['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'].map((c) => `Class ${c}`)];
+const subjects = ['Admissions', 'Fees', 'Transport', 'Academics', 'Transfer Certificate', 'Other'];
+const usesEndpoint = Boolean(school.formEndpoint);
+---
+
+<form
+  class="form enquiry-form"
+  id={id}
+  method="post"
+  action={school.formEndpoint || undefined}
+  data-enquiry-form
+  data-variant={variant}
+  data-endpoint={school.formEndpoint}
+  data-whatsapp={school.whatsapp}
+  data-school={school.name}
+>
+  {
+    variant === 'admission' ? (
+      <>
+        <div class="form-row">
+          <div class="field">
+            <label for={`${id}-parent`}>Parent / Guardian name <span class="req">*</span></label>
+            <input id={`${id}-parent`} name="Parent name" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for={`${id}-phone`}>Mobile number <span class="req">*</span></label>
+            <input id={`${id}-phone`} name="Mobile" type="tel" required autocomplete="tel" inputmode="tel" pattern="[0-9+\s\-]{10,15}" placeholder="10-digit mobile number" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for={`${id}-child`}>Child’s name <span class="req">*</span></label>
+            <input id={`${id}-child`} name="Child name" required />
+          </div>
+          <div class="field">
+            <label for={`${id}-class`}>Admission sought for <span class="req">*</span></label>
+            <select id={`${id}-class`} name="Class" required>
+              <option value="">Select class</option>
+              {classes.map((c) => <option>{c}</option>)}
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for={`${id}-dob`}>Child’s date of birth</label>
+            <input id={`${id}-dob`} name="Date of birth" type="date" />
+          </div>
+          <div class="field">
+            <label for={`${id}-email`}>Email</label>
+            <input id={`${id}-email`} name="Email" type="email" autocomplete="email" />
+          </div>
+        </div>
+      </>
+    ) : (
+      <>
+        <div class="form-row">
+          <div class="field">
+            <label for={`${id}-name`}>Your name <span class="req">*</span></label>
+            <input id={`${id}-name`} name="Name" required autocomplete="name" />
+          </div>
+          <div class="field">
+            <label for={`${id}-phone`}>Mobile number <span class="req">*</span></label>
+            <input id={`${id}-phone`} name="Mobile" type="tel" required autocomplete="tel" inputmode="tel" pattern="[0-9+\s\-]{10,15}" placeholder="10-digit mobile number" />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="field">
+            <label for={`${id}-email`}>Email</label>
+            <input id={`${id}-email`} name="Email" type="email" autocomplete="email" />
+          </div>
+          <div class="field">
+            <label for={`${id}-subject`}>Regarding</label>
+            <select id={`${id}-subject`} name="Subject">
+              {subjects.map((s) => <option>{s}</option>)}
+            </select>
+          </div>
+        </div>
+      </>
+    )
+  }
+  <div class="field">
+    <label for={`${id}-message`}>
+      Message {variant === 'contact' && <span class="req">*</span>}
+    </label>
+    <textarea id={`${id}-message`} name="Message" required={variant === 'contact'} rows="4"></textarea>
+  </div>
+  <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" class="visually-hidden" aria-hidden="true" />
+  <div class="form-actions">
+    <button type="submit" class:list={['btn', usesEndpoint ? 'btn--navy' : 'btn--whatsapp']}>
+      <Icon name={usesEndpoint ? 'send' : 'whatsapp'} />
+      {usesEndpoint ? 'Submit enquiry' : 'Send on WhatsApp'}
+    </button>
+    <p class="small muted">
+      {usesEndpoint ? 'Our admissions office will call you within one working day.' : 'Opens WhatsApp with your details filled in. Just press send.'}
+    </p>
+  </div>
+  <p class="form-status" role="status" aria-live="polite" hidden></p>
+</form>
+
+<script>
+  document.querySelectorAll<HTMLFormElement>('[data-enquiry-form]').forEach((form) => {
+    const status = form.querySelector<HTMLElement>('.form-status')!;
+    const show = (state: 'ok' | 'error', text: string) => {
+      status.hidden = false;
+      status.dataset.state = state;
+      status.textContent = text;
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!form.reportValidity()) return;
+      const data = new FormData(form);
+      if (data.get('_gotcha')) return;
+      data.delete('_gotcha');
+
+      const { endpoint, whatsapp, school, variant } = form.dataset;
+
+      if (!endpoint) {
+        const heading = variant === 'admission' ? `Admission enquiry for ${school}` : `Enquiry for ${school}`;
+        const lines = [...data.entries()]
+          .filter(([, v]) => String(v).trim())
+          .map(([k, v]) => `${k}: ${v}`);
+        const text = `${heading}\n\n${lines.join('\n')}`;
+        window.open(`https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`, '_blank', 'noopener');
+        show('ok', 'WhatsApp has opened in a new tab. Press send there to reach the school office.');
+        return;
+      }
+
+      const button = form.querySelector<HTMLButtonElement>('button[type=submit]')!;
+      button.disabled = true;
+      try {
+        const res = await fetch(endpoint, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+        if (!res.ok) throw new Error(String(res.status));
+        form.reset();
+        show('ok', 'Thank you! Your enquiry has been received. We will get in touch shortly.');
+      } catch {
+        show('error', 'Sorry, the form could not be sent. Please call or WhatsApp the school office.');
+      } finally {
+        button.disabled = false;
+      }
+    });
+  });
+</script>
+
+<style>
+  .form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 18px;
+  }
+  .form-actions p {
+    flex: 1;
+    min-width: 200px;
+  }
+</style>

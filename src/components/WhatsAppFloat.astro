@@ -1,0 +1,63 @@
+---
+import Icon from './Icon.astro';
+import { school, whatsappLink } from '../data/school';
+
+const message = `Hello, I would like to know more about admissions at ${school.name}.`;
+---
+
+<a
+  href={whatsappLink(message)}
+  class="wa-float"
+  target="_blank"
+  rel="noopener"
+  aria-label="Chat with the school office on WhatsApp"
+>
+  <Icon name="whatsapp" size={28} />
+  <span class="wa-label">Chat with us</span>
+</a>
+
+<style>
+  .wa-float {
+    position: fixed;
+    right: clamp(14px, 3vw, 24px);
+    bottom: clamp(14px, 3vw, 24px);
+    z-index: 40;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 56px;
+    padding: 0 14px;
+    border-radius: 999px;
+    background: #1fa855;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 800;
+    box-shadow: 0 10px 30px -8px rgb(31 168 85 / 0.6);
+    transition:
+      transform 0.2s,
+      background 0.2s;
+  }
+  .wa-float:hover {
+    color: #fff;
+    background: #188f47;
+    transform: translateY(-2px);
+  }
+  .wa-label {
+    padding-right: 6px;
+  }
+  @media (max-width: 720px) {
+    .wa-float {
+      width: 56px;
+      padding: 0;
+      justify-content: center;
+    }
+    .wa-label {
+      display: none;
+    }
+  }
+  @media print {
+    .wa-float {
+      display: none;
+    }
+  }
+</style>

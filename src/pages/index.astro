@@ -1,0 +1,1277 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Icon from '../components/Icon.astro';
+import Photo from '../components/Photo.astro';
+import SectionHead from '../components/SectionHead.astro';
+import CampusIllustration from '../components/CampusIllustration.astro';
+import { school, telLink, whatsappLink } from '../data/school';
+import { sortedNotices, upcomingEvents } from '../data/notices';
+import { boardResults, toppers, passPercent, latestYear } from '../data/results';
+import { testimonials } from '../data/testimonials';
+import { formatDate, dateParts } from '../lib/format';
+import { url } from '../lib/url';
+
+/** Put a campus photo in /public/images/ and set its path here, e.g. 'images/campus.jpg'. */
+const heroImage = '';
+const welcomeImage = '';
+
+const quickLinks = [
+  { label: 'Admissions', note: `Session ${school.admissionSession}`, href: '/admissions/', icon: 'graduation-cap' },
+  { label: 'Fee Structure', note: 'Class-wise fees', href: '/admissions/#fees', icon: 'indian-rupee' },
+  { label: 'Mandatory Disclosure', note: 'As per CBSE norms', href: '/mandatory-disclosure/', icon: 'file-check' },
+  { label: 'TC Verification', note: 'Verify a certificate', href: '/tc-verification/', icon: 'badge-check' },
+  { label: 'Notices & Circulars', note: 'Latest updates', href: '/notices/', icon: 'bell' },
+  { label: 'Academic Calendar', note: `Session ${school.currentSession}`, href: '/academics/#calendar', icon: 'calendar-days' },
+];
+
+const highlights = [
+  { icon: 'users', title: 'Caring, qualified teachers', text: 'Trained, CBSE-experienced faculty and a healthy student–teacher ratio, so every child is seen and heard.', tone: '' },
+  { icon: 'monitor-smartphone', title: 'Smart classrooms', text: 'Interactive panels in every classroom, a modern computer lab and an Atal Tinkering-style innovation space.', tone: 'navy' },
+  { icon: 'shield-check', title: 'Safe & secure campus', text: 'CCTV coverage, trained guards, a visitor log, a medical room and GPS-tracked school buses with female attendants.', tone: 'green' },
+  { icon: 'trophy', title: 'Sports & co-curriculars', text: 'Cricket, football, basketball, athletics, yoga, music, dance, art and theatre, for every child, every week.', tone: 'maroon' },
+  { icon: 'heart-handshake', title: 'Values & discipline', text: 'Morning assembly, the house system, community service and respect for every culture and faith.', tone: '' },
+  { icon: 'microscope', title: 'Well-equipped labs', text: 'Physics, chemistry, biology, mathematics and computer labs that turn textbook concepts into experiments.', tone: 'navy' },
+];
+
+const stages = [
+  { title: 'Pre-Primary', classes: 'Nursery – UKG', text: 'Play-based learning, phonics, number sense and joyful routines.', icon: 'baby', tone: 'gold' },
+  { title: 'Primary', classes: 'Classes I – V', text: 'Strong foundations in language, numeracy and environmental studies.', icon: 'pencil', tone: 'sky' },
+  { title: 'Middle', classes: 'Classes VI – VIII', text: 'Subject depth, projects, coding, and a third language.', icon: 'book-open', tone: 'green' },
+  { title: 'Secondary', classes: 'Classes IX – X', text: 'Focused CBSE board preparation with regular practice tests.', icon: 'notebook-pen', tone: 'maroon' },
+  { title: 'Senior Secondary', classes: 'Classes XI – XII', text: 'Science (PCM / PCB), Commerce and Humanities streams.', icon: 'graduation-cap', tone: 'navy' },
+];
+
+const latestNotices = sortedNotices().slice(0, 5);
+const events = upcomingEvents().slice(0, 4);
+const latestResults = boardResults.filter((r) => r.year === latestYear);
+const topToppers = toppers.filter((t) => t.year === latestYear).sort((a, b) => b.percent - a.percent).slice(0, 3);
+
+const galleryTiles = [
+  { label: 'Annual Day', icon: 'drama', tone: 'maroon' },
+  { label: 'Sports Meet', icon: 'trophy', tone: 'green' },
+  { label: 'Science Exhibition', icon: 'flask-conical', tone: 'sky' },
+  { label: 'Morning Assembly', icon: 'sun', tone: 'gold' },
+  { label: 'Art & Craft', icon: 'palette', tone: 'plum' },
+  { label: 'Independence Day', icon: 'flag', tone: 'navy' },
+] as const;
+---
+
+<BaseLayout ticker>
+  <!-- ========== HERO ========== -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="hero-copy">
+        <p class="hero-kicker">
+          <span class="dot" aria-hidden="true"></span>
+          Affiliated to CBSE, New Delhi · {school.classes}
+        </p>
+        <h1>{school.tagline}</h1>
+        <p class="hero-lead">
+          Welcome to {school.name}, where children learn to think clearly, speak confidently and act with
+          kindness, in a safe, happy campus that feels like a second home.
+        </p>
+        <div class="btn-row">
+          <a href={url('/admissions/')} class="btn btn--gold">
+            Admissions {school.admissionSession} <Icon name="arrow-right" />
+          </a>
+          <a href={url('/about/')} class="btn btn--light">Discover our school</a>
+        </div>
+        <dl class="hero-facts">
+          <div><dt>Established</dt><dd>{school.established}</dd></div>
+          <div><dt>Board</dt><dd>{school.board}</dd></div>
+          <div><dt>Medium</dt><dd>{school.medium}</dd></div>
+          <div><dt>Type</dt><dd>Co-educational</dd></div>
+        </dl>
+      </div>
+
+      <div class="hero-visual">
+        <div class="hero-frame">
+          {
+            heroImage ? (
+              <Photo src={heroImage} alt={`${school.name} campus`} ratio="4 / 3" loading="eager" />
+            ) : (
+              <CampusIllustration class="hero-illustration" />
+            )
+          }
+        </div>
+        {
+          school.admissionsOpen && (
+            <a href={url('/admissions/#enquiry')} class="hero-card hero-card--admission">
+              <span class="tag tag--maroon">Now open</span>
+              <strong>Admissions {school.admissionSession}</strong>
+              <span>Nursery to Class IX &amp; XI</span>
+              <span class="link-arrow">
+                Enquire now <Icon name="arrow-right" />
+              </span>
+            </a>
+          )
+        }
+        <div class="hero-card hero-card--motto" aria-hidden="true">
+          <Icon name="sparkles" size={20} />
+          <span>
+            <em>{school.motto}</em>
+            <small>{school.mottoMeaning}</small>
+          </span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== QUICK LINKS ========== -->
+  <section class="quick" aria-label="Quick links">
+    <div class="container">
+      <ul class="quick-grid">
+        {
+          quickLinks.map((q) => (
+            <li>
+              <a href={url(q.href)} class="quick-item">
+                <span class="quick-icon">
+                  <Icon name={q.icon} size={22} />
+                </span>
+                <span>
+                  <strong>{q.label}</strong>
+                  <small>{q.note}</small>
+                </span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <!-- ========== WELCOME ========== -->
+  <section class="section">
+    <div class="container split">
+      <div class="welcome-media reveal">
+        <Photo src={welcomeImage} label="Our campus" icon="school" tone="navy" ratio="5 / 4" alt="" />
+        <div class="welcome-badge">
+          <span class="welcome-years">{new Date().getFullYear() - school.established}+</span>
+          <span>years of nurturing young minds</span>
+        </div>
+      </div>
+      <div class="reveal">
+        <SectionHead eyebrow="Welcome" title={`A place to grow, belong and shine`} />
+        <div class="stack">
+          <p>
+            Since {school.established}, {school.name} has been helping children discover what they are capable of.
+            We follow the CBSE curriculum in the spirit of the National Education Policy (NEP 2020): concepts before
+            rote learning, activity before lecture, and character alongside marks.
+          </p>
+          <p>
+            Our classrooms are bright and digital-ready, our teachers are mentors, and our campus is designed around
+            one promise to parents: your child will be safe, known and encouraged every single day.
+          </p>
+          <ul class="check-list">
+            <li>CBSE curriculum from Nursery to Class XII</li>
+            <li>Science, Commerce and Humanities in Classes XI–XII</li>
+            <li>Sports, arts, clubs and community service for all</li>
+          </ul>
+          <div class="btn-row" style="margin-top:24px">
+            <a href={url('/about/')} class="btn btn--navy">About the school</a>
+            <a href={url('/about/#principal')} class="btn btn--outline">Principal’s message</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== STATS ========== -->
+  <section class="stats-band" aria-label="School at a glance">
+    <div class="container">
+      <dl class="stats-grid">
+        {
+          school.stats.map((s) => (
+            <div class="stat">
+              <dt>{s.label}</dt>
+              <dd>{s.value}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </section>
+
+  <!-- ========== PRINCIPAL ========== -->
+  <section class="section section--cream">
+    <div class="container principal">
+      <div class="principal-photo reveal">
+        <Photo src={school.principal.photo || undefined} label="Principal" icon="user-round" tone="gold" ratio="4 / 5" alt={school.principal.name} />
+      </div>
+      <div class="principal-copy reveal">
+        <p class="eyebrow">From the Principal’s desk</p>
+        <blockquote>
+          <Icon name="quote" size={40} class="q-mark" />
+          <p>
+            Education is not only about preparing children for examinations; it is about preparing them for life. At
+            our school we want every child to leave with a curious mind, a kind heart and the courage to stand up for
+            what is right.
+          </p>
+        </blockquote>
+        <p class="principal-name">
+          <strong>{school.principal.name}</strong>
+          <span>Principal, {school.name}</span>
+        </p>
+        <a href={url('/about/#principal')} class="link-arrow">Read the full message <Icon name="arrow-right" /></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WHY US ========== -->
+  <section class="section">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow="Why parents choose us"
+        title="Everything your child needs to flourish"
+        lead="Strong academics, a safe environment and plenty of room to play, create and lead."
+      />
+      <div class="grid grid-3">
+        {
+          highlights.map((h) => (
+            <article class="card card--hover reveal">
+              <span class:list={['icon-badge', h.tone && `icon-badge--${h.tone}`]}>
+                <Icon name={h.icon} />
+              </span>
+              <h3>{h.title}</h3>
+              <p>{h.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ACADEMICS ========== -->
+  <section class="section section--navy section--jali">
+    <div class="container">
+      <SectionHead
+        eyebrow="Academics"
+        title="One journey, Nursery to Class XII"
+        lead="A CBSE curriculum that grows with your child: from joyful early years to focused board preparation and career-ready streams."
+      />
+      <ol class="stages">
+        {
+          stages.map((s, i) => (
+            <li class="stage reveal">
+              <span class:list={['stage-icon', `tone-${s.tone}`]}>
+                <Icon name={s.icon} />
+              </span>
+              <span class="stage-step">Stage {i + 1}</span>
+              <h3>{s.title}</h3>
+              <p class="stage-classes">{s.classes}</p>
+              <p>{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="btn-row" style="margin-top:36px">
+        <a href={url('/academics/')} class="btn btn--gold">Explore academics</a>
+        <a href={url('/academics/#streams')} class="btn btn--light">Streams in XI–XII</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== NOTICES & EVENTS ========== -->
+  <section class="section">
+    <div class="container board">
+      <div class="board-col reveal">
+        <div class="board-head">
+          <h2><Icon name="bell" /> Notice Board</h2>
+          <a href={url('/notices/')} class="link-arrow">All notices <Icon name="arrow-right" /></a>
+        </div>
+        <ul class="notice-list">
+          {
+            latestNotices.map((n) => (
+              <li>
+                <a href={url(n.link ?? '/notices/')}>
+                  <span class="notice-meta">
+                    <span class="tag tag--gold">{n.category}</span>
+                    <time datetime={n.date}>{formatDate(n.date)}</time>
+                  </span>
+                  <span class="notice-title">{n.title}</span>
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="board-col reveal">
+        <div class="board-head">
+          <h2><Icon name="calendar-days" /> Upcoming Events</h2>
+          <a href={url('/notices/#events')} class="link-arrow">Calendar <Icon name="arrow-right" /></a>
+        </div>
+        <ul class="event-list">
+          {
+            events.map((e) => {
+              const d = dateParts(e.date);
+              return (
+                <li>
+                  <time class="event-date" datetime={e.date}>
+                    <span class="d">{d.day}</span>
+                    <span class="m">{d.month}</span>
+                  </time>
+                  <div>
+                    <strong>{e.title}</strong>
+                    <span class="event-info">
+                      {e.endDate ? `${formatDate(e.date)} – ${formatDate(e.endDate)}` : d.weekday}
+                      {e.time && ` · ${e.time}`}
+                      {e.venue && ` · ${e.venue}`}
+                    </span>
+                  </div>
+                </li>
+              );
+            })
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== RESULTS ========== -->
+  <section class="section section--cream">
+    <div class="container">
+      <SectionHead
+        center
+        eyebrow={`CBSE Board Results ${latestYear}`}
+        title="Results we are proud of"
+        lead="Year after year, our students achieve outstanding results in the Class X and XII board examinations."
+      />
+      <div class="results-grid">
+        {
+          latestResults.map((r) => (
+            <div class="result-card reveal">
+              <p class="result-class">Class {r.cls}</p>
+              <p class="result-big">{passPercent(r)}%</p>
+              <p class="result-label">pass result</p>
+              <dl>
+                <div><dt>Highest</dt><dd>{r.highest}%</dd></div>
+                <div><dt>90% & above</dt><dd>{r.above90}</dd></div>
+                <div><dt>Appeared</dt><dd>{r.registered}</dd></div>
+              </dl>
+            </div>
+          ))
+        }
+        <div class="toppers reveal">
+          <h3>Our toppers</h3>
+          <ul>
+            {
+              topToppers.map((t) => (
+                <li>
+                  <span class="topper-avatar">
+                    <Icon name="award" size={22} />
+                  </span>
+                  <span>
+                    <strong>{t.name}</strong>
+                    <small>Class {t.cls}{t.stream && ` · ${t.stream}`}</small>
+                  </span>
+                  <span class="topper-score">{t.percent}%</span>
+                </li>
+              ))
+            }
+          </ul>
+          <a href={url('/achievements/')} class="link-arrow">All results &amp; achievements <Icon name="arrow-right" /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== GALLERY ========== -->
+  <section class="section">
+    <div class="container">
+      <div class="gallery-head">
+        <SectionHead eyebrow="Life at school" title="Moments from our campus" />
+        <a href={url('/gallery/')} class="btn btn--outline">View photo gallery</a>
+      </div>
+      <div class="mosaic">
+        {
+          galleryTiles.map((g, i) => (
+            <a href={url('/gallery/')} class:list={['mosaic-item', `m${i + 1}`, 'reveal']} aria-label={`${g.label} photos`}>
+              <Photo label={g.label} icon={g.icon} tone={g.tone} ratio="auto" class="mosaic-photo" />
+            </a>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TESTIMONIALS ========== -->
+  <section class="section section--cream">
+    <div class="container">
+      <SectionHead center eyebrow="Parent voices" title="What our families say" />
+      <div class="grid grid-3">
+        {
+          testimonials.map((t) => (
+            <figure class="card testimonial reveal">
+              <Icon name="quote" size={30} class="t-mark" />
+              <blockquote>{t.quote}</blockquote>
+              <figcaption>
+                <strong>{t.name}</strong>
+                <span>{t.since}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ADMISSIONS CTA ========== -->
+  <section class="cta-band">
+    <div class="container cta-inner">
+      <div>
+        <p class="eyebrow">Admissions {school.admissionSession}</p>
+        <h2>Give your child the right start.</h2>
+        <p class="lead">
+          Registrations are open for Nursery to Class IX and XI. Visit the campus, meet our teachers and see the school
+          for yourself.
+        </p>
+      </div>
+      <div class="cta-actions">
+        <a href={url('/admissions/#enquiry')} class="btn btn--gold">Admission enquiry <Icon name="arrow-right" /></a>
+        <a href={telLink(school.phones[0])} class="btn btn--light"><Icon name="phone" /> {school.phones[0]}</a>
+        <a href={whatsappLink(`Hello, I would like to know about admissions for ${school.admissionSession}.`)} class="btn btn--whatsapp" target="_blank" rel="noopener"
+          ><Icon name="whatsapp" /> WhatsApp us</a
+        >
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    color: #dfe6f3;
+    background:
+      radial-gradient(1000px 520px at 90% 10%, rgb(212 161 42 / 0.2), transparent 60%),
+      radial-gradient(700px 500px at 0% 100%, rgb(36 80 154 / 0.5), transparent 60%),
+      linear-gradient(150deg, var(--navy-950), var(--navy-900) 45%, var(--navy-800));
+    padding-block: clamp(48px, 7vw, 96px) clamp(96px, 10vw, 140px);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--jali);
+    background-size: 72px 72px;
+    opacity: 0.07;
+    mask-image: radial-gradient(ellipse at 30% 40%, #000, transparent 75%);
+  }
+  .hero-grid {
+    display: grid;
+    gap: clamp(40px, 6vw, 72px);
+    align-items: center;
+  }
+  @media (min-width: 980px) {
+    .hero-grid {
+      grid-template-columns: 1.05fr 1fr;
+    }
+  }
+  .hero-kicker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 14px;
+    border-radius: 999px;
+    background: rgb(255 255 255 / 0.08);
+    border: 1px solid rgb(255 255 255 / 0.14);
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: #e6ecf7;
+  }
+  .hero-kicker .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--gold-400);
+    box-shadow: 0 0 0 4px rgb(228 185 76 / 0.25);
+  }
+  .hero h1 {
+    margin-top: 22px;
+    color: #fff;
+    font-size: clamp(2.4rem, 1.6rem + 3.6vw, 4.4rem);
+    line-height: 1.04;
+    font-weight: 560;
+    font-variation-settings: 'opsz' 144, 'SOFT' 50;
+  }
+  .hero-lead {
+    margin-top: 22px;
+    max-width: 54ch;
+    font-size: var(--step-1);
+    color: #c7d2e6;
+  }
+  .hero .btn-row {
+    margin-top: 32px;
+  }
+  .hero-facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 34px;
+    margin-top: 40px;
+    padding-top: 26px;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+  }
+  .hero-facts dt {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8597b9;
+  }
+  .hero-facts dd {
+    margin: 2px 0 0;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    color: #fff;
+  }
+  .hero-visual {
+    position: relative;
+    padding: 0 0 28px;
+  }
+  .hero-frame {
+    position: relative;
+    border-radius: 26px;
+    padding: 10px;
+    background: linear-gradient(140deg, rgb(255 255 255 / 0.18), rgb(255 255 255 / 0.04));
+    border: 1px solid rgb(255 255 255 / 0.16);
+    box-shadow: 0 40px 80px -30px rgb(0 0 0 / 0.6);
+  }
+  .hero-frame :global(.hero-illustration) {
+    width: 100%;
+    height: auto;
+    border-radius: 18px;
+  }
+  .hero-card {
+    position: absolute;
+    display: grid;
+    gap: 2px;
+    background: #fff;
+    color: var(--ink);
+    border-radius: 16px;
+    box-shadow: var(--shadow-lg);
+    text-decoration: none;
+  }
+  .hero-card--admission {
+    left: -18px;
+    bottom: -6px;
+    padding: 16px 20px;
+    min-width: 230px;
+    transition: transform 0.2s;
+  }
+  .hero-card--admission:hover {
+    transform: translateY(-3px);
+    color: var(--ink);
+  }
+  .hero-card--admission strong {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    color: var(--navy-900);
+    margin-top: 6px;
+  }
+  .hero-card--admission > span:not(.tag):not(.link-arrow) {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .hero-card--admission .tag {
+    justify-self: start;
+  }
+  .hero-card--admission .link-arrow {
+    margin-top: 6px;
+    font-size: 0.9rem;
+  }
+  .hero-card--motto {
+    right: -14px;
+    top: 24px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 16px;
+    background: var(--gold-500);
+    color: var(--navy-950);
+  }
+  .hero-card--motto em {
+    display: block;
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-style: italic;
+    font-size: 1rem;
+  }
+  .hero-card--motto small {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 700;
+    opacity: 0.8;
+  }
+  @media (max-width: 979px) {
+    .hero-card--admission {
+      left: 12px;
+    }
+    .hero-card--motto {
+      right: 12px;
+      top: -16px;
+    }
+  }
+  @media (max-width: 480px) {
+    .hero-card--motto {
+      display: none;
+    }
+    .hero-card--admission {
+      position: relative;
+      left: auto;
+      bottom: auto;
+      margin: -36px 16px 0;
+    }
+    .hero-visual {
+      padding-bottom: 0;
+    }
+  }
+
+  /* ---------- Quick links ---------- */
+  .quick {
+    position: relative;
+    z-index: 2;
+    margin-top: clamp(-64px, -6vw, -48px);
+  }
+  .quick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
+    list-style: none;
+    padding: 0;
+    background: #fff;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--line-soft);
+    overflow: hidden;
+  }
+  .quick-grid li + li {
+    border-left: 1px solid var(--line-soft);
+  }
+  .quick-item {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    height: 100%;
+    padding: 22px 20px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: background 0.2s;
+  }
+  .quick-item:hover {
+    background: var(--gold-100);
+    color: var(--ink);
+  }
+  .quick-icon {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: var(--navy-50);
+    color: var(--navy-700);
+    transition:
+      background 0.2s,
+      color 0.2s;
+  }
+  .quick-item:hover .quick-icon {
+    background: var(--navy-900);
+    color: var(--gold-400);
+  }
+  .quick-item strong {
+    display: block;
+    font-size: 0.95rem;
+    line-height: 1.25;
+    color: var(--navy-900);
+  }
+  .quick-item small {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  @media (max-width: 1100px) {
+    .quick-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .quick-grid li {
+      border-left: 0 !important;
+      border-bottom: 1px solid var(--line-soft);
+    }
+    .quick-grid li:not(:nth-child(3n + 1)) {
+      border-left: 1px solid var(--line-soft) !important;
+    }
+  }
+  @media (max-width: 640px) {
+    .quick-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .quick-grid li:not(:nth-child(3n + 1)) {
+      border-left: 0 !important;
+    }
+    .quick-grid li:nth-child(even) {
+      border-left: 1px solid var(--line-soft) !important;
+    }
+    .quick-item {
+      gap: 10px;
+      padding: 16px;
+    }
+  }
+
+  /* ---------- Welcome ---------- */
+  .welcome-media {
+    position: relative;
+    padding: 0 0 32px 0;
+  }
+  .welcome-badge {
+    position: absolute;
+    right: -8px;
+    bottom: 0;
+    display: grid;
+    width: 168px;
+    padding: 18px;
+    border-radius: 18px;
+    background: var(--gold-500);
+    color: var(--navy-950);
+    font-weight: 700;
+    font-size: 0.88rem;
+    line-height: 1.3;
+    box-shadow: var(--shadow-lg);
+  }
+  .welcome-years {
+    font-family: var(--font-display);
+    font-size: 2.6rem;
+    line-height: 1;
+    font-weight: 600;
+  }
+  @media (max-width: 600px) {
+    .welcome-badge {
+      right: 12px;
+    }
+  }
+
+  /* ---------- Stats ---------- */
+  .stats-band {
+    background: linear-gradient(90deg, var(--gold-600), var(--gold-500) 50%, var(--gold-600));
+    color: var(--navy-950);
+  }
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  }
+  .stat {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: clamp(24px, 4vw, 40px) 16px;
+    text-align: center;
+  }
+  .stat + .stat {
+    border-left: 1px solid rgb(10 31 68 / 0.15);
+  }
+  .stat dd {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 1.6rem + 2.4vw, 3.4rem);
+    font-weight: 600;
+    line-height: 1;
+    color: var(--navy-950);
+  }
+  .stat dt {
+    margin-top: 8px;
+    font-size: 0.8rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgb(6 20 48 / 0.75);
+  }
+  @media (max-width: 900px) {
+    .stats-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .stat:nth-child(3) {
+      border-left: 0;
+    }
+    .stat:nth-child(-n + 2) {
+      border-bottom: 1px solid rgb(10 31 68 / 0.15);
+    }
+  }
+
+  /* ---------- Principal ---------- */
+  .principal {
+    display: grid;
+    gap: clamp(28px, 5vw, 64px);
+    align-items: center;
+  }
+  @media (min-width: 860px) {
+    .principal {
+      grid-template-columns: minmax(260px, 0.7fr) 1.3fr;
+    }
+  }
+  .principal-photo {
+    max-width: min(380px, calc(100% - 18px));
+    position: relative;
+  }
+  .principal-photo::after {
+    content: '';
+    position: absolute;
+    inset: 18px -18px -18px 18px;
+    z-index: -1;
+    border: 2px solid var(--gold-500);
+    border-radius: var(--radius);
+  }
+  .principal-photo {
+    isolation: isolate;
+  }
+  .principal-copy blockquote {
+    position: relative;
+    margin-top: 18px;
+    font-family: var(--font-display);
+    font-size: clamp(1.3rem, 1.1rem + 0.9vw, 1.85rem);
+    line-height: 1.4;
+    color: var(--navy-900);
+    font-weight: 450;
+  }
+  .principal-copy :global(.q-mark) {
+    color: var(--gold-500);
+    margin-bottom: 8px;
+  }
+  .principal-name {
+    display: grid;
+    margin: 24px 0 16px;
+  }
+  .principal-name strong {
+    font-size: 1.1rem;
+    color: var(--navy-900);
+  }
+  .principal-name span {
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+
+  /* ---------- Stages ---------- */
+  .stages {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+    gap: 16px;
+    list-style: none;
+    padding: 0;
+  }
+  .stage {
+    position: relative;
+    padding: 26px 22px;
+    border-radius: var(--radius);
+    background: rgb(255 255 255 / 0.05);
+    border: 1px solid rgb(255 255 255 / 0.1);
+    transition:
+      background 0.2s,
+      border-color 0.2s,
+      transform 0.2s;
+  }
+  .stage:hover {
+    background: rgb(255 255 255 / 0.09);
+    border-color: rgb(228 185 76 / 0.5);
+    transform: translateY(-3px);
+  }
+  .stage-icon {
+    display: grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: var(--gold-500);
+    color: var(--navy-950);
+    margin-bottom: 18px;
+  }
+  .stage-icon.tone-sky {
+    background: #9cc3f0;
+  }
+  .stage-icon.tone-green {
+    background: #9ed4b2;
+  }
+  .stage-icon.tone-maroon {
+    background: #f0aab5;
+  }
+  .stage-icon.tone-navy {
+    background: #fff;
+  }
+  .stage-step {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: #8597b9;
+  }
+  .stage h3 {
+    font-size: 1.3rem;
+    margin-top: 4px;
+  }
+  .stage-classes {
+    color: var(--gold-400);
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin: 4px 0 10px;
+  }
+  .stage p:last-child {
+    font-size: 0.92rem;
+    color: #b9c6df;
+  }
+
+  /* ---------- Notice board ---------- */
+  .board {
+    display: grid;
+    gap: clamp(28px, 4vw, 48px);
+  }
+  @media (min-width: 960px) {
+    .board {
+      grid-template-columns: 1.15fr 1fr;
+    }
+  }
+  .board-col {
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-lg);
+    padding: clamp(20px, 3vw, 32px);
+    box-shadow: var(--shadow-sm);
+  }
+  .board-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 16px;
+    margin-bottom: 8px;
+    border-bottom: 2px solid var(--navy-900);
+  }
+  .board-head h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: var(--step-2);
+  }
+  .board-head h2 :global(.icon) {
+    color: var(--gold-600);
+  }
+  .board-head .link-arrow {
+    font-size: 0.88rem;
+  }
+  .notice-list,
+  .event-list {
+    list-style: none;
+    padding: 0;
+  }
+  .notice-list li + li,
+  .event-list li + li {
+    border-top: 1px dashed var(--line);
+  }
+  .notice-list a {
+    display: grid;
+    gap: 6px;
+    padding: 14px 4px;
+    text-decoration: none;
+    color: var(--ink);
+    border-radius: 8px;
+  }
+  .notice-list a:hover .notice-title {
+    color: var(--navy-700);
+    text-decoration: underline;
+  }
+  .notice-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.82rem;
+    color: var(--muted);
+    font-weight: 700;
+  }
+  .notice-title {
+    font-weight: 700;
+    line-height: 1.4;
+  }
+  .event-list li {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    padding: 14px 0;
+  }
+  .event-date {
+    display: grid;
+    place-items: center;
+    flex: none;
+    width: 62px;
+    height: 66px;
+    border-radius: 12px;
+    background: var(--navy-900);
+    color: #fff;
+    line-height: 1;
+  }
+  .event-date .d {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 600;
+  }
+  .event-date .m {
+    font-size: 0.72rem;
+    font-weight: 800;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--gold-400);
+    margin-top: -10px;
+  }
+  .event-list strong {
+    display: block;
+    color: var(--navy-900);
+    line-height: 1.35;
+  }
+  .event-info {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 2px;
+  }
+
+  /* ---------- Results ---------- */
+  .results-grid {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr));
+  }
+  @media (min-width: 1000px) {
+    .results-grid {
+      grid-template-columns: 1fr 1fr 1.4fr;
+    }
+  }
+  .result-card {
+    position: relative;
+    overflow: hidden;
+    padding: 28px;
+    border-radius: var(--radius-lg);
+    background: var(--navy-900);
+    color: #c7d2e6;
+  }
+  .result-card::after {
+    content: '';
+    position: absolute;
+    right: -40px;
+    top: -40px;
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    border: 24px solid rgb(228 185 76 / 0.12);
+  }
+  .result-class {
+    font-weight: 800;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: var(--gold-400);
+  }
+  .result-big {
+    font-family: var(--font-display);
+    font-size: clamp(3rem, 2.4rem + 2.4vw, 4.2rem);
+    font-weight: 600;
+    line-height: 1;
+    color: #fff;
+    margin-top: 10px;
+  }
+  .result-label {
+    font-size: 0.9rem;
+  }
+  .result-card dl {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+  }
+  .result-card dt {
+    font-size: 0.7rem;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #8597b9;
+  }
+  .result-card dd {
+    margin: 0;
+    font-weight: 800;
+    font-size: 1.15rem;
+    color: #fff;
+  }
+  .toppers {
+    padding: 26px;
+    border-radius: var(--radius-lg);
+    background: #fff;
+    border: 1px solid var(--line);
+  }
+  .toppers h3 {
+    font-size: var(--step-1);
+    margin-bottom: 10px;
+  }
+  .toppers ul {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 16px;
+  }
+  .toppers li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+  }
+  .toppers li + li {
+    border-top: 1px dashed var(--line);
+  }
+  .topper-avatar {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex: none;
+    border-radius: 50%;
+    background: var(--gold-100);
+    color: var(--gold-600);
+  }
+  .toppers li strong {
+    display: block;
+    color: var(--navy-900);
+    line-height: 1.3;
+  }
+  .toppers li small {
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+  .topper-score {
+    margin-left: auto;
+    font-family: var(--font-display);
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: var(--maroon-600);
+  }
+
+  /* ---------- Gallery mosaic ---------- */
+  .gallery-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0 24px;
+  }
+  .gallery-head .btn {
+    margin-bottom: clamp(28px, 4vw, 48px);
+  }
+  .mosaic {
+    display: grid;
+    gap: 14px;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: clamp(120px, 14vw, 190px);
+  }
+  .mosaic-item {
+    display: block;
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+  .mosaic-item :global(.mosaic-photo) {
+    height: 100%;
+    transition: transform 0.4s ease;
+  }
+  .mosaic-item:hover :global(.mosaic-photo) {
+    transform: scale(1.04);
+  }
+  .m1 {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .m4 {
+    grid-row: span 2;
+  }
+  @media (max-width: 720px) {
+    .mosaic {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .m4 {
+      grid-row: span 1;
+    }
+  }
+
+  /* ---------- Testimonials ---------- */
+  .testimonial {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .testimonial :global(.t-mark) {
+    color: var(--gold-500);
+  }
+  .testimonial blockquote {
+    font-size: 1.02rem;
+    line-height: 1.65;
+    color: var(--ink-soft);
+    flex: 1;
+  }
+  .testimonial figcaption {
+    display: grid;
+    padding-top: 14px;
+    border-top: 1px solid var(--line-soft);
+  }
+  .testimonial figcaption strong {
+    color: var(--navy-900);
+  }
+  .testimonial figcaption span {
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+
+  /* ---------- CTA band ---------- */
+  .cta-band {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    padding-block: clamp(56px, 8vw, 96px);
+    background:
+      radial-gradient(700px 300px at 100% 0%, rgb(212 161 42 / 0.25), transparent 60%),
+      linear-gradient(120deg, var(--maroon-700), #5e1220);
+    color: #f5dde1;
+  }
+  .cta-band::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background-image: var(--jali);
+    background-size: 64px 64px;
+    opacity: 0.08;
+  }
+  .cta-inner {
+    display: grid;
+    gap: 28px;
+    align-items: center;
+  }
+  @media (min-width: 960px) {
+    .cta-inner {
+      grid-template-columns: 1.3fr 1fr;
+    }
+  }
+  .cta-band h2 {
+    color: #fff;
+    margin-top: 10px;
+  }
+  .cta-band .eyebrow {
+    color: var(--gold-400);
+  }
+  .cta-band .lead {
+    color: #f0cfd5;
+  }
+  .cta-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  @media (min-width: 960px) {
+    .cta-actions {
+      justify-content: flex-end;
+    }
+  }
+</style>
