@@ -14,8 +14,8 @@ export const testimonials = [
   },
   {
     quote:
-      'From Nursery to Class VIII, both my children have studied here. The festivals, the dance and the stage programmes have made them confident, and their basics are strong.',
-    name: 'Parent of a Class VIII student',
-    since: 'Parent since 2018',
+      'Both my children have studied here since the school opened. The festivals, the dance and the stage programmes have made them confident, and their basics are strong.',
+    name: 'Parent of a Class VII student',
+    since: 'Parent since 2019',
   },
 ];

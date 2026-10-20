@@ -11,8 +11,8 @@
  * ─────────────────────────────────────────────────────────────────────────────
  */
 
-/** ⚠ PLACEHOLDER: year the school was founded. */
-const established = 2005;
+/** Year the school was founded. */
+const established = 2019;
 
 export const school = {
   /** Shows a thin banner saying the site contains sample content. Set to false at launch. */
