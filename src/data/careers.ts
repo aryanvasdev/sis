@@ -31,7 +31,7 @@ export const benefits: { icon: string; title: string; text: string; tone?: 'navy
   {
     icon: 'monitor-smartphone',
     title: 'Tools to teach well',
-    text: 'Digital classrooms, a library and the teaching aids you need to plan lively, engaging lessons.',
+    text: 'Bright classrooms, a library and the teaching aids you need to plan lively, engaging lessons.',
     tone: 'green',
   },
   {

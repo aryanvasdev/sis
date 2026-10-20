@@ -255,16 +255,6 @@ const jumpLinks = [
   <section class="section section--cream" aria-labelledby="chairperson-h">
     <div class="container">
       <div class="chair reveal">
-        <div class="chair-photo">
-          <Photo
-            src={school.chairperson.photo}
-            label="Chairperson"
-            icon="user-round"
-            tone="maroon"
-            ratio="1 / 1"
-            alt={school.chairperson.name}
-          />
-        </div>
         <div>
           <p class="eyebrow">From the Chairperson</p>
           <h2 id="chairperson-h">Chairperson’s message</h2>
@@ -791,21 +781,13 @@ const jumpLinks = [
     display: grid;
     gap: clamp(24px, 4vw, 48px);
     align-items: start;
-    max-width: 1040px;
+    max-width: 860px;
     margin-inline: auto;
     padding: clamp(24px, 4vw, 48px);
     background: #fff;
     border: 1px solid var(--line);
     border-radius: var(--radius-lg);
     box-shadow: var(--shadow);
-  }
-  @media (min-width: 760px) {
-    .chair {
-      grid-template-columns: 220px 1fr;
-    }
-  }
-  .chair-photo {
-    max-width: 220px;
   }
   .chair h2 {
     margin-top: 10px;

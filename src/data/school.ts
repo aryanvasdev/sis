@@ -84,7 +84,6 @@ export const school = {
   chairperson: {
     name: '[Chairperson Name]',
     title: 'Chairperson, Sahib Educational Society',
-    photo: '',
   },
   /** The registered society that runs the school. */
   trustName: 'Sahib Educational Society',

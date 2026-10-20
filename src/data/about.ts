@@ -62,7 +62,7 @@ export const mottoNote = 'Painted on the pillars of our school gate, our motto r
 export const principalMessage = [
   'Dear Parents and Students,',
   `It gives me great joy to welcome you to ${school.name}. A school is far more than its building; it is a family of children, teachers and parents who believe that every child deserves the chance to discover what they are capable of. That belief guides everything we do, from the first day of Nursery to the last day of Class VIII.`,
-  'We follow the CBSE curriculum with NCERT textbooks, in the spirit of the National Education Policy 2020. We want our students to understand concepts deeply, apply them to real situations and ask “why?” as often as they ask “what?”. Smart classrooms and activity-based lessons help, but the heart of our school remains the teacher who knows each child by name, notices when something is wrong and celebrates every small step forward.',
+  'We follow the CBSE curriculum with NCERT textbooks, in the spirit of the National Education Policy 2020. We want our students to understand concepts deeply, apply them to real situations and ask “why?” as often as they ask “what?”. Activity-based lessons help, but the heart of our school remains the teacher who knows each child by name, notices when something is wrong and celebrates every small step forward.',
   'We care just as much about the growth of the whole child. Dance, music, art, sports and celebrations such as Teeyan da Mela, Janmashtami, Independence Day and Gandhi Jayanti are part of school life, not an afterthought. Through the house system and the Student Council, children learn to lead and to work as a team. Above all, we expect honesty, good manners and respect for every person, culture and faith.',
   `Parents are our most important partners. Please read and sign your child’s school diary every day: the teachers’ remarks and homework in it are our daily link between home and school. Attend parent–teacher meetings, read our circulars, and if an issue needs urgent attention, meet the class teacher or me; my office is open from ${school.principalHours}.`,
   'The holistic development of every student is our prime concern, and we seek your cooperation to achieve it. Please remember, productive collaboration is the key to success. Together, let us live out the words on our gate, so that our children come to learn and go to serve.',
@@ -71,7 +71,7 @@ export const principalMessage = [
 /** ⚠ SAMPLE CONTENT: replace with the Chairperson's own message (one string per paragraph). */
 export const chairpersonMessage = [
   `When ${school.trustName} founded ${school.name} in ${school.established}, our aim was simple: to give the children of our area a school that combines sound learning with good values, at a fee that families can afford.`,
-  'Year by year we have added classrooms, smart boards, play areas and, most of all, a caring and capable team of teachers. We will keep investing, so that our children can hold their own anywhere while remaining grounded in the culture and community that shaped them.',
+  'Year by year we have added classrooms, a science lab, play areas and, most of all, a caring and capable team of teachers. We will keep investing, so that our children can hold their own anywhere while remaining grounded in the culture and community that shaped them.',
   'I thank our parents for the trust they place in us, and our staff for the dedication they bring to their work every single day.',
 ];
 

@@ -56,11 +56,11 @@ export interface Facility {
 export const featureFacilities: Facility[] = [
   {
     id: 'classrooms',
-    eyebrow: 'Smart classrooms',
-    title: 'Bright, cheerful classrooms with digital boards',
-    text: 'Our classrooms are airy, well lit and full of the children’s own work. Each has a digital board, so lessons come alive with pictures, animations and short videos alongside the textbook, and every child can see and take part.',
+    eyebrow: 'Classrooms',
+    title: 'Bright, cheerful classrooms',
+    text: 'Our classrooms are airy, well lit and full of the children’s own work. Charts, models and teaching aids bring the textbook to life, and class sizes let every child see, ask and take part.',
     points: [
-      'Digital boards with lesson-linked content',
+      'Charts, models and teaching aids for every subject',
       'Comfortable, child-sized furniture for every age',
       'Soft boards in every room to display children’s work',
       'Classrooms cleaned and aired every day',
