@@ -3,20 +3,30 @@
  * Used on /student-life/: houses, clubs, sports, annual events, the Student
  * Council, outreach, excursions and wellbeing.
  *
- * ⚠ SAMPLE CONTENT — replace the house names, clubs, sports and Student Council
- * members with the school's real details. Everything marked ⚠ PLACEHOLDER must
- * be checked before the site goes live.
+ * Houses, inter-house events and the morning assembly come from the school diary.
+ * ⚠ SAMPLE CONTENT — check the clubs, sports and Student Council members.
+ * Everything marked ⚠ PLACEHOLDER must be checked before the site goes live.
  */
 
 /* ---------- Houses ---------- */
 
-/** ⚠ SAMPLE CONTENT: the school's own house names, colours and values. */
+/** From the school diary. `event` is the inter-house competition each house organises. */
 export const houses = [
-  { name: 'Aravali', colour: 'Red', hex: '#b3263a', value: 'Courage', text: 'Standing firm, speaking up and trying again, like the ancient Aravali hills.' },
-  { name: 'Nilgiri', colour: 'Blue', hex: '#24509a', value: 'Wisdom', text: 'Thinking clearly, listening carefully and choosing wisely, as calm as the Blue Mountains.' },
-  { name: 'Shivalik', colour: 'Green', hex: '#1f7a4d', value: 'Harmony', text: 'Working together, including everyone and caring for nature and one another.' },
-  { name: 'Vindhya', colour: 'Yellow', hex: '#d4a12a', value: 'Perseverance', text: 'Steady effort, every day, that turns big goals into real achievements.' },
+  { name: 'Kaveri', colour: 'Yellow', hex: '#d4a12a', event: 'Inter-House Rangoli Competition', when: '6 Nov', text: 'Named after the river Kaveri, which brings life to the lands of the south.' },
+  { name: 'Saraswati', colour: 'Blue', hex: '#24509a', event: 'Inter-House Declamation Competition', when: '16 May', text: 'Named after the river Saraswati, linked with learning, wisdom and the arts.' },
+  { name: 'Yamuna', colour: 'Green', hex: '#1f7a4d', event: 'Inter-House Group Song & Dance Competition', when: '18 Jul', text: 'Named after the river Yamuna, which flows through the plains of Haryana.' },
+  { name: 'Ganga', colour: 'Red', hex: '#b3263a', event: 'Inter-House GK Quiz', when: '16 Oct', text: 'Named after the river Ganga, India’s most loved and longest river.' },
 ] as const;
+
+/** The morning assembly, from the school diary: a different prayer each day of the week. */
+export const assemblyPrayers = [
+  { day: 'Monday', line: 'अब सौंप दिया इस जीवन का, सब भार तुम्हारे हाथों में' },
+  { day: 'Tuesday', line: 'तुम्ही हो माता, पिता तुम्ही हो' },
+  { day: 'Wednesday', line: 'ऐ मालिक तेरे बन्दे हम' },
+  { day: 'Thursday', line: 'दया कर दान भक्ति का' },
+  { day: 'Friday', line: 'हम को मन की शक्ति देना' },
+  { day: 'Saturday', line: 'तू प्यार का सागर है' },
+];
 
 /* ---------- Clubs & societies ---------- */
 
@@ -62,14 +72,14 @@ export const sports = [
  */
 export const signatureEvents = [
   {
-    title: 'Annual Day & cultural programmes',
-    when: 'December',
+    title: 'Annual Function',
+    when: 'Every year',
     icon: 'drama',
     tone: 'maroon',
-    photo: 'images/gallery/cultural-dance/01.jpg',
-    alt: 'A dance troupe in red costumes ready to perform at a school event',
-    ratio: '4 / 3',
-    text: 'Every child gets a turn on stage: dance, music, skits and the year’s prize distribution, in front of proud families.',
+    photo: 'images/gallery/annual-function/01.jpg',
+    alt: 'Students in tiger-striped costumes performing a group dance on the annual function stage',
+    ratio: '16 / 9',
+    text: 'Dance, music, speeches and the prize distribution, in front of proud families and guests.',
   },
   {
     title: 'Teeyan da Mela',
@@ -80,13 +90,6 @@ export const signatureEvents = [
     alt: 'Little children in traditional dress with a dholak at the Teeyan da Mela',
     ratio: '3 / 4',
     text: 'Our little ones dress up in traditional clothes for the festival of Teej, with folk songs, the dholak, swings and phulkari.',
-  },
-  {
-    title: 'Annual Sports Meet',
-    when: 'December',
-    icon: 'trophy',
-    tone: 'sky',
-    text: 'March past, races, fun games for the little ones and the race for the inter-house trophy.',
   },
   {
     title: 'Independence & Republic Day',
@@ -110,7 +113,7 @@ export const signatureEvents = [
   },
   {
     title: 'Investiture Ceremony',
-    when: 'July',
+    when: '8 May',
     icon: 'badge-check',
     tone: 'navy',
     text: 'The new Student Council takes its oath and receives badges and sashes in front of parents.',
@@ -133,14 +136,37 @@ export const signatureEvents = [
     photo: 'images/gallery/green-day-2026/01.jpg',
     alt: 'Collage of pre-primary children dressed in green for Green Day',
     ratio: '1 / 1',
-    text: 'The pre-primary wing dresses in green, and every class plants and looks after saplings on campus.',
+    text: 'The pre-primary wing dresses in green, and children celebrate their birthdays by planting a sapling on campus instead of sharing sweets.',
   },
   {
     title: 'Science Exhibition',
-    when: 'November',
+    when: 'Every session',
     icon: 'flask-conical',
     tone: 'plum',
-    text: 'Working models and simple experiments by students from Classes III–VIII, explained to visiting parents.',
+    photo: 'images/gallery/science-exhibition/01.jpg',
+    alt: 'Two girls presenting their water purification model at the science exhibition',
+    ratio: '3 / 4',
+    text: 'Working models and charts made by the students, from the water cycle to a water purifier, explained to visitors.',
+  },
+  {
+    title: 'Inter-house competitions',
+    when: 'May – November',
+    icon: 'swords',
+    tone: 'gold',
+    photo: 'images/gallery/diwali-rangoli/01.jpg',
+    alt: 'Students sitting around a colourful Happy Diwali rangoli',
+    ratio: '4 / 3',
+    text: 'Declamation (16 May), group song and dance (18 July), GK quiz (16 October) and rangoli (6 November), each organised by one house.',
+  },
+  {
+    title: 'Class outings',
+    when: 'Every session',
+    icon: 'bus',
+    tone: 'green',
+    photo: 'images/gallery/class-outing/01.jpg',
+    alt: 'Students in house T-shirts lined up for a group photo during a class outing',
+    ratio: '16 / 9',
+    text: 'Days out with classmates and teachers, in house T-shirts, that the children talk about for weeks.',
   },
 ];
 
@@ -158,10 +184,10 @@ export const councilLeaders = [
 
 /** One captain per house, in the same order as `houses`. */
 export const houseCaptains = [
-  { house: 'Aravali', name: '[Student Name]', cls: 'Class VIII' },
-  { house: 'Nilgiri', name: '[Student Name]', cls: 'Class VIII' },
-  { house: 'Shivalik', name: '[Student Name]', cls: 'Class VIII' },
-  { house: 'Vindhya', name: '[Student Name]', cls: 'Class VIII' },
+  { house: 'Kaveri', name: '[Student Name]', cls: 'Class VIII' },
+  { house: 'Saraswati', name: '[Student Name]', cls: 'Class VIII' },
+  { house: 'Yamuna', name: '[Student Name]', cls: 'Class VIII' },
+  { house: 'Ganga', name: '[Student Name]', cls: 'Class VIII' },
 ];
 
 export const prefects = [

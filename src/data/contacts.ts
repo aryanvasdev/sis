@@ -54,7 +54,7 @@ export const departments: Department[] = [
     handles: 'Appointments with the Principal (please book through the front office)',
     phone: school.phones[0],
     email: school.principal.email,
-    hours: 'By appointment, through the front office',
+    hours: `${school.principalHours}, by appointment`,
   },
   {
     name: 'Academics & Exams',

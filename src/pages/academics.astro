@@ -81,7 +81,10 @@ const assessment = [
   },
 ];
 
-const typeOrder = Object.keys(calendarTypes) as (keyof typeof calendarTypes)[];
+// Legend shows only the kinds of entries the calendar actually uses.
+const typeOrder = (Object.keys(calendarTypes) as (keyof typeof calendarTypes)[]).filter((t) =>
+  academicCalendar.some((m) => m.items.some((it) => it.type === t)),
+);
 
 const monthName = (ym: string) => {
   const d = new Date(`${ym}-01T00:00:00`);
@@ -411,20 +414,24 @@ const docs = documents.map((d) => ({ ...d, ready: hasPublicFile(d.file) }));
             <dl>
               <div class="timing timing--summer">
                 <dt><Icon name="sun" size={20} /> Summer</dt>
-                <dd>{school.schoolHours.summer}</dd>
+                <dd>
+                  Classes I–VIII: {school.schoolHours.summer}
+                  <small>Nursery–UKG: {school.prePrimaryHours.summer}</small>
+                </dd>
               </div>
               <div class="timing timing--winter">
                 <dt><Icon name="snowflake" size={20} /> Winter</dt>
-                <dd>{school.schoolHours.winter}</dd>
+                <dd>
+                  Classes I–VIII: {school.schoolHours.winter}
+                  <small>Nursery–UKG: {school.prePrimaryHours.winter}</small>
+                </dd>
               </div>
               <div class="timing">
-                <dt><Icon name="clock" size={20} /> School office</dt>
-                <dd>{school.officeHours}</dd>
+                <dt><Icon name="clock" size={20} /> Principal’s office</dt>
+                <dd>{school.principalHours}</dd>
               </div>
             </dl>
-            <p class="small">
-              Pre-primary classes are dismissed earlier. Exact timings for each wing are shared in the welcome circular.
-            </p>
+            <p class="small">{school.holidayNote}</p>
           </div>
           <a href={url('/notices/')} class="aside-link">
             <span class="icon-badge icon-badge--navy"><Icon name="bell" /></span>
@@ -446,7 +453,7 @@ const docs = documents.map((d) => ({ ...d, ready: hasPublicFile(d.file) }));
         eyebrow={`Session ${calendarSession}`}
         title="Book List & Uniform"
         id="booklist"
-        lead="Download the class-wise book list and the uniform guidelines. Printed copies are also available at the school office."
+        lead="The class-wise book list, and the school uniform as set out in the school diary."
       />
       <div class="grid grid-2">
         {
@@ -526,7 +533,11 @@ const docs = documents.map((d) => ({ ...d, ready: hasPublicFile(d.file) }));
       </div>
       <p class="sports-uniform reveal">
         <Icon name="shirt" size={20} />
-        <span><strong>Sports uniform:</strong> {uniform.sports}</span>
+        <span><strong>Wednesdays &amp; Saturdays:</strong> {uniform.houseDays}</span>
+      </p>
+      <p class="sports-uniform reveal">
+        <Icon name="badge-check" size={20} />
+        <span><strong>Every day:</strong> {uniform.always}</span>
       </p>
     </div>
   </section>
@@ -577,6 +588,13 @@ const docs = documents.map((d) => ({ ...d, ready: hasPublicFile(d.file) }));
 </script>
 
 <style>
+  .timing dd small {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0.8;
+  }
   /* ---------- Jump links ---------- */
   .jump .btn {
     min-height: 36px;

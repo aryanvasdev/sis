@@ -18,8 +18,8 @@ const emails = [
 ].filter((e, i, all) => all.findIndex((x) => x.address === e.address) === i);
 
 const timings = [
-  { icon: 'sun', label: 'Summer', value: school.schoolHours.summer },
-  { icon: 'snowflake', label: 'Winter', value: school.schoolHours.winter },
+  { icon: 'sun', label: 'Summer', value: school.schoolHours.summer, prePrimary: school.prePrimaryHours.summer },
+  { icon: 'snowflake', label: 'Winter', value: school.schoolHours.winter, prePrimary: school.prePrimaryHours.winter },
 ];
 
 /** Split an email address so it can wrap before the "@" in narrow cards. */
@@ -141,7 +141,8 @@ const splitHours = (s: string) => {
                         {t.label}
                         {months && ` · ${months}`}
                       </small>
-                      <strong>{hours}</strong>
+                      <strong>Classes I–VIII: {hours}</strong>
+                      <span class="timing-sub">Nursery–UKG: {t.prePrimary}</span>
                     </span>
                   </li>
                 );
@@ -154,11 +155,13 @@ const splitHours = (s: string) => {
               <span>
                 <small>School office</small>
                 <strong>{school.officeHours}</strong>
+                <span class="timing-sub">Principal: {school.principalHours}</span>
               </span>
             </li>
           </ul>
           <p class="timing-note">
-            Timings may change for examinations and special events. Watch the <a href={url('/notices/')}>notice board</a> for updates.
+            {school.holidayNote} Timings may change for examinations and special events; watch the
+            <a href={url('/notices/')}>notice board</a> for updates.
           </p>
         </aside>
 
@@ -306,6 +309,12 @@ const splitHours = (s: string) => {
 </BaseLayout>
 
 <style>
+  .timing-sub {
+    display: block;
+    margin-top: 2px;
+    font-size: 0.85rem;
+    color: #b9c6df;
+  }
   /* ---------- Contact cards ---------- */
   .contact-cards {
     grid-template-columns: minmax(0, 1fr);

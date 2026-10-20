@@ -3,9 +3,8 @@
  * Used on /academics/: stages and subjects (Nursery to Class VIII), languages,
  * the academic calendar, book list & uniform downloads and uniform details.
  *
- * ⚠ SAMPLE CONTENT — replace the subjects, calendar dates, documents and uniform
- * details with the school's real information. Everything marked ⚠ PLACEHOLDER
- * must be checked before the site goes live.
+ * The calendar and uniform come from the school diary. Subjects marked
+ * ⚠ PLACEHOLDER must be checked before the site goes live.
  */
 
 /* ---------- NEP 2020 stages ---------- */
@@ -113,110 +112,84 @@ export interface CalendarMonth {
   items: { when: string; what: string; type: CalendarType }[];
 }
 
-/** ⚠ SAMPLE CONTENT: replace with the school's approved calendar for the session. */
+/**
+ * From the school diary (exam schedule, PTM schedule and inter-house events), plus
+ * national days and the festivals celebrated at school. Add holidays as they are notified.
+ */
 export const calendarSession = '2026–27';
 
 export const academicCalendar: CalendarMonth[] = [
   {
     month: '2026-04',
-    items: [
-      { when: '1 Apr', what: 'New session begins (summer timings)', type: 'academic' },
-      { when: '11 Apr', what: 'Orientation for parents of new students', type: 'meeting' },
-      { when: '22 Apr', what: 'Earth Day activities', type: 'event' },
-      { when: '24 Apr', what: 'Educational trip (VI–VIII)', type: 'event' },
-    ],
+    items: [{ when: 'April', what: 'New session begins', type: 'academic' }],
   },
   {
     month: '2026-05',
     items: [
-      { when: '9 May', what: 'Parent–Teacher Meeting (all classes)', type: 'meeting' },
-      { when: '16 May', what: 'Inter-House Recitation Competition', type: 'event' },
-      { when: '30 May', what: 'Summer vacation begins', type: 'holiday' },
-    ],
-  },
-  {
-    month: '2026-06',
-    items: [
-      { when: '1–30 Jun', what: 'Summer vacation', type: 'holiday' },
-      { when: '21 Jun', what: 'International Day of Yoga', type: 'event' },
+      { when: '2nd week', what: 'Periodic Test 1', type: 'exam' },
+      { when: '8 May', what: 'Investiture Ceremony', type: 'event' },
+      { when: '16 May', what: 'Inter-House Declamation Competition (Saraswati House)', type: 'event' },
+      { when: '30 May', what: 'PTM 1: Periodic Test 1 results', type: 'meeting' },
     ],
   },
   {
     month: '2026-07',
     items: [
-      { when: '1 Jul', what: 'School reopens after summer vacation', type: 'academic' },
-      { when: '1–7 Jul', what: 'Van Mahotsav week: tree plantation drive', type: 'event' },
-      { when: '10 Jul', what: 'Green Day (pre-primary)', type: 'event' },
-      { when: '13–18 Jul', what: 'Periodic Test 1 (I–VIII)', type: 'exam' },
-      { when: '18 Jul', what: 'Investiture Ceremony of the Student Council', type: 'event' },
-      { when: '25 Jul', what: 'Parent–Teacher Meeting (all classes)', type: 'meeting' },
+      { when: 'July', what: 'Green Day (pre-primary)', type: 'event' },
+      { when: '18 Jul', what: 'Inter-House Group Song / Dance Competition (Yamuna House)', type: 'event' },
     ],
   },
   {
     month: '2026-08',
     items: [
-      { when: '5 Aug', what: 'Inter-House Debate Competition (VI–VIII)', type: 'event' },
-      { when: '15 Aug', what: 'Independence Day celebrations', type: 'event' },
-      { when: '28 Aug', what: 'Raksha Bandhan and Teeyan da Mela (Teej)', type: 'event' },
-      { when: '29 Aug', what: 'National Sports Day: inter-house races', type: 'event' },
+      { when: '15 Aug', what: 'Independence Day', type: 'event' },
+      { when: 'August', what: 'Teeyan da Mela (Teej)', type: 'event' },
+      { when: '28 Aug', what: 'Raksha Bandhan', type: 'event' },
+      { when: '29 Aug', what: 'PTM 2: Term 1 discussion', type: 'meeting' },
     ],
   },
   {
     month: '2026-09',
     items: [
-      { when: '4 Sep', what: 'Janmashtami celebrations: dress-up and matki decoration', type: 'event' },
-      { when: '5 Sep', what: "Teachers' Day", type: 'event' },
-      { when: '14 Sep', what: 'Hindi Diwas', type: 'event' },
-      { when: '15–26 Sep', what: 'Half-Yearly Examinations (I–VIII)', type: 'exam' },
+      { when: '4 Sep', what: 'Janmashtami celebrations', type: 'event' },
+      { when: '2nd week', what: 'Term 1 examinations', type: 'exam' },
     ],
   },
   {
     month: '2026-10',
     items: [
-      { when: '1 Oct', what: 'Winter timings begin', type: 'academic' },
-      { when: '2 Oct', what: 'Gandhi Jayanti: Swachh Bharat rally and pledge', type: 'event' },
-      { when: '31 Oct', what: 'Parent–Teacher Meeting: half-yearly results', type: 'meeting' },
+      { when: '2 Oct', what: 'Gandhi Jayanti', type: 'event' },
+      { when: '3 Oct', what: 'PTM 3: Term 1 results', type: 'meeting' },
+      { when: '16 Oct', what: 'Inter-House GK Quiz (Ganga House)', type: 'event' },
     ],
   },
   {
     month: '2026-11',
     items: [
-      { when: '1 Nov', what: 'Winter uniform compulsory', type: 'academic' },
-      { when: '7–11 Nov', what: 'Diwali break', type: 'holiday' },
-      { when: '14 Nov', what: "Children's Day celebrations", type: 'event' },
-      { when: '21 Nov', what: 'Inter-House Science Exhibition', type: 'event' },
-      { when: '23–28 Nov', what: 'Periodic Test 2 (I–VIII)', type: 'exam' },
+      { when: '1 Nov', what: 'Winter uniform begins', type: 'academic' },
+      { when: '6 Nov', what: 'Inter-House Rangoli Competition (Kaveri House)', type: 'event' },
     ],
   },
   {
     month: '2026-12',
     items: [
-      { when: '5–6 Dec', what: 'Annual Sports Meet', type: 'event' },
-      { when: '19 Dec', what: 'Annual Day: “Sanskriti”', type: 'event' },
-      { when: '25 Dec', what: 'Christmas (holiday)', type: 'holiday' },
+      { when: '2nd week', what: 'Periodic Test 2', type: 'exam' },
+      { when: '26 Dec', what: 'PTM 4: Periodic Test 2 results', type: 'meeting' },
     ],
   },
   {
     month: '2027-01',
-    items: [
-      { when: '1–15 Jan', what: 'Winter break (as per state government orders)', type: 'holiday' },
-      { when: '26 Jan', what: 'Republic Day celebrations', type: 'event' },
-      { when: '30 Jan', what: 'Parent–Teacher Meeting (all classes)', type: 'meeting' },
-    ],
+    items: [{ when: '26 Jan', what: 'Republic Day', type: 'event' }],
   },
   {
     month: '2027-02',
-    items: [
-      { when: '20 Feb', what: 'Inter-House Quiz Competition', type: 'event' },
-      { when: '28 Feb', what: 'National Science Day', type: 'event' },
-    ],
+    items: [{ when: '21 Feb', what: 'PTM 5: Term II discussion', type: 'meeting' }],
   },
   {
     month: '2027-03',
     items: [
-      { when: '1–13 Mar', what: 'Annual Examinations (I–VIII)', type: 'exam' },
-      { when: '27 Mar', what: 'Result declaration & Parent–Teacher Meeting', type: 'meeting' },
-      { when: '31 Mar', what: 'Session ends', type: 'academic' },
+      { when: '2nd week', what: 'Term II (annual) examinations', type: 'exam' },
+      { when: 'March', what: 'PTM 6: Final results (date announced later)', type: 'meeting' },
     ],
   },
 ];
@@ -231,7 +204,7 @@ export const calendarTypes: Record<CalendarType, string> = {
 
 /* ---------- Book list & uniform ---------- */
 
-/** ⚠ PLACEHOLDER: upload the real PDFs to /public/documents/ with these file names. */
+/** Upload the PDF to /public/documents/ with this file name. */
 export const documents = [
   {
     title: `Book List ${calendarSession}`,
@@ -239,25 +212,21 @@ export const documents = [
     file: '/documents/booklist-2026-27.pdf',
     icon: 'book-open-check',
   },
-  {
-    title: 'Uniform Guidelines',
-    text: 'Summer, winter and sports uniform for all classes, with approved suppliers.',
-    file: '/documents/uniform-guidelines.pdf',
-    icon: 'shirt',
-  },
 ] as const;
 
-/** ⚠ SAMPLE CONTENT: check against the school's uniform guidelines. */
+/** From the school diary. */
 export const uniform = {
   summer: {
-    from: 'April – October',
-    boys: ['White half-sleeve shirt with navy blue piping and school monogram', 'Navy blue trousers (shorts up to Class II)', 'Navy blue belt and school ID card', 'Navy blue socks and black shoes'],
-    girls: ['White half-sleeve shirt with navy blue piping and school monogram', 'Navy blue skirt', 'Navy blue belt and school ID card', 'Navy blue socks and black shoes'],
+    from: 'Up to 30 September',
+    boys: ['White shirt (half sleeves)', 'Blue trousers', 'Blue socks with a white stripe', 'Black shoes'],
+    girls: ['White shirt (half sleeves)', 'Blue skirt with white stripes', 'White ribbons (two plaits)', 'Blue socks with white stripes and black shoes'],
   },
   winter: {
-    from: 'November – March',
-    boys: ['White full-sleeve shirt with navy blue piping', 'Navy blue trousers', 'Navy blue V-neck pullover or blazer with school crest', 'Navy blue socks and black shoes'],
-    girls: ['White full-sleeve shirt with navy blue piping', 'Navy blue skirt with navy tights, or trousers', 'Navy blue V-neck pullover or blazer with school crest', 'Navy blue socks and black shoes'],
+    from: 'From 1 November',
+    boys: ['Same as summer, with a white shirt', 'School tie and full sweater', 'Check blazer', 'Blue cap with white stripes'],
+    girls: ['Same as summer, with a white shirt', 'School tie and full sweater', 'Check blazer', 'Blue cap with white stripes'],
   },
-  sports: 'House T-shirt, navy track pants and white sports shoes on PE days, as per the class timetable.',
+  houseDays:
+    'House-colour T-shirt with blue trousers for boys and girls (girls with white ribbons in two plaits), Nursery to Class VIII.',
+  always: 'ID card and school belt every day. Slippers and sandals are not allowed. Plain haircut; girls with long hair wear two plaits with white ribbons.',
 };

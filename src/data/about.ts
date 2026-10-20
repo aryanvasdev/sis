@@ -12,19 +12,19 @@ import { school } from './school';
 
 /* ---------- Vision, mission & values ---------- */
 
-/** ⚠ PLACEHOLDER: the school's own vision statement. */
-export const vision =
-  'To nurture confident, compassionate and curious children who are rooted in good values, think for themselves and grow up to serve their families, their community and their country.';
-
-/** ⚠ PLACEHOLDER: the school's own mission points. */
-export const mission = [
-  'Follow the CBSE curriculum with NCERT textbooks in the spirit of NEP 2020, with understanding placed before rote learning.',
-  'Give every child a safe, caring and happy campus where they are known, heard and encouraged.',
-  'Develop the whole child through sports, arts, celebrations and service, not marks alone.',
-  'Support our teachers with regular training, good resources and a culture of mutual respect.',
-  'Work closely with parents, keeping them informed and involved at every stage.',
-  'Instil honesty, discipline, empathy and respect for every culture, language and faith.',
+/** From the school diary. */
+export const vision = [
+  'To achieve a unique blend of ancient cultural heritage and a modern scientific outlook.',
+  'To create an oasis of peace and harmony in a world of violence and destruction, in keeping with the basic principles of non-violence.',
+  'To develop students as total quality people with integrity, character and good values.',
 ];
+
+/** From the school diary. */
+export const mission =
+  'We want our pupils to become self-confident but not arrogant, tolerant but not subservient, ambitious but not ruthless, determined yet self-controlled.';
+
+/** The line on the cover of the school diary. */
+export const diaryMotto = 'Think Today, Change Tomorrow';
 
 export const coreValues = [
   { icon: 'scale', title: 'Integrity', text: 'We are honest in our work and fair in our dealings, even when no one is watching.', tone: '' },
@@ -64,7 +64,8 @@ export const principalMessage = [
   `It gives me great joy to welcome you to ${school.name}. A school is far more than its building; it is a family of children, teachers and parents who believe that every child deserves the chance to discover what they are capable of. That belief guides everything we do, from the first day of Nursery to the last day of Class VIII.`,
   'We follow the CBSE curriculum with NCERT textbooks, in the spirit of the National Education Policy 2020. We want our students to understand concepts deeply, apply them to real situations and ask “why?” as often as they ask “what?”. Smart classrooms and activity-based lessons help, but the heart of our school remains the teacher who knows each child by name, notices when something is wrong and celebrates every small step forward.',
   'We care just as much about the growth of the whole child. Dance, music, art, sports and celebrations such as Teeyan da Mela, Janmashtami, Independence Day and Gandhi Jayanti are part of school life, not an afterthought. Through the house system and the Student Council, children learn to lead and to work as a team. Above all, we expect honesty, good manners and respect for every person, culture and faith.',
-  'Parents are our most important partners. I encourage you to stay closely involved: attend parent–teacher meetings, read our circulars and speak to us whenever you have a concern or a suggestion. My door is always open. Together, let us live out the words on our gate, so that our children come to learn and go to serve.',
+  `Parents are our most important partners. Please read and sign your child’s school diary every day: the teachers’ remarks and homework in it are our daily link between home and school. Attend parent–teacher meetings, read our circulars, and if an issue needs urgent attention, meet the class teacher or me; my office is open from ${school.principalHours}.`,
+  'The holistic development of every student is our prime concern, and we seek your cooperation to achieve it. Please remember, productive collaboration is the key to success. Together, let us live out the words on our gate, so that our children come to learn and go to serve.',
 ];
 
 /** ⚠ SAMPLE CONTENT: replace with the Chairperson's own message (one string per paragraph). */

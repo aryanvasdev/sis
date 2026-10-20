@@ -6,9 +6,9 @@
  * `photo` on a facility, e.g. photo: 'images/campus/library.jpg'. Until a photo is set,
  * a decorative placeholder is drawn with the facility's icon and colour.
  *
- * ⚠ SAMPLE CONTENT — check every description against the school's real facilities,
- * and replace the hospital name. Values marked ⚠ PLACEHOLDER are guesses and must be
- * confirmed before the site goes live. Bus coverage lives in src/data/transport.ts.
+ * ⚠ SAMPLE CONTENT — check every description against the school's real facilities.
+ * Values marked ⚠ PLACEHOLDER are guesses and must be confirmed before the site goes live.
+ * The bus safety features (GPS, CCTV, lady attendant) are confirmed by the school. Bus coverage lives in src/data/transport.ts.
  */
 
 import { school } from './school';
@@ -90,15 +90,13 @@ export const featureFacilities: Facility[] = [
     title: 'A library that grows young readers',
     text: 'A cosy, colourful library with picture books for the little ones, stories and general-knowledge books for older children, and children’s magazines and newspapers. Every class has a library period each week, and our reading programme helps children read for pleasure.',
     points: [
-      // ⚠ PLACEHOLDER: book count
-      '3,000+ books in English and Hindi',
+      'Books in English and Hindi for every age',
       'A weekly library period for every class',
       'Story-telling sessions for the pre-primary and primary classes',
       'Book talks and reading challenges to build the reading habit',
     ],
     icon: 'library',
     tone: 'maroon',
-    badge: { value: '3,000+', label: 'books' },
   },
 ];
 
@@ -149,8 +147,7 @@ export const moreFacilities: MiniFacility[] = [
     points: [
       'First aid for minor injuries',
       'Parents informed straight away if a child is unwell',
-      // ⚠ PLACEHOLDER: name of the tie-up hospital
-      'Tie-up with [Hospital Name] for emergencies',
+      'Nearby hospital contacted at once in an emergency',
     ],
     icon: 'stethoscope',
     tone: 'maroon',

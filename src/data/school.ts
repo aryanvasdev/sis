@@ -58,10 +58,18 @@ export const school = {
   admissionsEmail: 'sahib.acadamy@gmail.com',
   careersEmail: 'sahib.acadamy@gmail.com',
   officeHours: 'Mon – Sat, during school hours',
+  /** School hours for Classes I–VIII (from the school diary). */
   schoolHours: {
     summer: '8:00 AM – 2:00 PM',
     winter: '9:00 AM – 2:45 PM',
   },
+  /** Nursery to UKG. */
+  prePrimaryHours: {
+    summer: '8:00 AM – 1:00 PM',
+    winter: '9:00 AM – 2:00 PM',
+  },
+  principalHours: '10:00 AM – 2:00 PM',
+  holidayNote: 'Every second Saturday is a holiday.',
 
   /** Photos go in /public/images/people/ */
   principal: {

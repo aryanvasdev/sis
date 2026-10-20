@@ -11,6 +11,7 @@ import {
   coreValues,
   mottoParts,
   mottoNote,
+  diaryMotto,
   principalMessage,
   chairpersonMessage,
   teachers,
@@ -153,15 +154,15 @@ const jumpLinks = [
       />
       <div class="vm-grid">
         <div class="vision-card reveal">
-          <span class="vm-icon"><Icon name="eye" size={26} /></span>
-          <h3>Our vision</h3>
-          <p>{vision}</p>
+          <span class="vm-icon"><Icon name="target" size={26} /></span>
+          <h3>Our mission</h3>
+          <p>{mission}</p>
         </div>
         <div class="mission-card reveal">
-          <span class="icon-badge icon-badge--maroon"><Icon name="target" /></span>
-          <h3>Our mission</h3>
+          <span class="icon-badge icon-badge--maroon"><Icon name="eye" /></span>
+          <h3>Our vision</h3>
           <ul class="check-list">
-            {mission.map((m) => <li>{m}</li>)}
+            {vision.map((v) => <li>{v}</li>)}
           </ul>
         </div>
       </div>
@@ -208,6 +209,10 @@ const jumpLinks = [
           ))
         }
       </div>
+      <p class="diary-motto reveal">
+        <span>And on the cover of every student diary:</span>
+        <strong>“{diaryMotto}”</strong>
+      </p>
     </div>
   </section>
 
@@ -325,7 +330,7 @@ const jumpLinks = [
         eyebrow="Governance"
         title="Management"
         id="management"
-        lead={`${school.name} is run by ${school.trustName}, a registered non-profit body. The School Management Committee brings together the management, the Principal, teachers and parents to guide the school.`}
+        lead={`${school.name} is under the direct control and management of ${school.trustName} (Regd.), ${school.address.city}. The School Management Committee brings together the management, the Principal, teachers and parents to guide the school.`}
       />
       <div class="mgmt">
         <div class="reveal">
@@ -403,6 +408,21 @@ const jumpLinks = [
 </BaseLayout>
 
 <style>
+  .diary-motto {
+    display: grid;
+    gap: 4px;
+    margin-top: clamp(28px, 4vw, 44px);
+    text-align: center;
+    color: #b9c6df;
+  }
+  .diary-motto strong {
+    font-family: var(--font-display);
+    font-size: var(--step-3);
+    font-weight: 500;
+    font-style: italic;
+    color: var(--gold-400);
+  }
+
   /* ---------- Jump links ---------- */
   .jump .btn {
     min-height: 36px;

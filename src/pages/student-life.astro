@@ -13,6 +13,7 @@ import {
   councilSession,
   councilLeaders,
   houseCaptains,
+  assemblyPrayers,
   prefects,
   counsellor,
 } from '../data/student-life';
@@ -52,9 +53,9 @@ const glyphs: Record<string, string> = {
 };
 
 const houseWork = [
-  { icon: 'star', title: 'House points', text: 'Earned for academics, sports, discipline, cleanliness and community service throughout the year.' },
-  { icon: 'swords', title: 'Inter-house contests', text: 'Debates, quizzes, dance, music, art and sports, with every student representing their house.' },
-  { icon: 'trophy', title: 'The House Cup', text: 'Awarded on Annual Day to the house with the most points, and proudly displayed for the year.' },
+  { icon: 'shirt', title: 'House T-shirts', text: 'Every Wednesday and Saturday, students from Nursery to Class VIII come to school in their house colours.' },
+  { icon: 'swords', title: 'Inter-house competitions', text: 'Each house organises one competition a year: declamation, group song and dance, GK quiz or rangoli.' },
+  { icon: 'calendar-check', title: 'House of Duty', text: 'The houses take turns, two weeks at a time, to be on duty through the session, helping with assembly and discipline.' },
 ];
 
 const outreach = [
@@ -172,6 +173,41 @@ const wellbeing = [
   </section>
 
   <!-- ========== HOUSES ========== -->
+  <!-- ========== MORNING ASSEMBLY ========== -->
+  <section class="section section--tight" aria-labelledby="assembly">
+    <div class="container">
+      <div class="assembly reveal">
+        <div class="assembly-head">
+          <SectionHead
+            eyebrow="Every morning"
+            title="Our morning assembly"
+            id="assembly"
+            lead="Each school day begins together, with a different prayer for every day of the week, the group song “Hum Honge Kamyab”, Vande Mataram, the student pledge and the National Anthem."
+          />
+          <p class="assembly-diary">
+            <Icon name="notebook-pen" size={20} />
+            <span>
+              Every student also carries the school diary, with a <strong>word of the day</strong> and a
+              <strong>sentence of the day</strong>, homework, and a note for parents to sign each evening.
+            </span>
+          </p>
+        </div>
+        <ul class="prayers" aria-label="Prayer for each day">
+          {
+            assemblyPrayers.map((p) => (
+              <li>
+                <span class="prayer-day">{p.day}</span>
+                <span class="prayer-line" lang="hi">
+                  {p.line}
+                </span>
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </section>
+
   <section class="section section--cream" aria-labelledby="houses">
     <div class="container">
       <SectionHead
@@ -179,14 +215,14 @@ const wellbeing = [
         eyebrow="The house system"
         title="Four houses, one school"
         id="houses"
-        lead="Every student and teacher belongs to one of four houses, named after India’s great mountain ranges. Houses build friendships across classes and a healthy spirit of competition."
+        lead="Every student and teacher belongs to one of four houses, named after four of India’s great rivers. Houses build friendships across classes and a healthy spirit of competition."
       />
       <div class="grid grid-4">
         {
           houses.map((h) => (
             <article class="house reveal" style={`--house:${h.hex}`}>
               <div class="house-top">
-                <Icon name="mountain-snow" size={34} strokeWidth={1.6} />
+                <Icon name="waves" size={34} strokeWidth={1.6} />
                 <h3>{h.name}</h3>
                 <span class="house-colour">
                   <span class="swatch" aria-hidden="true" />
@@ -195,8 +231,8 @@ const wellbeing = [
               </div>
               <div class="house-body">
                 <p class="house-value">
-                  <span>Value</span>
-                  {h.value}
+                  <span>Organises · {h.when}</span>
+                  {h.event}
                 </p>
                 <p>{h.text}</p>
               </div>
@@ -351,7 +387,7 @@ const wellbeing = [
         eyebrow={`Student Council ${councilSession}`}
         title="Student leadership"
         id="council"
-        lead="Council members are chosen at the start of each session through nominations, speeches and a vote by students and teachers, and take their oath at the Investiture Ceremony in July. They help run assemblies, events and house activities, and are the voice of students to the school."
+        lead="Council members are chosen at the start of each session through nominations, speeches and a vote by students and teachers, and take their oath at the Investiture Ceremony on 8 May. They help run assemblies, events and house activities, and are the voice of students to the school."
       />
 
       <h3 class="tier-h">Council leaders</h3>
@@ -501,6 +537,72 @@ const wellbeing = [
 </BaseLayout>
 
 <style>
+  /* ---------- Morning assembly ---------- */
+  .assembly {
+    display: grid;
+    gap: clamp(24px, 4vw, 48px);
+    align-items: start;
+  }
+  @media (min-width: 960px) {
+    .assembly {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  .assembly-head :global(.section-head) {
+    margin-bottom: 20px;
+  }
+  .assembly-diary {
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    background: var(--gold-100);
+    border: 1px solid var(--gold-200);
+    color: #5f4510;
+    font-size: 0.95rem;
+  }
+  .assembly-diary :global(.icon) {
+    margin-top: 3px;
+    color: var(--gold-600);
+  }
+  .prayers {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .prayers li {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    align-items: center;
+    gap: 14px;
+    padding: 14px 18px;
+    border-radius: var(--radius);
+    background: #fff;
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow-sm);
+  }
+  .prayer-day {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--gold-600);
+  }
+  .prayer-line {
+    font-family: 'Noto Sans Devanagari', 'Mangal', var(--font-body);
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--navy-900);
+  }
+  @media (max-width: 480px) {
+    .prayers li {
+      grid-template-columns: 1fr;
+      gap: 4px;
+    }
+  }
+
   /* ---------- Jump links ---------- */
   .jump .btn {
     min-height: 36px;
