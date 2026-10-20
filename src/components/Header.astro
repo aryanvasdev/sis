@@ -60,72 +60,73 @@ const path = Astro.url.pathname;
       </button>
     </div>
   </div>
+</header>
 
-  <div class="mobile-nav" id="mobile-nav" data-mobile-nav hidden>
-    <div class="mobile-nav-head">
-      <span class="brand-name">Menu</span>
-      <button type="button" class="menu-close" data-menu-close>
-        <span class="visually-hidden">Close menu</span>
-        <Icon name="x" size={26} />
-      </button>
-    </div>
-    <nav aria-label="Mobile">
-      <ul class="mobile-list">
-        {
-          mainNav.map((item) =>
-            item.children ? (
-              <li>
-                <details>
-                  <summary>
-                    {item.label}
-                    <Icon name="chevron-down" size={18} />
-                  </summary>
-                  <ul>
-                    {item.children.map((child) => (
-                      <li>
-                        <a href={url(child.href)} data-close-on-click>
-                          {child.label}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </details>
-              </li>
-            ) : (
-              <li>
-                <a href={url(item.href)} class="top" data-close-on-click>
-                  {item.label}
-                </a>
-              </li>
-            ),
-          )
-        }
-      </ul>
-      <ul class="mobile-utility">
-        {
-          utilityLinks.map((link) => (
+<!-- Kept outside <header>: its backdrop-filter would otherwise trap these fixed-position panels. -->
+<div class="mobile-nav" id="mobile-nav" data-mobile-nav role="dialog" aria-modal="true" aria-label="Menu" hidden>
+  <div class="mobile-nav-head">
+    <span class="brand-name">Menu</span>
+    <button type="button" class="menu-close" data-menu-close>
+      <span class="visually-hidden">Close menu</span>
+      <Icon name="x" size={26} />
+    </button>
+  </div>
+  <nav aria-label="Mobile">
+    <ul class="mobile-list">
+      {
+        mainNav.map((item) =>
+          item.children ? (
             <li>
-              <a href={url(link.href)} data-close-on-click>
-                <Icon name={link.icon} size={18} />
-                {link.label}
+              <details>
+                <summary>
+                  {item.label}
+                  <Icon name="chevron-down" size={18} />
+                </summary>
+                <ul>
+                  {item.children.map((child) => (
+                    <li>
+                      <a href={url(child.href)} data-close-on-click>
+                        {child.label}
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </li>
+          ) : (
+            <li>
+              <a href={url(item.href)} class="top" data-close-on-click>
+                {item.label}
               </a>
             </li>
-          ))
-        }
-      </ul>
-    </nav>
-    <div class="mobile-cta">
-      <a href={url('/admissions/#enquiry')} class="btn btn--gold" data-close-on-click>Admission Enquiry</a>
-      <div class="btn-row">
-        <a href={telLink(school.phones[0])} class="btn btn--outline btn--sm"><Icon name="phone" /> Call</a>
-        <a href={whatsappLink()} class="btn btn--whatsapp btn--sm" target="_blank" rel="noopener"
-          ><Icon name="whatsapp" /> WhatsApp</a
-        >
-      </div>
+          ),
+        )
+      }
+    </ul>
+    <ul class="mobile-utility">
+      {
+        utilityLinks.map((link) => (
+          <li>
+            <a href={url(link.href)} data-close-on-click>
+              <Icon name={link.icon} size={18} />
+              {link.label}
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </nav>
+  <div class="mobile-cta">
+    <a href={url('/admissions/#enquiry')} class="btn btn--gold" data-close-on-click>Admission Enquiry</a>
+    <div class="btn-row">
+      <a href={telLink(school.phones[0])} class="btn btn--outline btn--sm"><Icon name="phone" /> Call</a>
+      <a href={whatsappLink()} class="btn btn--whatsapp btn--sm" target="_blank" rel="noopener"
+        ><Icon name="whatsapp" /> WhatsApp</a
+      >
     </div>
   </div>
-  <div class="mobile-backdrop" data-menu-backdrop hidden></div>
-</header>
+</div>
+<div class="mobile-backdrop" data-menu-backdrop hidden></div>
 
 <script>
   const header = document.querySelector<HTMLElement>('[data-header]');

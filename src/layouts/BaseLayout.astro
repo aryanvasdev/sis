@@ -24,7 +24,8 @@ const {
 } = Astro.props;
 
 const pageTitle = title ? `${title} | ${school.name}` : `${school.name} | CBSE School in ${school.address.city}`;
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const pathname = /\/$|\.[a-z]+$/i.test(Astro.url.pathname) ? Astro.url.pathname : `${Astro.url.pathname}/`;
+const canonical = new URL(pathname, Astro.site);
 const isHome = !title;
 
 const jsonLd = {
