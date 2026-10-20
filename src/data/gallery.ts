@@ -347,7 +347,7 @@ export const albums: Album[] = [
     title: 'Life at School',
     date: '2026',
     category: 'Campus',
-    description: 'Everyday moments with our students and teachers.',
+    description: 'Our teachers, and everyday moments at school.',
     icon: 'school',
     tone: 'navy',
     photos: [

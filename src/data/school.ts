@@ -57,8 +57,8 @@ export const school = {
   email: 'sahib.acadamy@gmail.com',
   admissionsEmail: 'sahib.acadamy@gmail.com',
   careersEmail: 'sahib.acadamy@gmail.com',
-  /** Visiting hours for parents and visitors. */
-  officeHours: 'Mon – Sat · 8:00 AM – 3:00 PM',
+  /** Visiting hours for parents and visitors. (\u00a0 keeps each time on one line.) */
+  officeHours: 'Mon – Sat · 8:00\u00a0AM\u00a0–\u00a03:00\u00a0PM',
   /** School hours for Classes I–VIII (from the school diary). */
   schoolHours: {
     summer: '8:00 AM – 2:00 PM',
@@ -69,7 +69,7 @@ export const school = {
     summer: '8:00 AM – 1:00 PM',
     winter: '9:00 AM – 2:00 PM',
   },
-  principalHours: '10:00 AM – 2:00 PM',
+  principalHours: '10:00\u00a0AM\u00a0–\u00a02:00\u00a0PM',
   holidayNote: 'Every second Saturday is a holiday.',
 
   /** The principal's photo is deliberately not published on the site. */
