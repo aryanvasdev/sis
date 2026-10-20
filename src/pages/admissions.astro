@@ -19,6 +19,7 @@ import {
   faqs,
 } from '../data/admissions';
 import {
+  showFees,
   feeSession,
   oneTimeCharges,
   classFees,
@@ -56,7 +57,7 @@ const steps = [
   {
     icon: 'badge-check',
     title: 'Fee payment & confirmation',
-    text: 'Pay the admission fee and the first quarter’s fees within 7 days to confirm the seat. You will receive the book list, uniform details and orientation date.',
+    text: 'Complete the fee formalities to confirm the seat. You will receive the book list, uniform details and the date of the first day at school.',
   },
 ];
 
@@ -99,7 +100,7 @@ const prospectusAttrs = prospectusReady ? { download: true } : { target: '_blank
   >
     <div class="btn-row">
       <a href="#enquiry" class="btn btn--gold">Admission enquiry <Icon name="arrow-right" /></a>
-      <a href="#fees" class="btn btn--light">Fee structure</a>
+      <a href="#fees" class="btn btn--light">Fee details</a>
     </div>
   </PageHero>
 
@@ -124,7 +125,7 @@ const prospectusAttrs = prospectusReady ? { download: true } : { target: '_blank
                 <li>{school.recognition} school, {school.classes}</li>
                 <li>Follows the {school.curriculum}, {school.medium} medium</li>
                 <li>No admission test: just a friendly interaction</li>
-                <li>Clear, published fees with a sibling concession</li>
+                <li>Fees explained clearly before you register</li>
               </ul>
               <div class="btn-row" style="margin-top:24px">
                 <a href={prospectusHref} class="btn btn--navy" {...prospectusAttrs}>
@@ -293,6 +294,9 @@ const prospectusAttrs = prospectusReady ? { download: true } : { target: '_blank
   <!-- ========== FEES ========== -->
   <section class="section" id="fees">
     <div class="container">
+      {
+        showFees ? (
+          <>
       <div class="fees-head">
         <SectionHead
           eyebrow={`Fee structure · Session ${feeSession}`}
@@ -357,7 +361,7 @@ const prospectusAttrs = prospectusReady ? { download: true } : { target: '_blank
       </div>
       <p class="small muted table-note">
         * Annual charges plus 12 months’ tuition. Does not include one-time charges, transport, books or uniform.
-        Annual charges cover development, activities, library, the computer lab and examinations.
+        Annual charges cover development, activities, library and examinations.
       </p>
 
       <div class="fees-lower">
@@ -401,6 +405,43 @@ const prospectusAttrs = prospectusReady ? { download: true } : { target: '_blank
           </dl>
         </div>
       </div>
+
+          </>
+        ) : (
+          <>
+            <SectionHead
+              eyebrow={`Fees · Session ${feeSession}`}
+              title="Fee details"
+              lead="We share the complete fee structure with every family before registration, so there are no surprises."
+            />
+            <div class="fee-request reveal">
+              <span class="icon-badge">
+                <Icon name="indian-rupee" />
+              </span>
+              <div>
+                <h3>Ask us for the fee structure</h3>
+                <p>
+                  For the class-wise fees for Session {feeSession}, including transport charges, please visit the school
+                  office, call us or send a message on WhatsApp. We will be happy to explain every part of it.
+                </p>
+                <div class="btn-row">
+                  <a
+                    href={whatsappLink(`Hello, please share the fee structure for Session ${feeSession}. My child is applying for Class: `)}
+                    class="btn btn--whatsapp"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    <Icon name="whatsapp" /> Ask on WhatsApp
+                  </a>
+                  <a href={telLink(school.phones[0])} class="btn btn--outline">
+                    <Icon name="phone" /> {school.phones[0]}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </>
+        )
+      }
 
       <aside class="rte reveal" aria-labelledby="rte-title">
         <span class="icon-badge icon-badge--maroon">
@@ -871,6 +912,31 @@ const prospectusAttrs = prospectusReady ? { download: true } : { target: '_blank
     font-size: 0.9rem;
     line-height: 1.55;
     color: var(--ink-soft);
+  }
+  .fee-request {
+    display: flex;
+    gap: 18px;
+    align-items: flex-start;
+    padding: clamp(22px, 3vw, 32px);
+    border-radius: var(--radius-lg);
+    background: var(--cream);
+    border: 1px solid var(--line);
+  }
+  .fee-request .icon-badge {
+    margin-bottom: 0;
+  }
+  .fee-request h3 {
+    font-size: var(--step-2);
+  }
+  .fee-request p {
+    margin: 8px 0 18px;
+    max-width: 62ch;
+    color: var(--ink-soft);
+  }
+  @media (max-width: 560px) {
+    .fee-request {
+      flex-direction: column;
+    }
   }
   .rte {
     display: flex;

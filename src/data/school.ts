@@ -57,10 +57,10 @@ export const school = {
   email: 'sahib.acadamy@gmail.com',
   admissionsEmail: 'sahib.acadamy@gmail.com',
   careersEmail: 'sahib.acadamy@gmail.com',
-  officeHours: 'Mon – Sat · 8:00 AM – 2:30 PM',
+  officeHours: 'Mon – Sat, during school hours',
   schoolHours: {
-    summer: '7:30 AM – 1:30 PM (April – September)',
-    winter: '8:30 AM – 2:30 PM (October – March)',
+    summer: '8:00 AM – 2:00 PM',
+    winter: '9:00 AM – 2:45 PM',
   },
 
   /** Photos go in /public/images/people/ */
@@ -75,11 +75,11 @@ export const school = {
   /** ⚠ PLACEHOLDER: chairperson / manager of the school. */
   chairperson: {
     name: '[Chairperson Name]',
-    title: 'Chairperson, [Name of Trust / Society]',
+    title: 'Chairperson, Sahib Educational Society',
     photo: '',
   },
-  /** ⚠ PLACEHOLDER: the registered trust or society that runs the school. */
-  trustName: '[Name of Educational Trust / Society]',
+  /** The registered society that runs the school. */
+  trustName: 'Sahib Educational Society',
 
   /** Paste the school's page links here; an empty link hides that icon. */
   social: {

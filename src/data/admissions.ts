@@ -8,6 +8,7 @@
  *   school's real details. Items marked ⚠ PLACEHOLDER must be checked before launch.
  */
 import { school } from './school';
+import { transportRadiusKm } from './transport';
 
 /** First year of the admission session, e.g. '2027–28' → 2027. */
 export const admissionYear = Number.parseInt(school.admissionSession, 10);
@@ -99,16 +100,12 @@ export const faqs: { q: string; a: string }[] = [
     a: 'The Transfer Certificate must be countersigned by the District Education Officer (or the equivalent education officer) of that state. Please also bring the last two report cards. Our teachers will help your child settle in, with extra support in English and Hindi where needed.',
   },
   {
-    q: 'Is the registration fee refundable?',
-    a: 'The registration fee and admission fee are non-refundable. Caution money is a refundable security deposit and is returned, without interest, when the child leaves the school with a Transfer Certificate and all dues are cleared.',
-  },
-  {
-    q: 'Is there a concession for siblings?',
-    a: 'Yes. When two or more children of the same parents study at the school, the younger child receives a concession on the tuition fee. See the fee notes below for details.',
+    q: 'How can we find out the fees?',
+    a: 'Please visit the school office, call us or ask on WhatsApp. We will share the fee structure for your child’s class, including any transport charges, and explain every part of it before you register.',
   },
   {
     q: 'Does the school provide transport?',
-    a: 'Yes. GPS-tracked school buses with a trained driver, a conductor and a female attendant cover the city and nearby areas. The transport fee depends on the distance from school; the route list is available at the transport office.',
+    a: `Yes. School buses cover ${school.address.city} and almost every town and village within about ${transportRadiusKm} km. Please ask the office about the pick-up point nearest you and the timings.`,
   },
   {
     q: 'What is an APAAR ID and do we need one?',
@@ -116,6 +113,6 @@ export const faqs: { q: string; a: string }[] = [
   },
   {
     q: 'Can we visit the school before applying?',
-    a: 'Of course, and we encourage it. You are welcome to meet the admission team during visiting hours, and to book a guided campus tour to see the classrooms, labs, library, play areas and buses for yourself.',
+    a: 'Of course, and we encourage it. You are welcome to meet the admission team during visiting hours, and to book a guided campus tour to see the classrooms, library, play areas and buses for yourself.',
   },
 ];

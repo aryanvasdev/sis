@@ -31,7 +31,7 @@ export const benefits: { icon: string; title: string; text: string; tone?: 'navy
   {
     icon: 'monitor-smartphone',
     title: 'Tools to teach well',
-    text: 'Digital classrooms, a computer lab, a library and the teaching aids you need to plan lively, engaging lessons.',
+    text: 'Digital classrooms, a library and the teaching aids you need to plan lively, engaging lessons.',
     tone: 'green',
   },
   {
@@ -126,19 +126,6 @@ export const openings: Opening[] = [
   tgt('Social Science', 'SIS-TGT-SST', 'Graduate with History / Geography / Political Science (at least 50% marks)', 'Uses maps, models and field visits to bring the subject alive'),
   tgt('Hindi', 'SIS-TGT-HIN', 'Graduate with Hindi (at least 50% marks)'),
   tgt('Punjabi / Sanskrit', 'SIS-TGT-PS', 'Graduate with Punjabi or Sanskrit (at least 50% marks)', 'Able to teach both languages'),
-  {
-    ref: 'SIS-CS',
-    title: 'Computer Teacher',
-    category: 'Teaching',
-    level: 'Classes I – VIII',
-    positions: 1,
-    type: 'Full-time',
-    qualifications: ['BCA / B.Sc. (Computer Science), or a graduate with PGDCA / NIELIT ‘O’ Level', 'B.Ed. preferred'],
-    experience: '1+ year of teaching computers to school children',
-    preferred: 'Can teach basic coding with Scratch and help run the computer lab',
-    postedOn: '2026-10-08',
-    lastDate: '2026-11-30',
-  },
   {
     ref: 'SIS-PET',
     title: 'Sports Coach / PTI',

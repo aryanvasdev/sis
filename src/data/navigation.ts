@@ -31,7 +31,7 @@ export const mainNav: NavLink[] = [
     children: [
       { label: 'Admission Process', href: '/admissions/' },
       { label: 'Age Criteria', href: '/admissions/#age' },
-      { label: 'Fee Structure', href: '/admissions/#fees' },
+      { label: 'Fee Details', href: '/admissions/#fees' },
       { label: 'Admission Enquiry', href: '/admissions/#enquiry' },
     ],
   },

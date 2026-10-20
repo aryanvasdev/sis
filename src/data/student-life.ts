@@ -25,7 +25,6 @@ export const clubs = [
   { name: 'Science Club', icon: 'flask-conical', tone: 'navy', classes: 'V–VIII', text: 'Simple experiments, working models and preparation for science exhibitions.' },
   { name: 'Literary Club', icon: 'feather', tone: 'maroon', classes: 'III–VIII', text: 'Recitation, storytelling, debates, creative writing and book reviews.' },
   { name: 'Maths Club', icon: 'sigma', tone: 'gold', classes: 'III–VIII', text: 'Puzzles, number games, Vedic maths tricks and olympiad practice.' },
-  { name: 'Coding & Robotics', icon: 'bot', tone: 'navy', classes: 'IV–VIII', text: 'Block coding, simple programs and beginner robotics kits.' },
   { name: 'Quiz Club', icon: 'circle-help', tone: 'gold', classes: 'IV–VIII', text: 'General knowledge, current affairs and inter-house quiz contests.' },
   { name: 'Heritage Club', icon: 'landmark', tone: 'maroon', classes: 'V–VIII', text: 'Folk traditions, crafts, monuments and the festivals of our region, such as Teeyan.' },
   { name: 'Music Club', icon: 'music', tone: 'navy', classes: 'I–VIII', text: 'Singing, patriotic songs, the dholak and other instruments, and the school choir.' },

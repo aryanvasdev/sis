@@ -6,31 +6,26 @@
  * `photo` on a facility, e.g. photo: 'images/campus/library.jpg'. Until a photo is set,
  * a decorative placeholder is drawn with the facility's icon and colour.
  *
- * ⚠ SAMPLE CONTENT — check every number and description against the school's real
- * facilities, and replace the bus routes, timings and hospital name. Values marked
- * ⚠ PLACEHOLDER are guesses and must be confirmed before the site goes live.
+ * ⚠ SAMPLE CONTENT — check every description against the school's real facilities,
+ * and replace the hospital name. Values marked ⚠ PLACEHOLDER are guesses and must be
+ * confirmed before the site goes live. Bus coverage lives in src/data/transport.ts.
  */
 
 import { school } from './school';
+import { transportRadiusKm } from './transport';
 
 export type Tone = 'navy' | 'gold' | 'maroon' | 'green' | 'sky' | 'plum';
 /** Colour of the small icon square on cards ('' = gold). */
 export type BadgeTone = '' | 'navy' | 'maroon' | 'green';
-
-/** ⚠ PLACEHOLDER: fleet size and CCTV count, used in several places below. */
-const vehicleCount = 6;
-const cctvCount = '40+';
 
 /* ---------- At a glance ---------- */
 
 /** Headline numbers shown at the top of the page. The first one is shown larger. */
 export const campusStats = [
   { value: school.classesShort, label: `Co-educational, ${school.medium} medium`, icon: 'school' },
-  // ⚠ PLACEHOLDER: the four numbers below
-  { value: '25', label: 'Teachers', icon: 'users' },
-  { value: '16', label: 'Smart classrooms', icon: 'presentation' },
-  { value: String(vehicleCount), label: 'GPS-tracked school vehicles', icon: 'bus' },
-  { value: cctvCount, label: 'CCTV cameras', icon: 'cctv' },
+  { value: '500+', label: 'Students', icon: 'smile' },
+  { value: '25+', label: 'Teachers', icon: 'users' },
+  { value: `${transportRadiusKm} km`, label: `Bus service around ${school.address.city}`, icon: 'bus' },
 ];
 
 /** Photo beside the introduction (path inside /public). */
@@ -88,22 +83,6 @@ export const featureFacilities: Facility[] = [
     ],
     icon: 'microscope',
     tone: 'green',
-  },
-  {
-    id: 'computer-lab',
-    eyebrow: 'Computer lab',
-    title: 'A computer lab for the digital age',
-    text: 'Children meet computers from Class I and, as they grow, move on to typing, drawing, presentations, safe use of the internet and simple coding. Every class has regular, supervised practical periods in the lab.',
-    points: [
-      // ⚠ PLACEHOLDER: number of computers
-      '25 computers, so each child has a system in practical periods',
-      'Internet with content filtering and teacher supervision',
-      'Power back-up for uninterrupted classes',
-      'Lessons on staying safe and kind online',
-    ],
-    icon: 'monitor',
-    tone: 'sky',
-    badge: { value: '25', label: 'computers' },
   },
   {
     id: 'library',
@@ -187,14 +166,6 @@ export const moreFacilities: MiniFacility[] = [
 
 /* ---------- Transport ---------- */
 
-export const transport = {
-  vehicles: vehicleCount,
-  /** ⚠ PLACEHOLDER: when parents can reach the transport desk. */
-  officeHours: '8:00 AM – 2:30 PM, Monday to Saturday',
-  /** ⚠ PLACEHOLDER: which timings the routes table shows. */
-  timingsNote: 'Winter timings (October – March). Summer pick-ups are about one hour earlier.',
-};
-
 export const transportFeatures = [
   { icon: 'satellite', title: 'GPS tracking', text: 'Every vehicle is tracked live by the school throughout the journey.' },
   { icon: 'cctv', title: 'CCTV on board', text: 'Cameras inside each vehicle, with recordings checked regularly.' },
@@ -208,21 +179,6 @@ export const transportFeatures = [
   { icon: 'phone', title: 'Parents kept informed', text: 'A call or WhatsApp message for any delay or change of route.' },
 ];
 
-export interface BusRoute {
-  route: string;
-  areas: string[];
-  /** First to last stop, e.g. '7:30 – 8:05 AM' */
-  pickup: string;
-  drop: string;
-}
-
-/** ⚠ PLACEHOLDER: the school's real routes, stops and timings. */
-export const busRoutes: BusRoute[] = [
-  { route: 'R-01', areas: ['Saha town', 'Saha market', 'nearby colonies'], pickup: '7:45 – 8:10 AM', drop: '2:40 – 3:05 PM' },
-  { route: 'R-02', areas: ['[Village A]', '[Village B]', '[Village C]'], pickup: '7:30 – 8:05 AM', drop: '2:40 – 3:15 PM' },
-  { route: 'R-03', areas: ['[Village D]', '[Village E]', '[Village F]'], pickup: '7:25 – 8:05 AM', drop: '2:40 – 3:20 PM' },
-  { route: 'R-04', areas: ['[Area G]', '[Area H]', 'towards Ambala'], pickup: '7:15 – 8:00 AM', drop: '2:40 – 3:25 PM' },
-];
 
 /* ---------- Safety & security ---------- */
 
@@ -242,7 +198,7 @@ export const safetyMeasures = [
   {
     icon: 'cctv',
     title: 'CCTV surveillance',
-    text: `${cctvCount} cameras cover the gate, corridors, staircases and play areas, and are monitored during school hours.`,
+    text: 'Cameras cover the gate, corridors, staircases and play areas, and are monitored during school hours.',
   },
   {
     icon: 'fire-extinguisher',

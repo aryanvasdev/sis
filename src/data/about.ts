@@ -70,7 +70,7 @@ export const principalMessage = [
 /** ⚠ SAMPLE CONTENT: replace with the Chairperson's own message (one string per paragraph). */
 export const chairpersonMessage = [
   `When ${school.trustName} founded ${school.name} in ${school.established}, our aim was simple: to give the children of our area a school that combines sound learning with good values, at a fee that families can afford.`,
-  'Year by year we have added classrooms, smart boards, a computer room, play areas and, most of all, a caring and capable team of teachers. We will keep investing, so that our children can hold their own anywhere while remaining grounded in the culture and community that shaped them.',
+  'Year by year we have added classrooms, smart boards, play areas and, most of all, a caring and capable team of teachers. We will keep investing, so that our children can hold their own anywhere while remaining grounded in the culture and community that shaped them.',
   'I thank our parents for the trust they place in us, and our staff for the dedication they bring to their work every single day.',
 ];
 
@@ -124,8 +124,6 @@ export const managementCommittee: CommitteeMember[] = [
 export const milestones = [
   { year: String(school.established), title: 'The school opens its doors', text: 'Classes begin for pre-primary and primary children, with a small, dedicated team of teachers.' },
   { year: '2021', title: 'Growing to Class VIII', text: 'Middle classes are added step by step, and the school now runs from Nursery to Class VIII.' },
-  { year: '2023', title: 'Computer room & smart boards', text: 'A computer room opens and smart boards come to the classrooms.' },
   { year: '2024', title: 'Play-based early years', text: 'A play-based programme in the spirit of NEP 2020 for Nursery to Class II.' },
-  { year: '2025', title: 'Applause on stage', text: 'Our dance troupe wins praise and prizes at inter-school cultural events.' },
   { year: '2026', title: `Admissions for ${school.admissionSession}`, text: 'A growing school family opens its doors to new children for the coming session.' },
 ];

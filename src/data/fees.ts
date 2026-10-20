@@ -4,11 +4,15 @@
  * They are formatted automatically as ₹42,000.
  *
  * ⚠ SAMPLE CONTENT — replace every amount, date and rule below with the fee
- *   structure approved by the school management for the session. Remember to
- *   publish the same figures in the Mandatory Public Disclosure.
+ *   structure approved by the school management for the session.
+ *
+ * The fee tables are hidden while `showFees` is false: parents are asked to contact
+ * the school office instead. Set it to true once the amounts below are real.
  */
 import { school } from './school';
 import { formatINR } from '../lib/format';
+
+export const showFees = false;
 
 /** ⚠ PLACEHOLDER: the session these fees apply to. */
 export const feeSession = school.admissionSession;
@@ -24,7 +28,7 @@ export interface ClassFee {
   group: string;
   /** Optional extra line shown in smaller text under the class group. */
   detail?: string;
-  /** Development, activity, library, computer, examination and annual function charges. */
+  /** Development, activity, library, examination and annual function charges. */
   annual: number;
   /** Tuition fee per month. Collected every quarter (3 months together). */
   tuitionMonthly: number;
@@ -94,7 +98,7 @@ export const feeNotes: { title: string; text: string }[] = [
   },
   {
     title: 'How to pay',
-    text: 'UPI, debit / credit card, net banking, cheque or demand draft at the school accounts office. Always collect a computer-generated receipt.',
+    text: 'UPI, debit / credit card, net banking, cheque or demand draft at the school accounts office. Always collect a printed receipt.',
   },
   {
     title: 'Revision',

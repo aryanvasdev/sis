@@ -10,14 +10,13 @@ import {
   introPhoto,
   featureFacilities,
   moreFacilities,
-  transport,
   transportFeatures,
-  busRoutes,
   entrance,
   safetyMeasures,
   committees,
 } from '../data/facilities';
 import { url } from '../lib/url';
+import { busAreas, transportRadiusKm } from '../data/transport';
 
 /** Put a photo of the school bus or van in /public/images/campus/ and set its path here. */
 const transportImage = '';
@@ -32,7 +31,7 @@ const jumpLinks = [
 
 <BaseLayout
   title="Facilities"
-  description={`Smart classrooms, a science lab, computer lab, library, playground, GPS-tracked school transport and a safe, CCTV-monitored campus at ${school.name}.`}
+  description={`Smart classrooms, a science lab, library, playground, school buses within ${transportRadiusKm} km and a safe, CCTV-monitored campus at ${school.name}.`}
 >
   <PageHero
     title="Campus & Facilities"
@@ -186,7 +185,7 @@ const jumpLinks = [
           <SectionHead id="transport-title" eyebrow="School transport" title="Safe, punctual and tracked every day" />
           <div class="stack">
             <p>
-              Our {transport.vehicles} school vehicles cover {busRoutes.length} routes in and around {school.address.city}.
+              Our buses reach almost every town and village within about {transportRadiusKm} km of {school.address.city}.
               Every vehicle follows the state’s safe school-vehicle norms, and every journey is supervised from the moment
               your child boards until they are safely home.
             </p>
@@ -196,12 +195,12 @@ const jumpLinks = [
           </div>
           <dl class="t-stats">
             <div>
-              <dt>School vehicles</dt>
-              <dd>{transport.vehicles}</dd>
+              <dt>Coverage</dt>
+              <dd>~{transportRadiusKm} km</dd>
             </div>
             <div>
-              <dt>Routes</dt>
-              <dd>{busRoutes.length}</dd>
+              <dt>Towns &amp; villages</dt>
+              <dd>{busAreas.length}+</dd>
             </div>
             <div>
               <dt>Lady attendant</dt>
@@ -239,44 +238,18 @@ const jumpLinks = [
 
       <div class="routes reveal">
         <div class="routes-head">
-          <h3>Routes &amp; timings</h3>
-          <p>{transport.timingsNote}</p>
+          <h3>Areas we cover</h3>
+          <p>Saha and the towns and villages within about {transportRadiusKm} km, including:</p>
         </div>
-        <div class="table-wrap">
-          <table class="table">
-            <caption class="visually-hidden">
-              School transport routes, areas covered and timings, Session {school.currentSession}
-            </caption>
-            <thead>
-              <tr>
-                <th scope="col">Route</th>
-                <th scope="col">Areas covered</th>
-                <th scope="col">Pick-up</th>
-                <th scope="col">Drop</th>
-              </tr>
-            </thead>
-            <tbody>
-              {
-                busRoutes.map((r) => (
-                  <tr>
-                    <th scope="row">
-                      <span class="route-no">{r.route}</span>
-                    </th>
-                    <td>{r.areas.join(' · ')}</td>
-                    <td class="time">{r.pickup}</td>
-                    <td class="time">{r.drop}</td>
-                  </tr>
-                ))
-              }
-            </tbody>
-          </table>
-        </div>
+        <ul class="areas">
+          {busAreas.map((a) => <li>{a}</li>)}
+        </ul>
         <div class="callout callout--navy routes-note">
           <Icon name="info" />
           <p>
-            Need a new stop or a change of route? Please call the school office ({transport.officeHours}) on
-            <a href={telLink(school.phones[0])}>{school.phones[0]}</a>. Transport charges are listed with the
-            <a href={url('/admissions/#fees')}>fee structure</a>.
+            Don’t see your village? Call the school office ({school.officeHours}) on
+            <a href={telLink(school.phones[0])}>{school.phones[0]}</a> to check pick-up points, timings and transport
+            charges.
           </p>
         </div>
       </div>
@@ -780,20 +753,21 @@ const jumpLinks = [
     font-size: 0.88rem;
     color: var(--muted);
   }
-  .route-no {
-    display: inline-block;
-    padding: 2px 10px;
-    border-radius: 999px;
-    background: var(--gold-100);
-    color: #8a6412;
-    font-size: 0.82rem;
-    font-weight: 800;
-    letter-spacing: 0.04em;
-    white-space: nowrap;
+  .areas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    list-style: none;
+    padding: 0;
   }
-  .table td.time {
-    white-space: nowrap;
-    font-variant-numeric: tabular-nums;
+  .areas li {
+    padding: 8px 16px;
+    border-radius: 999px;
+    background: #fff;
+    border: 1px solid var(--line);
+    font-weight: 700;
+    font-size: 0.92rem;
+    color: var(--navy-900);
   }
   .routes-note {
     margin-top: 16px;

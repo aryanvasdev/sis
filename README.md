@@ -31,7 +31,7 @@ Everything Indian parents look for is included: fee structure, admission process
 
 Everything the school needs to change lives in **`src/data/`**. Values marked `⚠ PLACEHOLDER` or `⚠ SAMPLE CONTENT` are made up and **must be replaced**.
 
-1. **`src/data/school.ts`**: start here. The address, phone numbers, WhatsApp, email, principal, founding year and student count are already filled in. Still to add: the chairperson and trust name, social media links and the Google Map embed. Most pages read from this file.
+1. **`src/data/school.ts`**: start here. The address, phone numbers, WhatsApp, email, principal, founding year and student count are already filled in. Still to add: the chairperson's name, social media links and the Google Map embed. Fees are hidden until `showFees` is set to `true` in `src/data/fees.ts`; bus coverage is listed in `src/data/transport.ts`. Most pages read from this file.
 2. **`src/data/notices.ts`**: notices, circulars and upcoming events.
 3. The other files in `src/data/` (fees, admissions, academics, facilities, gallery, achievements, careers, contacts, and so on) hold the content for each page.
 5. When everything is real, set **`preview: false`** in `school.ts` to remove the yellow "sample content" banner.

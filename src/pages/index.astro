@@ -7,6 +7,7 @@ import CampusIllustration from '../components/CampusIllustration.astro';
 import { school, telLink, whatsappLink } from '../data/school';
 import { sortedNotices, upcomingEvents } from '../data/notices';
 import { testimonials } from '../data/testimonials';
+import { transportRadiusKm } from '../data/transport';
 import { formatDate, dateParts } from '../lib/format';
 import { url } from '../lib/url';
 
@@ -17,7 +18,7 @@ const teachersImage = 'images/people/our-teachers.jpg';
 
 const quickLinks = [
   { label: 'Admissions', note: `Session ${school.admissionSession}`, href: '/admissions/', icon: 'graduation-cap' },
-  { label: 'Fee Structure', note: 'Class-wise fees', href: '/admissions/#fees', icon: 'indian-rupee' },
+  { label: 'School Transport', note: `Buses within ${transportRadiusKm} km`, href: '/facilities/#transport', icon: 'bus' },
   { label: 'Notices & Circulars', note: 'Latest updates', href: '/notices/', icon: 'bell' },
   { label: 'Academic Calendar', note: `Session ${school.currentSession}`, href: '/academics/#calendar', icon: 'calendar-days' },
   { label: 'Photo Gallery', note: 'Life at school', href: '/gallery/', icon: 'images' },
@@ -30,13 +31,13 @@ const highlights = [
   { icon: 'shield-check', title: 'Safe & secure campus', text: 'A gated campus with CCTV, a visitor log, a first-aid room and safe school transport.', tone: 'green' },
   { icon: 'drama', title: 'Festivals, dance & stage', text: 'From Teeyan da Mela to Janmashtami and Gandhi Jayanti, children perform, celebrate and grow in confidence.', tone: 'maroon' },
   { icon: 'heart-handshake', title: 'Values & discipline', text: 'Morning assembly, good manners, cleanliness drives and respect for every culture and faith: “Come to learn, go to serve.”', tone: '' },
-  { icon: 'monitor-smartphone', title: 'Smart, hands-on learning', text: 'Smart-board lessons, a computer lab, and art, craft and activity corners that make concepts come alive.', tone: 'navy' },
+  { icon: 'monitor-smartphone', title: 'Smart, hands-on learning', text: 'Smart-board lessons, a science lab, and art, craft and activity corners that make concepts come alive.', tone: 'navy' },
 ];
 
 const stages = [
   { title: 'Pre-Primary', classes: 'Nursery · LKG · UKG', text: 'Play-way learning, phonics, rhymes, number sense, colours and joyful theme days in a caring, colourful wing.', icon: 'baby', tone: 'gold' },
   { title: 'Primary', classes: 'Classes I – V', text: 'Strong foundations in English, Hindi, mathematics and EVS, with reading, handwriting and activity-based projects.', icon: 'pencil', tone: 'sky' },
-  { title: 'Middle', classes: 'Classes VI – VIII', text: 'Science, social science and computers in depth, a third language, projects, quizzes and preparation for Class IX.', icon: 'book-open', tone: 'green' },
+  { title: 'Middle', classes: 'Classes VI – VIII', text: 'Science and social science in depth, a third language, projects, quizzes and preparation for Class IX.', icon: 'book-open', tone: 'green' },
 ];
 
 const latestNotices = sortedNotices().slice(0, 5);

@@ -2,8 +2,7 @@
  * CONTACT PAGE: department directory and directions.
  * The main address, phone numbers, emails and timings come from src/data/school.ts.
  *
- * ⚠ SAMPLE CONTENT — check the office hours, and replace the landmarks and bus
- *   routes below with the school's real details.
+ * Bus coverage is in src/data/transport.ts.
  */
 import { school } from './school';
 
@@ -28,7 +27,7 @@ export const departments: Department[] = [
     handles: 'Registration, campus visits, interactions and admission forms',
     phone: school.phones[0],
     email: school.email,
-    hours: 'Mon – Sat · 9:00 AM – 1:00 PM',
+    hours: school.officeHours,
   },
   {
     name: 'Fees & Accounts',
@@ -37,15 +36,15 @@ export const departments: Department[] = [
     handles: 'Fee payments, receipts, concessions and refunds',
     phone: school.phones[1],
     email: school.email,
-    hours: 'Mon – Sat · 8:30 AM – 1:30 PM',
+    hours: school.officeHours,
   },
   {
     name: 'Transport',
     icon: 'bus',
     role: 'Transport desk',
-    handles: 'Bus routes, stops, pick-up timings and transport fee',
+    handles: 'Bus coverage, pick-up points, timings and transport charges',
     phone: school.phones[1],
-    hours: 'Mon – Sat · 7:00 AM – 3:00 PM',
+    hours: school.officeHours,
   },
   {
     name: 'Principal’s Office',
@@ -55,7 +54,7 @@ export const departments: Department[] = [
     handles: 'Appointments with the Principal (please book through the front office)',
     phone: school.phones[0],
     email: school.principal.email,
-    hours: 'By appointment · Mon – Fri · 11:00 AM – 12:30 PM',
+    hours: 'By appointment, through the front office',
   },
   {
     name: 'Academics & Exams',
@@ -63,7 +62,7 @@ export const departments: Department[] = [
     role: 'Class teachers & exam coordinator',
     handles: 'Date sheets, periodic tests, report cards and PTMs',
     phone: school.phones[0],
-    hours: 'Mon – Sat · 9:00 AM – 1:00 PM',
+    hours: school.officeHours,
   },
   {
     name: 'Front Office',
@@ -82,10 +81,3 @@ export const landmarks: { icon: string; label: string; text: string }[] = [
   { icon: 'car-front', label: 'Parking', text: 'Visitor parking inside the main gate. Please sign the visitor register at the gate.' },
 ];
 
-/** ⚠ PLACEHOLDER: school bus routes and the main areas each one covers. */
-export const busRoutes: { route: string; areas: string }[] = [
-  { route: 'Route 1', areas: '[Village A] · [Village B] · [Village C]' },
-  { route: 'Route 2', areas: '[Village D] · [Village E]' },
-  { route: 'Route 3', areas: '[Village F] · [Village G] · [Village H]' },
-  { route: 'Route 4', areas: '[Area / Village J] · [Area / Village K]' },
-];

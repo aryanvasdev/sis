@@ -6,7 +6,8 @@ import EnquiryForm from '../components/EnquiryForm.astro';
 import Icon from '../components/Icon.astro';
 import Photo from '../components/Photo.astro';
 import { school, fullAddress, telLink, whatsappLink } from '../data/school';
-import { departments, landmarks, busRoutes } from '../data/contacts';
+import { departments, landmarks } from '../data/contacts';
+import { busAreas, transportRadiusKm } from '../data/transport';
 import { url } from '../lib/url';
 
 // One entry per distinct address, since several offices may share one inbox.
@@ -27,7 +28,7 @@ const emailParts = (email: string) => {
   return [email.slice(0, i), email.slice(i)];
 };
 
-/** '7:30 AM – 1:30 PM (April – September)' → ['7:30 AM – 1:30 PM', 'April – September'] */
+/** '8:00 AM – 2:00 PM (April – September)' → ['8:00 AM – 2:00 PM', 'April – September'] */
 const splitHours = (s: string) => {
   const m = s.match(/^(.*?)\s*\((.*)\)\s*$/);
   return m ? [m[1], m[2]] : [s, ''];
@@ -228,19 +229,16 @@ const splitHours = (s: string) => {
             }
           </ul>
 
-          <h3 class="routes-title"><Icon name="bus" /> School bus routes</h3>
+          <h3 class="routes-title"><Icon name="bus" /> School buses</h3>
+          <p class="small muted routes-lead">
+            Our buses cover almost every town and village within about {transportRadiusKm} km of {school.address.city},
+            including:
+          </p>
           <ul class="routes">
-            {
-              busRoutes.map((r) => (
-                <li>
-                  <span class="tag tag--gold">{r.route}</span>
-                  <span>{r.areas}</span>
-                </li>
-              ))
-            }
+            {busAreas.map((a) => <li>{a}</li>)}
           </ul>
           <p class="small muted">
-            For stops, pick-up times and the transport fee, please contact the transport office (see below).
+            For pick-up points, timings and transport charges, please call the transport desk (see below).
           </p>
           <div class="btn-row">
             <a href={school.mapLink} class="btn btn--outline btn--sm" target="_blank" rel="noopener">
@@ -649,27 +647,25 @@ const splitHours = (s: string) => {
   .routes-title :global(.icon) {
     color: var(--gold-600);
   }
+  .routes-lead {
+    margin-bottom: 12px;
+  }
   .routes {
     list-style: none;
     padding: 0;
-    display: grid;
+    display: flex;
+    flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 14px;
   }
   .routes li {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    align-items: center;
-    gap: 12px;
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
+    padding: 6px 12px;
+    border-radius: 999px;
     background: var(--cream);
     border: 1px solid var(--line-soft);
-    font-size: 0.92rem;
-    color: var(--ink-soft);
-  }
-  .routes .tag {
-    flex: none;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--navy-900);
   }
   .reach-info .btn-row {
     margin-top: 16px;
